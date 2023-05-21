@@ -36,6 +36,7 @@ urlpatterns = [
     path('', include('cobro.urls')),
     path('', include('reservacion.urls')),
     path('', include('configuracion.urls')),
+    path('', include('adminschema.urls')),
     path('docs/', include_docs_urls(title='API documentation')),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='swagger-schema'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='redoc-schema'),

@@ -1,14 +1,6 @@
 from rest_framework import serializers
 from .models import *
 
-
-################ Nuevo modelo #################################
-class TbInstitucionCreateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TbInstitucion
-        fields = '__all__'
-    
-################   final     #################################
 ######################################################################## Pertenece a distibucion ################################
 class TbCategoryCreateSerializer(serializers.ModelSerializer):
     class Meta:

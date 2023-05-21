@@ -5,15 +5,7 @@ from .serializerPost import *
 from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.decorators import action
-################ Nuevo modelo #################################
-class TbInstitucionViewSet(viewsets.ModelViewSet):
-    queryset = TbInstitucion.objects.all()
-    def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return TbInstitucionCreateSerializer
-        else:
-            return TbInstitucionSerializer  
-################   final     #################################
+
 ######################################################################## Pertenece a distibucion ################################
 class TbCategoryViewSet(viewsets.ModelViewSet):
     queryset = TbCategory.objects.all()

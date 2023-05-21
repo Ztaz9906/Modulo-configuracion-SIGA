@@ -1,18 +1,7 @@
 from django.db import models
 from base.models import TbDpersona
 from adminschema.models import TbUser
-################ Nuevo modelo #################################
-class TbInstitucion(models.Model):
-    name = models.TextField()
-    description = models.TextField(blank=True, null=True)
-    active = models.BooleanField(blank=True, null=True)
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
-    
-    class Meta:
-        db_table = 'tb_institucion'
-        
-################   final     #################################
+
 ######################################################################## Pertenece a distibucion ################################
 class TbCategory(models.Model):
     name = models.TextField()
@@ -193,9 +182,9 @@ class TbDproducto(models.Model):
 class TbRproductoAlmacen(models.Model):
     id_producto = models.ForeignKey(TbDproducto, models.DO_NOTHING, db_column='id_producto')
     id_almacen = models.ForeignKey(TbDalmacen, models.DO_NOTHING, db_column='id_almacen')
-    cantidad = models.DecimalField(max_digits=65535, decimal_places=65535)
+    cantidad = models.DecimalField(max_digits=999, decimal_places=999)
     id_producto_almacen = models.AutoField(primary_key=True)
-    cantidad_anterior = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    cantidad_anterior = models.DecimalField(max_digits=999, decimal_places=999, blank=True, null=True)
     class Meta:
         
         db_table = 'tb_rproducto_almacen'
@@ -276,6 +265,7 @@ class TbRmenuPlatoProducto(models.Model):
     class Meta:    
         db_table = 'tb_rmenu_plato_producto'
         
+#se puede hacer ManyToMany identificar la entidad debil para quitar esta tabla y dejar q django la maneje         
 class TbRplatoEvento(models.Model):
     id_plato_evento = models.AutoField(primary_key=True)
     id_plato = models.ForeignKey(TbNplato, models.DO_NOTHING, db_column='id_plato', blank=True, null=True)
@@ -287,7 +277,7 @@ class TbRplatoProducto(models.Model):
     id_plato_producto = models.AutoField(primary_key=True)
     id_plato = models.ForeignKey(TbNplato, models.DO_NOTHING, db_column='id_plato', blank=True, null=True)
     id_producto = models.ForeignKey(TbDproducto,on_delete = models.DO_NOTHING, db_column='id_producto', blank=True, null=True) # revisar si esta bien pensado esta relacion
-    id_unidad_medida = models.ForeignKey(TbNunidadMedida, models.DO_NOTHING, db_column='id_unidad_medida', blank=True, null=True)
+    id_unidad_medida = models.ForeignKey(TbNunidadMedida, models.DO_NOTHING, db_column='id_unidad_medida', blank=True, null=True) # ya en producto se tiene una unidad de medida aqui no seria nesesario
     gramaje = models.FloatField(blank=True, null=True)
     class Meta:   
         db_table = 'tb_rplato_producto'
@@ -303,7 +293,7 @@ class TbDaccesoEventoSecundario(models.Model):
 
 class TbDpersonaPuerta(models.Model):
     id_persona_puerta = models.AutoField(primary_key=True)
-    id_persona = models.ForeignKey(TbDpersona, models.DO_NOTHING, db_column='id_persona', blank=True, null=True)
+    id_persona = models.ForeignKey(TbDpersona, models.DO_NOTHING, db_column='id_persona', blank=True, null=True)#quitar ya no hace falta
     id_puerta =  models.ForeignKey(TbStructure, models.DO_NOTHING, db_column='id_puerta', blank=True, null=True)
     activo = models.BooleanField(blank=True, null=True)
     id_usuario_registro = models.ForeignKey(TbUser, models.DO_NOTHING, db_column='id_usuario_registro', blank=True, null=True,related_name='id_usuario_registro_personaPuerta')

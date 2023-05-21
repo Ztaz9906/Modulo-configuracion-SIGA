@@ -3,9 +3,6 @@ from rest_framework import routers
 from .views import *
 
 router = routers.DefaultRouter()
-################ Nuevo modelo #################################
-router.register(r'Instituciones', TbInstitucionViewSet)
-################   final     #################################
 ######################################################################## Pertenece a distibucion ################################
 router.register(r'Distribucion_TbCategory', TbCategoryViewSet)
 router.register(r'Distribucion_TbNclasificacionEvento', TbNclasificacionEventoViewSet)

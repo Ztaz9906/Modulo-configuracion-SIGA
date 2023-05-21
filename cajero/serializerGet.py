@@ -3,13 +3,9 @@ from .models import *
 from .serializerPost import *
 from adminschema.serializer import TbUserSerializer
 from base.serializers import TbDpersonaSerializer
-################ Nuevo modelo #################################
-class TbInstitucionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TbInstitucion
-        fields = '__all__'
+
         
-################   final     #################################
+
 ######################################################################## Pertenece a distibucion ################################
 class TbCategorySerializer(serializers.ModelSerializer):
    class Meta:
