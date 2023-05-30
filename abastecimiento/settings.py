@@ -152,10 +152,11 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.BrowsableAPIRenderer',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
     ],
 }
+CORS_ORIGIN_ALLOW_ALL = True
+REST_USE_JWT = True
+JWT_AUTH_COOKIE = 'my-app-auth'
 
 AUTH_USER_MODEL = 'adminschema.TbUser'

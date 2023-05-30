@@ -10,7 +10,7 @@ router.register(r'Configuracion_TbDconfiguracionEventoAcceso', TbDconfiguracionE
 router.register(r'Configuracion_TbDconfiguracionPersona', TbDconfiguracionPersonaViewSet)
 router.register(r'Configuracion_TbDconfiguracionProceso', TbDconfiguracionProcesoViewSet)
 router.register(r'Configuracion_TbDconfiguracionRabbitmq', TbDconfiguracionRabbitmqViewSet)
-router.register(r'Configuracion_TbDcron', TbDcronViewSet)
+router.register(r'Configuracion_Tarea_programada', TbDcronViewSet)
 router.register(r'Configuracion_TbDdatosContacto', TbDdatosContactoViewSet)
 router.register(r'Configuracion_TbDplanificacionMenu', TbDplanificacionMenuViewSet)
 router.register(r'Configuracion_TbDvaloresConfiguracionCobro', TbDvaloresConfiguracionCobroViewSet)

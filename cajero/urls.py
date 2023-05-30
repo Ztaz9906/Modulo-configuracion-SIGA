@@ -36,12 +36,12 @@ router.register(r'Abastecimiento_TbRplatoProducto', TbRplatoProductoViewSet)
 ######################################################################## Final #################################################
 ######################################################################## Cajero ################################################
 router.register(r'Cajero_TbDaccesoEventoSecundario', TbDaccesoEventoSecundarioViewSet)
-router.register(r'Cajero_TbDpersonaPuerta', TbDpersonaPuertaViewSet)
+router.register(r'Cajero_TbDIp_Puerta', TbDpersonaPuertaViewSet)
 router.register(r'Cajero_TbDplanEvento', TbDplanEventoViewSet)
 router.register(r'Cajero_TbDsolapinPerdido', TbDsolapinPerdidoViewSet)
 router.register(r'Cajero_TbNestadoTarjeta', TbNestadoTarjetaViewSet)
 router.register(r'Cajero_TbNtipoError', TbNtipoErrorViewSet)
-router.register(r'Cajero_TbNtipoTarjetaViewSet', TbNtipoTarjetaViewSet)
+router.register(r'Cajero_TbNtipoTarjeta', TbNtipoTarjetaViewSet)
 router.register(r'Cajero_TbDtarjetaAlimentacion', TbDtarjetaAlimentacionViewSet)
 ################################################################ Final ########################################################################
 ################################################################ Distribucion #################################################################

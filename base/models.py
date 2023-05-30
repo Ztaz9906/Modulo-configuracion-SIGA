@@ -1,6 +1,5 @@
 from django.db import models
 
-
 class TbNpais(models.Model):
     nombre_pais = models.CharField(max_length=255)
     fecha_registro_pais = models.DateTimeField()
