@@ -2,8 +2,10 @@ from rest_framework import viewsets,response, status
 from .models import *
 from .serializerGet import *
 from .serializerPost import *
+import rest_framework.permissions as _permissions
 from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 from rest_framework.decorators import action
 
 ######################################################################## Pertenece a distibucion ################################
@@ -45,14 +47,20 @@ class TbNeventoViewSet(viewsets.ModelViewSet):
 
 ######################### tabla almacen de asset #############################
 class TbDalmacenViewSet(viewsets.ModelViewSet):
-    queryset = TbDalmacen.objects.all()
-
+    permission_classes = (_permissions.IsAuthenticated,
+                          _permissions.DjangoModelPermissions)
     def get_serializer_class(self):
         if self.request.method == 'POST':
             return TbDalmacenCreateSerializer
         else:
             return TbDalmacenSerializer
-    
+    def get_queryset(self):
+        user = self.request.user
+        id_institucion = user.id_institucion # hay una relación de clave foránea entre Usuario e Institucion
+        queryset = TbDalmacen.objects.filter(id_institucion=id_institucion)
+        return queryset
+        
+
 ######################### Final #############################
       
 class TbStructureViewSet(viewsets.ModelViewSet):

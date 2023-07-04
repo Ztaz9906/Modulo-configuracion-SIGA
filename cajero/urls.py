@@ -9,7 +9,7 @@ router.register(r'Distribucion_TbNclasificacionEvento', TbNclasificacionEventoVi
 router.register(r'Distribucion_TbNhorario', TbNhorarioViewSet)
 router.register(r'Distribucion_TbNevento', TbNeventoViewSet)
 ######################### tabla almacen de asset #############################
-router.register(r'Asset_TbDalmacen', TbDalmacenViewSet)
+router.register(r'Asset_TbDalmacen', TbDalmacenViewSet,basename='tb_dalmacen')
 ######################### Final #############################
 router.register(r'Distribucion_TbStructure', TbStructureViewSet)
 ######################################################################## Final ############################################

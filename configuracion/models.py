@@ -27,6 +27,7 @@ class TbDconfiguracionCobro(models.Model):
         db_table = 'tb_dconfiguracion_cobro'
 
 
+#### no se ahce
 class TbDconfiguracionElastic(models.Model):
     id_configuracion_elastic = models.AutoField(primary_key=True)
     ip = models.TextField(blank=True, null=True)
@@ -39,7 +40,7 @@ class TbDconfiguracionElastic(models.Model):
         
         db_table = 'tb_dconfiguracion_elastic'
 
-
+##### se puede quitar por que esta muy estricto y crea conflictos 
 class TbDconfiguracionEventoAcceso(models.Model):
     id_configuracion_evento_acceso = models.AutoField(primary_key=True)
     activo = models.BooleanField(blank=True, null=True)
@@ -50,7 +51,7 @@ class TbDconfiguracionEventoAcceso(models.Model):
         
         db_table = 'tb_dconfiguracion_evento_acceso'
 
-
+###Aqui manda config comensales
 class TbDconfiguracionPersona(models.Model):
     id_configuracion_persona = models.AutoField(primary_key=True)
     activo = models.BooleanField(blank=True, null=True)
@@ -61,7 +62,7 @@ class TbDconfiguracionPersona(models.Model):
         
         db_table = 'tb_dconfiguracion_persona'
 
-
+### se ponen 3 campos incambiable 3 datos estaticos se activa o se desactiva 
 class TbDconfiguracionProceso(models.Model):
     id_configuracion_proceso = models.AutoField(primary_key=True)
     flujo = models.BooleanField(blank=True, null=True)
@@ -73,7 +74,7 @@ class TbDconfiguracionProceso(models.Model):
         
         db_table = 'tb_dconfiguracion_proceso'
 
-
+#### no se ahce
 class TbDconfiguracionRabbitmq(models.Model):
     id_configuracion_rabbitmq = models.AutoField(primary_key=True)
     ip = models.TextField(blank=True, null=True)
@@ -88,6 +89,7 @@ class TbDconfiguracionRabbitmq(models.Model):
         db_table = 'tb_dconfiguracion_rabbitmq'
 
 
+#### no se ahce tareas programadas
 class TbDcron(models.Model):
     id_cron = models.AutoField(primary_key=True)
     scrip = models.TextField(blank=True, null=True)

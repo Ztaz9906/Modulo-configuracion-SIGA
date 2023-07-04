@@ -286,7 +286,7 @@ class TbRpersonaAkademosFamiliar(models.Model):
     class Meta:
        
         db_table = 'tb_rpersona_akademos_familiar'
-
+###Hay que hacerle crud a este modelos
 class TbDpersonaTorpedo(models.Model):
     id_persona_torpedo = models.AutoField(primary_key=True)
     nombre_completo = models.CharField(max_length=255)

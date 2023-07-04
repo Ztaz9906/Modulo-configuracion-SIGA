@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import *
 from .serializerPost import *
-from adminschema.serializer import TbUserSerializer
+from adminschema.serializer import TbUserSerializer,TbInstitucionSerializer
 from base.serializers import TbDpersonaSerializer
 
         
@@ -30,7 +30,7 @@ class TbNeventoSerializer(serializers.ModelSerializer):
 
 ######################### tabla almacen de asset #############################
 class TbDalmacenSerializer(serializers.ModelSerializer):
-    
+    id_institucion = TbInstitucionSerializer (read_only=True)
     class Meta:
         model = TbDalmacen
         fields = '__all__'
@@ -100,7 +100,7 @@ class TbNunidadMedidaSerializer(serializers.ModelSerializer):
 ####### Empieza esquema asset ##########
 
 class TbNclasificacionProductoSerializer(serializers.ModelSerializer):
-    
+    id_institucion = TbInstitucionSerializer (read_only=True)
     class Meta:
         model = TbNclasificacionProducto
         fields = '__all__'

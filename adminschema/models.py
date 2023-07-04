@@ -72,7 +72,7 @@ class TbUser(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         """Return String"""
         return self.email
-    
+### Se quita  
 class TbSystem(models.Model):
     name = models.TextField(blank=True, null=True)
     system_code = models.CharField(primary_key=True, max_length=1)

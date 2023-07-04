@@ -1,6 +1,6 @@
 from django.db import models
 from base.models import TbDpersona
-from adminschema.models import TbUser
+from adminschema.models import TbUser,TbInstitucion
 
 ######################################################################## Pertenece a distibucion ################################
 class TbCategory(models.Model):
@@ -9,7 +9,7 @@ class TbCategory(models.Model):
     active = models.BooleanField(blank=True, null=True)
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField()
-    version = models.IntegerField()
+    #version = models.IntegerField()
     color = models.TextField()
 
     class Meta:
@@ -53,19 +53,21 @@ class TbNevento(models.Model):
         db_table = 'tb_nevento'
 
 ######################### tabla almacen de asset #############################
+###Quitar el almacen y todoas sus referencias en el sistema
 class TbDalmacen(models.Model):
     id_almacen = models.AutoField(primary_key=True)
     nombre_almacen = models.CharField(unique=True, max_length=255)
     descripcion = models.TextField(blank=True, null=True)
     id_asset = models.CharField(max_length=1)
     siglas_almacen = models.TextField(blank=True, null=True)
+    id_institucion = models.ForeignKey(TbInstitucion, models.DO_NOTHING, db_column=' id_institucion')
 
     class Meta:
         
         db_table = 'tb_dalmacen'
         
 ######################### Final #############################
-      
+##a la hora de asignar reglas no debe ser obligatorio apra cada institucion
 class TbStructure(models.Model):
     category = models.ForeignKey(TbCategory, models.DO_NOTHING)
     estructura_parent = models.ForeignKey('self', models.DO_NOTHING, blank=True, null=True)
@@ -136,7 +138,7 @@ class TbNcategoriaTipoProducto(models.Model):
     id_tipo_producto = models.ForeignKey(TbNtipoProducto, models.DO_NOTHING, db_column='id_tipo_producto', blank=True, null=True)
     class Meta:  
         db_table = 'tb_ncategoria_tipo_producto'
-
+#### se mantiene
 class TbNunidadMedida(models.Model):
     id_unidad_medida = models.AutoField(primary_key=True)
     nombre_unidad_medida = models.TextField(blank=True, null=True)
@@ -144,17 +146,17 @@ class TbNunidadMedida(models.Model):
     descripcion_unidad_medida = models.TextField(blank=True, null=True)
     fecha_registro = models.DateField(blank=True, null=True)
     siglas = models.TextField(blank=True, null=True)
-    id_unidad_superior = models.IntegerField(blank=True, null=True)
-    convertible = models.BooleanField(blank=True, null=True)
-    id_unidad_inferior = models.IntegerField(blank=True, null=True)
-    orden = models.IntegerField(blank=True, null=True)
+    # id_unidad_superior = models.IntegerField(blank=True, null=True)
+    # convertible = models.BooleanField(blank=True, null=True)
+    # id_unidad_inferior = models.IntegerField(blank=True, null=True)
+    # orden = models.IntegerField(blank=True, null=True)
     clasificacion = models.TextField(blank=False, null=False)
     
     class Meta:    
         db_table = 'tb_nunidad_medida'
  
 ####### Empieza esquema asset ##########
-
+#### se va dle esquema
 class TbNclasificacionProducto(models.Model):
     id_clasificacion_producto = models.AutoField(primary_key=True)
     nombre_clasificacion_producto = models.CharField(unique=True, max_length=255)
@@ -162,10 +164,11 @@ class TbNclasificacionProducto(models.Model):
     fecha_registro = models.DateTimeField()
     activo = models.BooleanField()
     id_asset = models.CharField(max_length=1)
+    id_institucion = models.ForeignKey(TbInstitucion, models.DO_NOTHING, db_column=' id_institucion')
     class Meta:
         
         db_table = 'tb_nclasificacion_producto'
-
+##### esta se queda 
 class TbDproducto(models.Model):
     id_producto = models.AutoField(primary_key=True)
     nombre_producto = models.CharField(max_length=255)
@@ -178,7 +181,7 @@ class TbDproducto(models.Model):
 
     class Meta:
         db_table = 'tb_dproducto'
-
+###Se puede quitar y dejar para despues , o quitar completamente
 class TbRproductoAlmacen(models.Model):
     id_producto = models.ForeignKey(TbDproducto, models.DO_NOTHING, db_column='id_producto')
     id_almacen = models.ForeignKey(TbDalmacen, models.DO_NOTHING, db_column='id_almacen')
@@ -199,6 +202,7 @@ class TbFecha(models.Model):
         db_table = 'tb_fecha'
  
 ######### Termina esquema assets #########
+##### recomendaciones para la configuracion dle producto
 class TbDconfiguracionProducto(models.Model):
     id_configuracion_producto = models.AutoField(primary_key=True)
     id_categoria_tipo_producto = models.ForeignKey(TbNcategoriaTipoProducto, models.DO_NOTHING, db_column='id_categoria_tipo_producto', blank=True, null=True)
@@ -218,7 +222,7 @@ class TbDconfiguracionProducto(models.Model):
     entidad_actualiza = models.TextField(blank=True, null=True)
     class Meta:   
         db_table = 'tb_dconfiguracion_producto'
-
+###### se quita la equivalencia y unidad de medida se antiene
 class TbDequivalenciaUnidadMedida(models.Model):
     id_equivalencia_unidad_medida = models.AutoField(primary_key=True)
     id_unidad_medida = models.ForeignKey(TbNunidadMedida, models.DO_NOTHING, db_column='id_unidad_medida', blank=True, null=True,related_name='id_unidad_medida_equivalencia')
@@ -244,6 +248,7 @@ class TbNplato(models.Model):
     class Meta:  
         db_table = 'tb_nplato'
         
+#se quita lo relacionado con menu par ala configuracion
 class TbRmenuPlato(models.Model):
     id_menu_plato = models.AutoField(primary_key=True)
     id_menu = models.ForeignKey(TbDmenu, models.DO_NOTHING, db_column='id_menu')
@@ -283,14 +288,14 @@ class TbRplatoProducto(models.Model):
         db_table = 'tb_rplato_producto'
 
 ######################################################################## Final #################################################
-
+### Configuraciones de cantidad de accesos para eventos secundarios ej:doble tiene valor por defecto tiene q existir y solo se puede modificar, para diferentes instituciones hay que ahcer un crud 
 class TbDaccesoEventoSecundario(models.Model):
     id_acceso_evento_secundario = models.AutoField(primary_key=True)
     cantidad_acceso = models.IntegerField(blank=True, null=True)
     fecha_registro = models.DateField(blank=True, null=True)
     class Meta:
         db_table = 'tb_dacceso_evento_secundario'
-
+###Asignar IP a Puerta
 class TbDpersonaPuerta(models.Model):
     id_persona_puerta = models.AutoField(primary_key=True)
     id_persona = models.ForeignKey(TbDpersona, models.DO_NOTHING, db_column='id_persona', blank=True, null=True)#quitar ya no hace falta
@@ -348,7 +353,7 @@ class TbNtipoError(models.Model):
 
     class Meta:
         db_table = 'tb_ntipo_error'
-
+### vinculada con institucion
 class TbNtipoTarjeta(models.Model):
     id_tipo_tarjeta = models.AutoField(primary_key=True)
     nombre_tipo_tarjeta = models.CharField(max_length=255)
@@ -479,7 +484,7 @@ class TbNdiaSemana(models.Model):
 
     class Meta:
         db_table = 'tb_ndia_semana'
-
+#### se quita y se deja de recomendaciones
 class TbNrangoEvento(models.Model):
     id_rango_evento = models.AutoField(primary_key=True)
     activo = models.BooleanField(blank=True, null=True)
@@ -537,7 +542,7 @@ class TbRhorarioDiaSemana(models.Model):
     class Meta:
         db_table = 'tb_rhorario_dia_semana'
 
-#revisar por que esta sin ralacion alguna ninnguno de estos id
+#revisar por que esta sin ralacion alguna ninnguno de estos id se puede quitar y que las tarjetas se eliminen cuando llegue la fecha de expiracion
 class TbTempDistribucionTarjeta(models.Model):
     id_temp = models.AutoField(primary_key=True)
     id_persona = models.CharField(max_length=255, blank=True, null=True)

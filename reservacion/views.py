@@ -9,7 +9,7 @@ class TbDelementosMostrarViewSet(viewsets.ModelViewSet):
 class TbDperiodoReservacionViewSet(viewsets.ModelViewSet):
     queryset = TbDperiodoReservacion.objects.all()
     serializer_class = TbDperiodoReservacion
-
+    
 class TbDreservacionViewSet(viewsets.ModelViewSet):
     queryset = TbDreservacion.objects.all()
     def get_serializer_class(self):
