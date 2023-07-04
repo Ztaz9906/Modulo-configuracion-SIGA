@@ -1,13 +1,13 @@
 from django.urls import path, include
 from rest_framework import routers
-from .views import TbInstitucionViewSet,TbUserViewSet,GroupViewSet,TbSystemViewSet,CustomLoginView
+from .views import TbInstitucionViewSet, TbUserViewSet, GroupViewSet, CustomLoginView
 from dj_rest_auth.urls import LogoutView
 router = routers.DefaultRouter()
 ################ Nuevo modelo #################################
 router.register(r'Instituciones', TbInstitucionViewSet)
 ################   final     #################################
 router.register("roles", GroupViewSet)
-router.register("TbSystem", TbSystemViewSet)
+
 router.register("Users", TbUserViewSet)
 
 urlpatterns = [

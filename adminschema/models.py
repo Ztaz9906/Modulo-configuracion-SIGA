@@ -1,27 +1,48 @@
 from django.db import models
-from base.models import TbDpersona
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, Group,Permission
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, Group
+from django.contrib.postgres.fields import ArrayField
+
+
+def add_database(db_name):
+    from django.conf import settings
+    settings.DATABASES[db_name] = {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': db_name,
+        'USER': 'postgres',
+        'PASSWORD': '1234',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
 
 ################ Nuevo modelo #################################
+
+
 class TbInstitucion(models.Model):
     name = models.TextField()
     description = models.TextField(blank=True, null=True)
     active = models.BooleanField(blank=True, null=True)
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
-    
+    db_name = models.TextField(blank=True, null=True)
+    active_modules = ArrayField(models.CharField(
+        max_length=200), blank=True, default=list)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        add_database(self.db_name)
+
     class Meta:
         db_table = 'tb_institucion_admin'
-        
+
 ################   final     #################################
+
 
 class TbAvatar(models.Model):
     photo = models.BinaryField(blank=True, null=True)
-    photo_dir = models.TextField(blank=True, null=True)
+    photo_url = models.TextField(blank=True, null=True)
 
     class Meta:
         db_table = 'tb_avatar'
-        
+
+
 class TbUserManager(BaseUserManager):
     """Manager para usuarios"""
 
@@ -31,7 +52,7 @@ class TbUserManager(BaseUserManager):
             raise ValueError("El usuario debe tener un email")
 
         email = self.normalize_email(email)
-        user = self.model(email=email, username=username,**extra_fields)
+        user = self.model(email=email, username=username, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
 
@@ -52,36 +73,27 @@ class TbUserManager(BaseUserManager):
 
 class TbUser(AbstractBaseUser, PermissionsMixin):
     """Modelo BD para Users"""
-    avatar = models.OneToOneField(TbAvatar, models.DO_NOTHING, blank=True, null=True)
+    avatar = models.OneToOneField(
+        TbAvatar, models.DO_NOTHING, blank=True, null=True)
     email = models.EmailField(max_length=255, unique=True)
     username = models.CharField(max_length=255, unique=True)
-    rol = models.ForeignKey(Group,models.DO_NOTHING,related_name='user_rol',blank=False, null=False)
+    rol = models.ForeignKey(Group, models.DO_NOTHING,
+                            related_name='user_rol', blank=False, null=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-    id_institucion = models.ForeignKey(TbInstitucion, models.DO_NOTHING, db_column='id_institucion', blank=True, null=True)
-    # id_persona = models.ForeignKey(TbDpersona, models.DO_NOTHING, db_column='id_persona', blank=True, null=True)
+    id_institucion = models.ForeignKey(
+        TbInstitucion, models.DO_NOTHING, db_column='id_institucion', blank=True, null=True)
+
     objects = TbUserManager()
 
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['id_institucion','email']
+    REQUIRED_FIELDS = ['id_institucion', 'email']
+
     class Meta:
         verbose_name = 'Usuario'
         verbose_name_plural = 'Usuarios'
         db_table = 'tb_user'
-        
+
     def __str__(self):
         """Return String"""
         return self.email
-### Se quita  
-class TbSystem(models.Model):
-    name = models.TextField(blank=True, null=True)
-    system_code = models.CharField(primary_key=True, max_length=1)
-    active = models.BooleanField()
-    register_date = models.DateTimeField(blank=True, null=True)
-    acronym = models.TextField(unique=True, blank=True, null=True)
-    routing = models.TextField(blank=True, null=True)
-    icon = models.TextField(blank=True, null=True)
-
-    class Meta:
-        
-        db_table = 'tb_system'

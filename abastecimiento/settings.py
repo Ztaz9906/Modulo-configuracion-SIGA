@@ -95,10 +95,6 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': '5432',
     }
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # }
 }
 
 
@@ -144,7 +140,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-## Para django-rest-framework
+# Para django-rest-framework
 
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
