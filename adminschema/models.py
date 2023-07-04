@@ -3,19 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from django.contrib.postgres.fields import ArrayField
 
 
-def add_database(db_name):
-    from django.conf import settings
-    settings.DATABASES[db_name] = {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': db_name,
-        'USER': 'postgres',
-        'PASSWORD': '1234',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-
 ################ Nuevo modelo #################################
-
 
 class TbInstitucion(models.Model):
     name = models.TextField()
@@ -24,10 +12,6 @@ class TbInstitucion(models.Model):
     db_name = models.TextField(blank=True, null=True)
     active_modules = ArrayField(models.CharField(
         max_length=200), blank=True, default=list)
-
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        add_database(self.db_name)
 
     class Meta:
         db_table = 'tb_institucion_admin'
@@ -72,7 +56,7 @@ class TbUserManager(BaseUserManager):
 
 
 class TbUser(AbstractBaseUser, PermissionsMixin):
-    """Modelo BD para Users"""
+
     avatar = models.OneToOneField(
         TbAvatar, models.DO_NOTHING, blank=True, null=True)
     email = models.EmailField(max_length=255, unique=True)

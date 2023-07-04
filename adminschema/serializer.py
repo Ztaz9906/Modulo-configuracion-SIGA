@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from .models import *
-from base.serializers import TbDpersonaSerializer
+from django.contrib.auth.models import Group, Permission
 from dj_rest_auth.serializers import LoginSerializer
+
 ################ Nuevo modelo #################################
 
 
@@ -9,6 +10,7 @@ class TbInstitucionSerializer(serializers.ModelSerializer):
     class Meta:
         model = TbInstitucion
         fields = '__all__'
+
 ################   final     #################################
 
 
@@ -19,7 +21,6 @@ class TbAvatarSerializer(serializers.ModelSerializer):
 
 
 class TbUserSerializer(serializers.ModelSerializer):
-    """SERIALIZA EL OBJETO DE PERFIL DE USUARIO"""
     class Meta:
         model = TbUser
         fields = ['username', 'email', 'password', 'rol', 'id_institucion']
@@ -43,10 +44,18 @@ class TbUserSerializer(serializers.ModelSerializer):
         return user
 
 
+class PermisionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Permission
+        fields = '__all__'
+
+
 class GroupSerializer(serializers.ModelSerializer):
+    permissions = PermisionSerializer()
+
     class Meta:
         model = Group
-        fields = '__all__'
+        fields = ['id', 'permissions', 'name']
 
 
 class CustomLoginSerializer(LoginSerializer):

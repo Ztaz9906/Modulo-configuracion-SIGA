@@ -1,7 +1,6 @@
 from rest_framework import viewsets, filters
 from .models import TbUser, TbInstitucion
 from .serializer import TbInstitucionSerializer, TbUserSerializer, GroupSerializer, CustomLoginSerializer
-from rest_framework import status
 from django.contrib.auth.models import Group
 from dj_rest_auth.views import LoginView
 ################ Nuevo modelo #################################
@@ -26,6 +25,7 @@ class TbUserViewSet(viewsets.ModelViewSet):
 
 
 class GroupViewSet(viewsets.ModelViewSet):
+
     """"Genera CRUD de los GRUPOS de permisos"""
     serializer_class = GroupSerializer
     queryset = Group.objects.all()

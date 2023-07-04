@@ -6,9 +6,9 @@ router = routers.DefaultRouter()
 ################ Nuevo modelo #################################
 router.register(r'Instituciones', TbInstitucionViewSet)
 ################   final     #################################
-router.register("roles", GroupViewSet)
+router.register(r"roles", GroupViewSet)
 
-router.register("Users", TbUserViewSet)
+router.register(r"Users", TbUserViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
