@@ -26,7 +26,6 @@ router.register(r'Cajero_TbDaccesoEventoSecundario',
 router.register(r'Cajero_TbDIp_Puerta', TbDpersonaPuertaViewSet)
 router.register(r'Cajero_TbDsolapinPerdido', TbDsolapinPerdidoViewSet)
 router.register(r'Cajero_TbNestadoTarjeta', TbNestadoTarjetaViewSet)
-router.register(r'Cajero_TbNtipoError', TbNtipoErrorViewSet)
 router.register(r'Cajero_TbNtipoTarjeta', TbNtipoTarjetaViewSet)
 router.register(r'Cajero_TbDtarjetaAlimentacion',
                 TbDtarjetaAlimentacionViewSet)

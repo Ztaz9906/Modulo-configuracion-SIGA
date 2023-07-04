@@ -102,13 +102,6 @@ class TbNestadoTarjetaCreateSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class TbNtipoErrorCreateSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = TbNtipoError
-        fields = '__all__'
-
-
 class TbNtipoTarjetaCreateSerializer(serializers.ModelSerializer):
 
     class Meta:

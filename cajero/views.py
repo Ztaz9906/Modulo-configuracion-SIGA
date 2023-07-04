@@ -143,16 +143,6 @@ class TbNestadoTarjetaViewSet(viewsets.ModelViewSet):
             return TbNestadoTarjetaSerializer
 
 
-class TbNtipoErrorViewSet(viewsets.ModelViewSet):
-    queryset = TbNtipoError.objects.all()
-
-    def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return TbNtipoErrorCreateSerializer
-        else:
-            return TbNtipoErrorSerializer
-
-
 class TbNtipoTarjetaViewSet(viewsets.ModelViewSet):
     queryset = TbNtipoTarjeta.objects.all()
 
