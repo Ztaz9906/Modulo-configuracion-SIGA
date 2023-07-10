@@ -1,45 +1,64 @@
 from rest_framework import serializers
 from .models import *
-from base.serializers import TbDpersonaSerializer
-from django.contrib.auth import authenticate
+from django.contrib.auth.models import Group, Permission
+from dj_rest_auth.serializers import LoginSerializer
 
 ################ Nuevo modelo #################################
+
+
 class TbInstitucionSerializer(serializers.ModelSerializer):
     class Meta:
         model = TbInstitucion
         fields = '__all__'
+
 ################   final     #################################
+
+
 class TbAvatarSerializer(serializers.ModelSerializer):
-   class Meta:
+    class Meta:
         model = TbUser
         fields = '__all__'
+
+
 class TbUserSerializer(serializers.ModelSerializer):
-    avatar = TbAvatarSerializer(read_only=True)
-    password = serializers.CharField(write_only=True)
-    id_persona = TbDpersonaSerializer(read_only=True)
-    
     class Meta:
         model = TbUser
+        fields = ['username', 'email', 'password', 'rol', 'id_institucion']
+        extra_kwargs = {
+            'password': {
+                "write_only": True,
+                "style": {'input_type': 'password'}
+            }
+        }
+
+    def create(self, validated_data):
+        """Crear y retorna un nuevo usuario"""
+        rol = validated_data.pop('rol')
+        user = TbUser.objects.create_user(
+            email=validated_data['email'],
+            username=validated_data['username'],
+            id_institucion=validated_data['id_institucion'],
+            password=validated_data["password"],
+            rol=rol,
+        )
+        return user
+
+
+class PermisionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Permission
         fields = '__all__'
 
-class TbUserCreateSerializer(serializers.ModelSerializer):
-    # Añadimos un campo adicional para confirmar la contraseña
-    password_confirm = serializers.CharField(write_only=True)
-    class Meta:
-        model = TbUser
-        fields = ('username', 'password', 'password_confirm', 'email', 'id_institucion')
-        extra_kwargs = {'password': {'write_only': True}}
 
-    def validate(self, data):
-        # Validamos que los campos de contraseña coincidan
-        if data['password'] != data['password_confirm']:
-            raise serializers.ValidationError("Las contraseñas no coinciden.")
-        return data
-    def create(self, validated_data):
-        # Eliminamos el campo de confirmación de la contraseña
-        validated_data.pop('password_confirm')
-        password = validated_data.pop('password')
-        user = TbUser(**validated_data)
-        user.set_password(password)
-        user.save()
-        return user
+class GroupSerializer(serializers.ModelSerializer):
+    permissions = PermisionSerializer()
+
+    class Meta:
+        model = Group
+        fields = ['id', 'permissions', 'name']
+
+
+class CustomLoginSerializer(LoginSerializer):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields.pop('email')

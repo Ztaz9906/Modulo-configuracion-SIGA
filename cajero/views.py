@@ -1,10 +1,8 @@
-from rest_framework import viewsets,response, status
+from rest_framework import viewsets, filters
 from .models import *
 from .serializerGet import *
 from .serializerPost import *
-from rest_framework.response import Response
-from drf_yasg.utils import swagger_auto_schema
-from rest_framework.decorators import action
+
 
 ######################################################################## Pertenece a distibucion ################################
 class TbCategoryViewSet(viewsets.ModelViewSet):
@@ -15,7 +13,8 @@ class TbCategoryViewSet(viewsets.ModelViewSet):
             return TbCategoryCreateSerializer
         else:
             return TbCategorySerializer
-        
+
+
 class TbNclasificacionEventoViewSet(viewsets.ModelViewSet):
     queryset = TbNclasificacionEvento.objects.all()
 
@@ -24,7 +23,8 @@ class TbNclasificacionEventoViewSet(viewsets.ModelViewSet):
             return TbNclasificacionEventoCreateSerializer
         else:
             return TbNclasificacionEventoSerializer
-        
+
+
 class TbNhorarioViewSet(viewsets.ModelViewSet):
     queryset = TbNhorario.objects.all()
 
@@ -33,6 +33,7 @@ class TbNhorarioViewSet(viewsets.ModelViewSet):
             return TbNhorarioCreateSerializer
         else:
             return TbNhorarioSerializer
+
 
 class TbNeventoViewSet(viewsets.ModelViewSet):
     queryset = TbNevento.objects.all()
@@ -43,18 +44,7 @@ class TbNeventoViewSet(viewsets.ModelViewSet):
         else:
             return TbNeventoSerializer
 
-######################### tabla almacen de asset #############################
-class TbDalmacenViewSet(viewsets.ModelViewSet):
-    queryset = TbDalmacen.objects.all()
 
-    def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return TbDalmacenCreateSerializer
-        else:
-            return TbDalmacenSerializer
-    
-######################### Final #############################
-      
 class TbStructureViewSet(viewsets.ModelViewSet):
     queryset = TbStructure.objects.all()
 
@@ -67,32 +57,6 @@ class TbStructureViewSet(viewsets.ModelViewSet):
 
 ######################################################################## Abastecimiento con asset ###################################################
 
-class TbNcomposicionPlatoViewSet(viewsets.ModelViewSet):
-    queryset = TbNcomposicionPlato.objects.all()
-
-    def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return TbNcomposicionPlatoCreateSerializer
-        else:
-            return TbNcomposicionPlatoSerializer
-        
-class TbDmenuViewSet(viewsets.ModelViewSet):
-    queryset = TbDmenu.objects.all()
-
-    def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return TbDmenuCreateSerializer
-        else:
-            return TbDmenuSerializer
-
-class TbNclasificacionPlatoViewSet(viewsets.ModelViewSet):
-    queryset = TbNclasificacionPlato.objects.all()
-
-    def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return TbNclasificacionPlatoCreateSerializer
-        else:
-            return TbNclasificacionPlatoSerializer
 
 class TbNtipoProductoViewSet(viewsets.ModelViewSet):
     queryset = TbNtipoProducto.objects.all()
@@ -102,15 +66,7 @@ class TbNtipoProductoViewSet(viewsets.ModelViewSet):
             return TbNtipoProductoCreateSerializer
         else:
             return TbNtipoProductoSerializer
-        
-class TbNcategoriaTipoProductoViewSet(viewsets.ModelViewSet):
-    queryset = TbNcategoriaTipoProducto.objects.all()
 
-    def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return TbNcategoriaTipoProductoCreateSerializer
-        else:
-            return TbNcategoriaTipoProductoSerializer
 
 class TbNunidadMedidaViewSet(viewsets.ModelViewSet):
     queryset = TbNunidadMedida.objects.all()
@@ -120,17 +76,15 @@ class TbNunidadMedidaViewSet(viewsets.ModelViewSet):
             return TbNunidadMedidaCreateSerializer
         else:
             return TbNunidadMedidaSerializer
-    
+
+
+class TbNclasificacionPlatoViewSet(viewsets.ModelViewSet):
+    queryset = TbNclasificacionPlato.objects.all()
+    serializer_class = TbNclasificacionPlatoSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['activo']
 ####### Empieza esquema asset ##########
 
-class TbNclasificacionProductoViewSet(viewsets.ModelViewSet):
-    queryset = TbNclasificacionProducto.objects.all()
-
-    def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return TbNclasificacionProductoCreateSerializer
-        else:
-            return TbNclasificacionProductoSerializer
 
 class TbDproductoViewSet(viewsets.ModelViewSet):
     queryset = TbDproducto.objects.all()
@@ -140,25 +94,8 @@ class TbDproductoViewSet(viewsets.ModelViewSet):
             return TbDproductoCreateSerializer
         else:
             return TbDproductoSerializer
-    
-class TbRproductoAlmacenViewSet(viewsets.ModelViewSet):
-    queryset = TbRproductoAlmacen.objects.all()
 
-    def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return TbRproductoAlmacenCreateSerializer
-        else:
-            return TbRproductoAlmacenSerializer
 
-class TbFechaViewSet(viewsets.ModelViewSet):
-    queryset = TbFecha.objects.all()
-
-    def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return TbFechaCreateSerializer
-        else:
-            return TbFechaSerializer
-    
 ######### Termina esquema assets #########
 class TbDconfiguracionProductoViewSet(viewsets.ModelViewSet):
     queryset = TbDconfiguracionProducto.objects.all()
@@ -169,61 +106,8 @@ class TbDconfiguracionProductoViewSet(viewsets.ModelViewSet):
         else:
             return TbDconfiguracionProductoSerializer
 
-class TbDequivalenciaUnidadMedidaViewSet(viewsets.ModelViewSet):
-    queryset = TbDequivalenciaUnidadMedida.objects.all()
-
-    def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return TbDequivalenciaUnidadMedidaCreateSerializer
-        else:
-            return TbDequivalenciaUnidadMedidaSerializer
-
-class TbNplatoViewSet(viewsets.ModelViewSet):
-    queryset = TbNplato.objects.all()
-
-    def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return TbNplatoCreateSerializer
-        else:
-            return TbNplatoSerializer
-    
-class TbRmenuPlatoViewSet(viewsets.ModelViewSet):
-    queryset = TbRmenuPlato.objects.all()
-
-    def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return TbRmenuPlatoCreateSerializer
-        else:
-            return TbRmenuPlatoSerializer
-
-class TbRmenuPlatoProductoViewSet(viewsets.ModelViewSet):
-    queryset = TbRmenuPlatoProducto.objects.all()
-
-    def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return TbRmenuPlatoProductoCreateSerializer
-        else:
-            return TbRmenuPlatoProductoSerializer
-    
-class TbRplatoEventoViewSet(viewsets.ModelViewSet):
-    queryset = TbRplatoEvento.objects.all()
-
-    def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return TbRplatoEventoCreateSerializer
-        else:
-            return TbRplatoEventoSerializer
-    
-class TbRplatoProductoViewSet(viewsets.ModelViewSet):
-    queryset = TbRplatoProducto.objects.all()
-
-    def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return TbRplatoProductoCreateSerializer
-        else:
-            return TbRplatoProductoSerializer
-    
 ######################################################################## Final #################################################
+
 
 class TbDaccesoEventoSecundarioViewSet(viewsets.ModelViewSet):
     queryset = TbDaccesoEventoSecundario.objects.all()
@@ -233,10 +117,10 @@ class TbDaccesoEventoSecundarioViewSet(viewsets.ModelViewSet):
             return TbDaccesoEventoSecundarioCreateSerializer
         else:
             return TbDaccesoEventoSecundarioSerializer
-    
+
 
 class TbDpersonaPuertaViewSet(viewsets.ModelViewSet):
-    queryset = TbDpersonaPuerta.objects.all()
+    queryset = TbDpersonaIPPuerta.objects.all()
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
@@ -244,14 +128,6 @@ class TbDpersonaPuertaViewSet(viewsets.ModelViewSet):
         else:
             return TbDpersonaPuertaSerializer
 
-class TbDplanEventoViewSet(viewsets.ModelViewSet):
-    queryset = TbDplanEvento.objects.all()
-
-    def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return TbDplanEventoCreateSerializer
-        else:
-            return TbDplanEventoSerializer
 
 class TbDsolapinPerdidoViewSet(viewsets.ModelViewSet):
     queryset = TbDsolapinPerdido.objects.all()
@@ -261,7 +137,8 @@ class TbDsolapinPerdidoViewSet(viewsets.ModelViewSet):
             return TbDsolapinPerdidoCreateSerializer
         else:
             return TbDsolapinPerdidoSerializer
-        
+
+
 class TbNestadoTarjetaViewSet(viewsets.ModelViewSet):
     queryset = TbNestadoTarjeta.objects.all()
 
@@ -271,14 +148,6 @@ class TbNestadoTarjetaViewSet(viewsets.ModelViewSet):
         else:
             return TbNestadoTarjetaSerializer
 
-class TbNtipoErrorViewSet(viewsets.ModelViewSet):
-    queryset = TbNtipoError.objects.all()
-
-    def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return TbNtipoErrorCreateSerializer
-        else:
-            return TbNtipoErrorSerializer
 
 class TbNtipoTarjetaViewSet(viewsets.ModelViewSet):
     queryset = TbNtipoTarjeta.objects.all()
@@ -288,6 +157,7 @@ class TbNtipoTarjetaViewSet(viewsets.ModelViewSet):
             return TbNtipoTarjetaCreateSerializer
         else:
             return TbNtipoTarjetaSerializer
+
 
 class TbDtarjetaAlimentacionViewSet(viewsets.ModelViewSet):
     queryset = TbDtarjetaAlimentacion.objects.all()
@@ -300,6 +170,7 @@ class TbDtarjetaAlimentacionViewSet(viewsets.ModelViewSet):
 
 ################################################################ Distribucion #################################################################
 
+
 class TbNclasificacionDistribucionViewSet(viewsets.ModelViewSet):
     queryset = TbNclasificacionDistribucion.objects.all()
 
@@ -308,6 +179,7 @@ class TbNclasificacionDistribucionViewSet(viewsets.ModelViewSet):
             return TbNclasificacionDistribucionCreateSerializer
         else:
             return TbNclasificacionDistribucionSerializer
+
 
 class TbDdistribucionViewSet(viewsets.ModelViewSet):
     queryset = TbDdistribucion.objects.all()
@@ -318,6 +190,7 @@ class TbDdistribucionViewSet(viewsets.ModelViewSet):
         else:
             return TbDdistribucionSerializer
 
+
 class TbDpersonaDistribucionViewSet(viewsets.ModelViewSet):
     queryset = TbDpersonaDistribucion.objects.all()
 
@@ -326,6 +199,7 @@ class TbDpersonaDistribucionViewSet(viewsets.ModelViewSet):
             return TbDpersonaDistribucionCreateSerializer
         else:
             return TbDpersonaDistribucionSerializer
+
 
 class TbDtarjetaDistribucionViewSet(viewsets.ModelViewSet):
     queryset = TbDtarjetaDistribucion.objects.all()
@@ -336,6 +210,7 @@ class TbDtarjetaDistribucionViewSet(viewsets.ModelViewSet):
         else:
             return TbDtarjetaDistribucionSerializer
 
+
 class TbNreglaViewSet(viewsets.ModelViewSet):
     queryset = TbNregla.objects.all()
 
@@ -344,6 +219,7 @@ class TbNreglaViewSet(viewsets.ModelViewSet):
             return TbNreglaCreateSerializer
         else:
             return TbNreglaSerializer
+
 
 class TbDvaloresReglaViewSet(viewsets.ModelViewSet):
     queryset = TbDvaloresRegla.objects.all()
@@ -354,7 +230,9 @@ class TbDvaloresReglaViewSet(viewsets.ModelViewSet):
         else:
             return TbDvaloresReglaSerializer
 
-# Revisar por q este modelo en la base de datos no tiene ninguna relacion con las tablas 
+# Revisar por q este modelo en la base de datos no tiene ninguna relacion con las tablas
+
+
 class TbLastDistribucionViewSet(viewsets.ModelViewSet):
     queryset = TbLastDistribucion.objects.all()
 
@@ -363,6 +241,7 @@ class TbLastDistribucionViewSet(viewsets.ModelViewSet):
             return TbLastDistribucionCreateSerializer
         else:
             return TbLastDistribucionSerializer
+
 
 class TbNdiaSemanaViewSet(viewsets.ModelViewSet):
     queryset = TbNdiaSemana.objects.all()
@@ -373,6 +252,7 @@ class TbNdiaSemanaViewSet(viewsets.ModelViewSet):
         else:
             return TbNdiaSemanaSerializer
 
+
 class TbNrangoEventoViewSet(viewsets.ModelViewSet):
     queryset = TbNrangoEvento.objects.all()
 
@@ -382,6 +262,7 @@ class TbNrangoEventoViewSet(viewsets.ModelViewSet):
         else:
             return TbNrangoEventoSerializer
 
+
 class TbRdistribucionReglaViewSet(viewsets.ModelViewSet):
     queryset = TbRdistribucionRegla.objects.all()
 
@@ -390,7 +271,8 @@ class TbRdistribucionReglaViewSet(viewsets.ModelViewSet):
             return TbRdistribucionReglaCreateSerializer
         else:
             return TbRdistribucionReglaSerializer
-    
+
+
 class TbRestructuraReglaViewSet(viewsets.ModelViewSet):
     queryset = TbRestructuraRegla.objects.all()
 
@@ -399,7 +281,8 @@ class TbRestructuraReglaViewSet(viewsets.ModelViewSet):
             return TbRestructuraReglaCreateSerializer
         else:
             return TbRestructuraReglaSerializer
-   
+
+
 class TbReventoHorarioViewSet(viewsets.ModelViewSet):
     queryset = TbReventoHorario.objects.all()
 
@@ -408,6 +291,7 @@ class TbReventoHorarioViewSet(viewsets.ModelViewSet):
             return TbReventoHorarioCreateSerializer
         else:
             return TbReventoHorarioSerializer
+
 
 class TbReventoRangoEventoViewSet(viewsets.ModelViewSet):
     queryset = TbReventoRangoEvento.objects.all()
@@ -418,6 +302,7 @@ class TbReventoRangoEventoViewSet(viewsets.ModelViewSet):
         else:
             return TbReventoRangoEventoSerializer
 
+
 class TbRhorarioDiaSemanaViewSet(viewsets.ModelViewSet):
     queryset = TbRhorarioDiaSemana.objects.all()
 
@@ -427,27 +312,13 @@ class TbRhorarioDiaSemanaViewSet(viewsets.ModelViewSet):
         else:
             return TbRhorarioDiaSemanaSerializer
 
-#revisar por que esta sin ralacion alguna ninnguno de estos id
-class TbTempDistribucionTarjetaViewSet(viewsets.ModelViewSet):
-    queryset = TbTempDistribucionTarjeta.objects.all()
+# revisar por que esta sin ralacion alguna ninnguno de estos id
 
-    def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return TbTempDistribucionTarjetaCreateSerializer
-        else:
-            return TbTempDistribucionTarjetaSerializer
 
 ################################################################    Fin      #################################################################
 
 ################################################################ Esquema cajero ##############################################################
-class TbDaccesoViewSet(viewsets.ModelViewSet):
-    queryset = TbDacceso.objects.all()
 
-    def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return TbDaccesoCreateSerializer
-        else:
-            return TbDaccesoSerializer
 
 class TbDconfiguracionTarjetaViewSet(viewsets.ModelViewSet):
     queryset = TbDconfiguracionTarjeta.objects.all()
@@ -458,14 +329,6 @@ class TbDconfiguracionTarjetaViewSet(viewsets.ModelViewSet):
         else:
             return TbDconfiguracionTarjetaSerializer
 
-class TbDerrorAccesoViewSet(viewsets.ModelViewSet):
-    queryset = TbDerrorAcceso.objects.all()
-
-    def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return TbDerrorAccesoCreateSerializer
-        else:
-            return TbDerrorAccesoSerializer
 
 class TbNestadoMovimientoAsignacionViewSet(viewsets.ModelViewSet):
     queryset = TbNestadoMovimientoAsignacion.objects.all()
@@ -476,6 +339,7 @@ class TbNestadoMovimientoAsignacionViewSet(viewsets.ModelViewSet):
         else:
             return TbNestadoMovimientoAsignacionSerializer
 
+
 class TbMovimientoAsignacionViewSet(viewsets.ModelViewSet):
     queryset = TbMovimientoAsignacion.objects.all()
 
@@ -485,15 +349,7 @@ class TbMovimientoAsignacionViewSet(viewsets.ModelViewSet):
         else:
             return TbMovimientoAsignacionSerializer
 
-class TbRmovimientoAsignacionPlatoViewSet(viewsets.ModelViewSet):
-    queryset = TbRmovimientoAsignacionPlato.objects.all()
 
-    def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return TbRmovimientoAsignacionPlatoCreateSerializer
-        else:
-            return TbRmovimientoAsignacionPlatoSerializer
-    
 class TbRpersonaTarjetaViewSet(viewsets.ModelViewSet):
     queryset = TbRpersonaTarjeta.objects.all()
 
@@ -503,5 +359,3 @@ class TbRpersonaTarjetaViewSet(viewsets.ModelViewSet):
         else:
             return TbRpersonaTarjetaSerializer
 ########################################################################## Fin ###############################################################################
-    
-
