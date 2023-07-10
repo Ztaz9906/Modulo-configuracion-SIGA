@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, filters
 from .models import *
 from .serializerGet import *
 from .serializerPost import *
@@ -77,6 +77,12 @@ class TbNunidadMedidaViewSet(viewsets.ModelViewSet):
         else:
             return TbNunidadMedidaSerializer
 
+
+class TbNclasificacionPlatoViewSet(viewsets.ModelViewSet):
+    queryset = TbNclasificacionPlato.objects.all()
+    serializer_class = TbNclasificacionPlatoSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['activo']
 ####### Empieza esquema asset ##########
 
 

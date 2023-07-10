@@ -12,6 +12,9 @@ router.register(r'Distribucion_TbNevento', TbNeventoViewSet)
 router.register(r'Distribucion_TbStructure', TbStructureViewSet)
 ######################################################################## Final ############################################
 ######################################################################## Abastecimiento con asset ###################################################
+
+router.register(r'Abastecimiento_TbNclasificacionPlato',
+                TbNclasificacionPlatoViewSet)
 router.register(r'Abastecimiento_TbNtipoProducto', TbNtipoProductoViewSet)
 router.register(r'Abastecimiento_TbNunidadMedida', TbNunidadMedidaViewSet)
 ####### Empieza esquema asset ##########

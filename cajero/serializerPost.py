@@ -48,6 +48,12 @@ class TbNtipoProductoCreateSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class TbNclasificacionPlatoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TbNclasificacionPlato
+        fields = '__all__'
+
+
 class TbNunidadMedidaCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
