@@ -136,9 +136,7 @@ class TbDproducto(models.Model):
     id_institucion = models.ForeignKey(TbInstitucion, models.CASCADE)
     id_producto = models.AutoField(primary_key=True)
     nombre_producto = models.CharField(max_length=255)
-    id_asset = models.CharField(max_length=1)
     descripcion = models.TextField(blank=True, null=True)
-    precio_cuc = models.FloatField()
     precio_cup = models.FloatField(blank=True, null=True)
     id_tipo_producto = models.ForeignKey(
         TbNtipoProducto, models.DO_NOTHING, db_column='id_tipo_producto')

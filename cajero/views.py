@@ -90,10 +90,10 @@ class TbDproductoViewSet(viewsets.ModelViewSet):
     queryset = TbDproducto.objects.all()
 
     def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return TbDproductoCreateSerializer
-        else:
+        if self.request.method == 'GET':
             return TbDproductoSerializer
+        else:
+            return TbDproductoCreateSerializer
 
 
 ######### Termina esquema assets #########

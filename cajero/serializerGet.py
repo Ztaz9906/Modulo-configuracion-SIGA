@@ -74,7 +74,7 @@ class TbNunidadMedidaSerializer(serializers.ModelSerializer):
 
 class TbDproductoSerializer(serializers.ModelSerializer):
     id_unidad_medida = TbNunidadMedidaSerializer(read_only=True)
-    id_tipo_producto = TbNtipoProductoSerializer
+    id_tipo_producto = TbNtipoProductoSerializer(read_only=True)
 
     class Meta:
         model = TbDproducto
