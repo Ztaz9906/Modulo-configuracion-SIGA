@@ -119,7 +119,8 @@ class TbDtarjetaAlimentacionCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TbDtarjetaAlimentacion
-        fields = '__all__'
+        fields = ['id_usuario_registro', 'id_tipo_tarjeta',
+                  'id_institucion', 'id_estado_tarjeta', 'fecha_registro', 'fecha_modificacion']
 
 ################################################################ Distribucion #################################################################
 

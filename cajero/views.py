@@ -9,10 +9,10 @@ class TbCategoryViewSet(viewsets.ModelViewSet):
     queryset = TbCategory.objects.all()
 
     def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return TbCategoryCreateSerializer
-        else:
+        if self.request.method == 'GET':
             return TbCategorySerializer
+        else:
+            return TbCategoryCreateSerializer
 
 
 class TbNclasificacionEventoViewSet(viewsets.ModelViewSet):
@@ -163,10 +163,10 @@ class TbDtarjetaAlimentacionViewSet(viewsets.ModelViewSet):
     queryset = TbDtarjetaAlimentacion.objects.all()
 
     def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return TbDtarjetaAlimentacionCreateSerializer
-        else:
+        if self.request.method == 'GET':
             return TbDtarjetaAlimentacionSerializer
+        else:
+            return TbDtarjetaAlimentacionCreateSerializer
 
 ################################################################ Distribucion #################################################################
 

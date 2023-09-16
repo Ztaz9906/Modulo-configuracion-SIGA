@@ -10,8 +10,8 @@ class TbCategory(models.Model):
     name = models.TextField()
     description = models.TextField(blank=True, null=True)
     active = models.BooleanField(blank=True, null=True)
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True, blank=True)
     color = models.TextField()
 
     class Meta:
@@ -73,7 +73,7 @@ class TbStructure(models.Model):
     initials = models.TextField(blank=True, null=True)
     active = models.BooleanField(blank=True, null=True)
     created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
+    updated_at = models.DateTimeField(auto_now=True, blank=True)
     version = models.IntegerField()
     description = models.TextField(blank=True, null=True)
     capacidad = models.IntegerField(blank=True, null=True)
@@ -84,6 +84,12 @@ class TbStructure(models.Model):
     centro_costo = models.TextField(blank=True, null=True)
     id_especialista_complejo = models.ForeignKey(
         TbDpersona, models.DO_NOTHING, db_column='id_especialista_complejo', blank=True, null=True, related_name='id_especialista_complejo_Structure')
+
+    @property
+    def raiz(self):
+        if not self.estructura_parent:
+            return self
+        return self.estructura_parent.raiz
 
     class Meta:
         db_table = 'tb_structure'
@@ -244,8 +250,8 @@ class TbNtipoTarjeta(models.Model):
 class TbDtarjetaAlimentacion(models.Model):
     id_institucion = models.ForeignKey(TbInstitucion, models.CASCADE)
     id_tarjeta_alimentacion = models.AutoField(primary_key=True)
-    codigo = models.TextField(blank=True, null=True)
-    numero_serie = models.TextField(blank=True, null=True)
+    codigo = models.TextField(blank=True, null=True, default='12345COD')
+    numero_serie = models.TextField(blank=True, null=True, default='12345NO')
     id_estado_tarjeta = models.ForeignKey(
         TbNestadoTarjeta, models.DO_NOTHING, db_column='id_estado_tarjeta', blank=True, null=True)
     fecha_registro = models.DateField(blank=True, null=True)

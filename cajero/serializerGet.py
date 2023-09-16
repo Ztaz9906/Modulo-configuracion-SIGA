@@ -32,11 +32,10 @@ class TbNeventoSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class TbStructurePadreSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = TbStructure
-        fields = '__all__'
+class RecursiveField(serializers.BaseSerializer):
+    def to_representation(self, value):
+        serializer = TbStructureSerializer(value, context=self.context)
+        return serializer.data
 
 
 class TbStructureSerializer(serializers.ModelSerializer):
@@ -45,7 +44,7 @@ class TbStructureSerializer(serializers.ModelSerializer):
     id_especialista_complejo = TbDpersonaSerializer(read_only=True)
     id_tecnico_atm = TbDpersonaSerializer(read_only=True)
     category = TbCategorySerializer(read_only=True)
-    estructura_parent = TbStructurePadreSerializer(read_only=True)
+    estructura_parent = RecursiveField(allow_null=True, read_only=True)
 
     class Meta:
         model = TbStructure

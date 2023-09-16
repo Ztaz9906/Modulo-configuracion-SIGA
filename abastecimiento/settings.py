@@ -26,7 +26,10 @@ SECRET_KEY = 'django-insecure-l(28uwf@zfunraq!#j9sa%m!(m65(sinrz!8a&*znf=x4!3pi+
 DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+]
 
 # Application definition
 
@@ -56,16 +59,14 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  # Mueve esto aquí
+    'django.middleware.common.CommonMiddleware',  # Después de CorsMiddleware
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
 ]
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-]
+
 
 ROOT_URLCONF = 'abastecimiento.urls'
 
@@ -157,7 +158,6 @@ REST_FRAMEWORK = {
         'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
     ],
 }
-CORS_ORIGIN_ALLOW_ALL = True
 REST_USE_JWT = True
 JWT_AUTH_COOKIE = 'my-app-auth'
 
