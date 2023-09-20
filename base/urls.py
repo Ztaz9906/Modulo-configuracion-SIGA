@@ -5,6 +5,8 @@ from .views import *
 router = routers.DefaultRouter()
 ################ Nuevo modelo #################################
 router.register(r'Torpedo', TbTorpedoViewSet)
+router.register(r'Persona', TbDpersonaViewSet)
+
 ################   final     #################################
 
 urlpatterns = [

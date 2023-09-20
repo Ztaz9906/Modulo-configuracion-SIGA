@@ -37,15 +37,19 @@ class RecursiveField(serializers.BaseSerializer):
         serializer = TbStructureSerializer(value, context=self.context)
         return serializer.data
 
-
+class TbStructureParentSerializer(serializers.ModelSerializer):
+    # Solo contiene la información básica del padre
+    class Meta:
+        model = TbStructure
+        fields = ['id', 'name'] 
 class TbStructureSerializer(serializers.ModelSerializer):
     id_sub_director = TbDpersonaSerializer(read_only=True)
     id_tecnico_general = TbDpersonaSerializer(read_only=True)
     id_especialista_complejo = TbDpersonaSerializer(read_only=True)
     id_tecnico_atm = TbDpersonaSerializer(read_only=True)
     category = TbCategorySerializer(read_only=True)
-    estructura_parent = RecursiveField(allow_null=True, read_only=True)
-
+    children = RecursiveField(many=True, read_only=True)
+    estructura_parent = TbStructureParentSerializer(read_only=True)
     class Meta:
         model = TbStructure
         fields = '__all__'

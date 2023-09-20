@@ -17,6 +17,10 @@ class TbCategory(models.Model):
     class Meta:
         db_table = 'tb_category'
 
+    def __str__(self):
+        """Return String"""
+        return self.name
+
 
 class TbNclasificacionEvento(models.Model):
     id_institucion = models.ForeignKey(TbInstitucion, models.CASCADE)
@@ -68,13 +72,13 @@ class TbStructure(models.Model):
     id_institucion = models.ForeignKey(TbInstitucion, models.CASCADE)
     category = models.ForeignKey(TbCategory, models.DO_NOTHING)
     estructura_parent = models.ForeignKey(
-        'self', models.DO_NOTHING, blank=True, null=True)
+        'self', on_delete=models.CASCADE, blank=True, null=True, related_name='children')
     name = models.TextField()
     initials = models.TextField(blank=True, null=True)
     active = models.BooleanField(blank=True, null=True)
-    created_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True, blank=True)
-    version = models.IntegerField()
+    version = models.IntegerField(blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     capacidad = models.IntegerField(blank=True, null=True)
     id_sub_director = models.ForeignKey(TbDpersona, models.DO_NOTHING, db_column='id_sub_director',
@@ -85,14 +89,12 @@ class TbStructure(models.Model):
     id_especialista_complejo = models.ForeignKey(
         TbDpersona, models.DO_NOTHING, db_column='id_especialista_complejo', blank=True, null=True, related_name='id_especialista_complejo_Structure')
 
-    @property
-    def raiz(self):
-        if not self.estructura_parent:
-            return self
-        return self.estructura_parent.raiz
-
     class Meta:
         db_table = 'tb_structure'
+
+    def __str__(self):
+        """Return String"""
+        return self.name
 ######################################################################## Final ############################################
 
 ######################################################################## Abastecimiento con asset ###################################################
