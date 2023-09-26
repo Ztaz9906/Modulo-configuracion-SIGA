@@ -17,8 +17,13 @@ class TbNclasificacionEventoSerializer(serializers.ModelSerializer):
         model = TbNclasificacionEvento
         fields = '__all__'
 
+class TbNdiaSemanaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TbNdiaSemana
+        fields = '__all__'
 
 class TbNhorarioSerializer(serializers.ModelSerializer):
+    dias_semana=TbNdiaSemanaSerializer(many=True,read_only=True)
     class Meta:
         model = TbNhorario
         fields = '__all__'
@@ -28,7 +33,7 @@ class TbNeventoSerializer(serializers.ModelSerializer):
     id_horario = TbNhorarioSerializer(read_only=True)
 
     class Meta:
-        model = TbNhorario
+        model = TbNevento
         fields = '__all__'
 
 
@@ -235,12 +240,6 @@ class TbLastDistribucionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class TbNdiaSemanaSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TbNdiaSemana
-        fields = '__all__'
-
-
 class TbNrangoEventoSerializer(serializers.ModelSerializer):
     class Meta:
         model = TbNrangoEvento
@@ -283,14 +282,6 @@ class TbReventoRangoEventoSerializer(serializers.ModelSerializer):
         model = TbReventoRangoEvento
         fields = '__all__'
 
-
-class TbRhorarioDiaSemanaSerializer(serializers.ModelSerializer):
-    id_horario = TbNhorarioSerializer(read_only=True)
-    id_dia_semana = TbNdiaSemanaSerializer(read_only=True)
-
-    class Meta:
-        model = TbRhorarioDiaSemana
-        fields = '__all__'
 
 # revisar por que esta sin ralacion alguna ninnguno de estos id
 

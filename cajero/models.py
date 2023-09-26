@@ -1,7 +1,7 @@
 from django.db import models
 from base.models import TbDpersona
 from adminschema.models import TbUser, TbInstitucion
-
+from django.contrib.postgres.fields import ArrayField
 ######################################################################## Pertenece a distibucion ################################
 
 
@@ -33,10 +33,21 @@ class TbNclasificacionEvento(models.Model):
     class Meta:
         db_table = 'tb_nclasificacion_evento'
 
+class TbNdiaSemana(models.Model):
+    id_dia_semana = models.AutoField(primary_key=True)
+    dia_semana = models.CharField(max_length=10)
+    
+    def __str__(self) -> str:
+        return self.dia_semana
+
+    class Meta:
+        db_table = 'tb_ndia_semana'
 
 class TbNhorario(models.Model):
+   
     id_institucion = models.ForeignKey(TbInstitucion, models.CASCADE)
     id_horario = models.AutoField(primary_key=True)
+    dias_semana = models.ManyToManyField(TbNdiaSemana)
     nombre_horario = models.TextField()
     hora_inicio = models.TimeField()
     hora_fin = models.TimeField()
@@ -64,6 +75,8 @@ class TbNevento(models.Model):
     icono = models.TextField(blank=True, null=True)
     color = models.TextField(blank=True, null=True)
 
+    def __str__(self) -> str:
+        return self.nombre_evento
     class Meta:
         db_table = 'tb_nevento'
 
@@ -401,16 +414,6 @@ class TbLastDistribucion(models.Model):
         db_table = 'tb_last_distribucion'
 
 
-class TbNdiaSemana(models.Model):
-    id_institucion = models.ForeignKey(TbInstitucion, models.CASCADE)
-    id_dia_semana = models.AutoField(primary_key=True)
-    nombre_dia_semana = models.CharField(max_length=10)
-    abreviatura_dia_semana = models.CharField(max_length=3)
-
-    class Meta:
-        db_table = 'tb_ndia_semana'
-
-
 class TbNrangoEvento(models.Model):
     id_institucion = models.ForeignKey(TbInstitucion, models.CASCADE)
     id_rango_evento = models.AutoField(primary_key=True)
@@ -477,18 +480,6 @@ class TbReventoRangoEvento(models.Model):
 
     class Meta:
         db_table = 'tb_revento_rango_evento'
-
-
-class TbRhorarioDiaSemana(models.Model):
-    id_institucion = models.ForeignKey(TbInstitucion, models.CASCADE)
-    id_horario_dia_semana = models.AutoField(primary_key=True)
-    id_horario = models.ForeignKey(
-        TbNhorario, models.DO_NOTHING, db_column='id_horario', blank=True, null=True)
-    id_dia_semana = models.ForeignKey(
-        TbNdiaSemana, models.DO_NOTHING, db_column='id_dia_semana', blank=True, null=True)
-
-    class Meta:
-        db_table = 'tb_rhorario_dia_semana'
 
 ################################################################    Fin      #################################################################
 

@@ -95,7 +95,7 @@ WSGI_APPLICATION = 'abastecimiento.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Tesis',
+        'NAME': 'Prueba',
         'USER': 'postgres',
         'PASSWORD': '1234',
         'HOST': 'localhost',

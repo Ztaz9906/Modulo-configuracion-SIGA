@@ -29,10 +29,10 @@ class TbNhorarioViewSet(viewsets.ModelViewSet):
     queryset = TbNhorario.objects.all()
 
     def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return TbNhorarioCreateSerializer
-        else:
+        if self.request.method == 'GET':
             return TbNhorarioSerializer
+        else:
+            return TbNhorarioCreateSerializer
 
 
 class TbNeventoViewSet(viewsets.ModelViewSet):
@@ -49,10 +49,10 @@ class TbStructureViewSet(viewsets.ModelViewSet):
     queryset = TbStructure.objects.all()
 
     def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return TbStructureCreateSerializer
-        else:
+        if self.request.method == 'GET':
             return TbStructureSerializer
+        else:
+            return TbStructureCreateSerializer
 ######################################################################## Final ############################################
 
 ######################################################################## Abastecimiento con asset ###################################################
@@ -245,13 +245,8 @@ class TbLastDistribucionViewSet(viewsets.ModelViewSet):
 
 class TbNdiaSemanaViewSet(viewsets.ModelViewSet):
     queryset = TbNdiaSemana.objects.all()
-
-    def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return TbNdiaSemanaCreateSerializer
-        else:
-            return TbNdiaSemanaSerializer
-
+    serializer_class = TbNdiaSemanaSerializer
+    
 
 class TbNrangoEventoViewSet(viewsets.ModelViewSet):
     queryset = TbNrangoEvento.objects.all()
@@ -287,10 +282,10 @@ class TbReventoHorarioViewSet(viewsets.ModelViewSet):
     queryset = TbReventoHorario.objects.all()
 
     def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return TbReventoHorarioCreateSerializer
-        else:
+        if self.request.method == 'GET':
             return TbReventoHorarioSerializer
+        else:
+            return TbReventoHorarioCreateSerializer
 
 
 class TbReventoRangoEventoViewSet(viewsets.ModelViewSet):
@@ -302,15 +297,6 @@ class TbReventoRangoEventoViewSet(viewsets.ModelViewSet):
         else:
             return TbReventoRangoEventoSerializer
 
-
-class TbRhorarioDiaSemanaViewSet(viewsets.ModelViewSet):
-    queryset = TbRhorarioDiaSemana.objects.all()
-
-    def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return TbRhorarioDiaSemanaCreateSerializer
-        else:
-            return TbRhorarioDiaSemanaSerializer
 
 # revisar por que esta sin ralacion alguna ninnguno de estos id
 

@@ -52,10 +52,7 @@ router.register(r'Distribucion_TbRestructuraRegla', TbRestructuraReglaViewSet)
 router.register(r'Distribucion_TbReventoHorario', TbReventoHorarioViewSet)
 router.register(r'Distribucion_TbReventoRangoEvento',
                 TbReventoRangoEventoViewSet)
-router.register(r'Distribucion_TbRhorarioDiaSemana',
-                TbRhorarioDiaSemanaViewSet)
-router.register(r'Distribucion_TbTempDistribucionTarSemana',
-                TbRhorarioDiaSemanaViewSet)
+
 ################################################################    Fin      #################################################################
 ############################################################### Esquema cajero ###############################################################
 router.register(r'Cajero_TbDconfiguracionTarjeta',

@@ -176,13 +176,6 @@ class TbLastDistribucionCreateSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class TbNdiaSemanaCreateSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = TbLastDistribucion
-        fields = '__all__'
-
-
 class TbNrangoEventoCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -217,12 +210,6 @@ class TbReventoRangoEventoCreateSerializer(serializers.ModelSerializer):
         model = TbReventoRangoEvento
         fields = '__all__'
 
-
-class TbRhorarioDiaSemanaCreateSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = TbRhorarioDiaSemana
-        fields = '__all__'
 
 ################################################################    Fin      #################################################################
 ################################################################ Esquema cajero ##############################################################
