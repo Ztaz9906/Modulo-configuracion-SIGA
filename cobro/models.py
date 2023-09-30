@@ -1,5 +1,5 @@
 from django.db import models
-from adminschema.models import TbUser
+from autenticacion.models.entities.usuario import Usuario
 from base.models import TbDpersona, TbNcategoriaResidente, TbNcategoria
 from cajero.models import TbNevento
 
@@ -34,10 +34,10 @@ class TbDimportacion(models.Model):
     fecha_fin = models.DateField(blank=True, null=True)
     id_estado_importacion = models.ForeignKey(
         TbNestadoImportacion, models.DO_NOTHING, db_column='id_estado_importacion', blank=True, null=True)
-    id_usuario_registro = models.ForeignKey(TbUser, models.DO_NOTHING, db_column='id_usuario_registro',
+    id_usuario_registro = models.ForeignKey(Usuario, models.DO_NOTHING, db_column='id_usuario_registro',
                                             blank=True, null=True, related_name='id_usuario_registro_importacion')
     id_usuario_modificacion = models.ForeignKey(
-        TbUser, models.DO_NOTHING, db_column='id_usuario_modificacion', blank=True, null=True, related_name='id_usuario_modificacion_importacion')
+        Usuario, models.DO_NOTHING, db_column='id_usuario_modificacion', blank=True, null=True, related_name='id_usuario_modificacion_importacion')
     fecha_modificacion = models.DateField(blank=True, null=True)
 
     class Meta:
@@ -51,7 +51,7 @@ class TbDimportaciones(models.Model):
     activo = models.BooleanField()
     fecha_inicio = models.DateField()
     fecha_fin = models.DateField()
-    id_usuario_registro = models.ForeignKey(TbUser, models.DO_NOTHING, db_column='id_usuario_registro',
+    id_usuario_registro = models.ForeignKey(Usuario, models.DO_NOTHING, db_column='id_usuario_registro',
                                             blank=True, null=True, related_name='id_usuario_registro_importaciones')
     fecha_registro = models.DateField()
     importe_desayuno = models.FloatField(blank=True, null=True)
@@ -97,7 +97,7 @@ class TbDpersonaRegla(models.Model):
 class TbDreglaCobro(models.Model):
     id_regla_cobro = models.AutoField(primary_key=True)
     nombre_regla_cobro = models.TextField()
-    id_usuario_registro = models.ForeignKey(TbUser, models.DO_NOTHING, db_column='id_usuario_registro',
+    id_usuario_registro = models.ForeignKey(Usuario, models.DO_NOTHING, db_column='id_usuario_registro',
                                             blank=True, null=True, related_name='id_usuario_registro_reglaCobro')
     activo = models.BooleanField()
     fijo = models.BooleanField()
@@ -164,7 +164,7 @@ class TbRpersonaExcluidaCobro(models.Model):
     id_importacion = models.ForeignKey(
         TbDimportacion, models.DO_NOTHING, db_column='id_importacion', blank=True, null=True)
     fecha_registro = models.DateField(blank=True, null=True)
-    id_usuario_registro = models.ForeignKey(TbUser, models.DO_NOTHING, db_column='id_usuario_registro',
+    id_usuario_registro = models.ForeignKey(Usuario, models.DO_NOTHING, db_column='id_usuario_registro',
                                             blank=True, null=True, related_name='id_usuario_registro_personaExcluidaCobro')
 
     class Meta:

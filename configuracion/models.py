@@ -1,5 +1,5 @@
 from django.db import models
-from adminschema.models import TbUser
+from autenticacion.models.entities.usuario import Usuario
 from base.models import TbNcategoria, TbNcategoriaResidente, TbNestructura, TbNtipoCurso
 
 # Aqui manda config comensales
@@ -24,7 +24,7 @@ class TbDconfiguracionProceso(models.Model):
     descripcion_configuracion_proceso = models.TextField(blank=True, null=True)
     fecha_registro = models.DateField(blank=True, null=True)
     id_usuario_registro = models.ForeignKey(
-        TbUser, models.DO_NOTHING, db_column='id_usuario_registro')
+        Usuario, models.DO_NOTHING, db_column='id_usuario_registro')
 
     class Meta:
 
@@ -37,7 +37,7 @@ class TbDdatosContacto(models.Model):
     telefono = models.TextField(blank=True, null=True)
     correo = models.TextField(blank=True, null=True)
     id_usuario_registro = models.ForeignKey(
-        TbUser, models.DO_NOTHING, db_column='id_usuario_registro')
+        Usuario, models.DO_NOTHING, db_column='id_usuario_registro')
     fecha_registro = models.DateField(blank=True, null=True)
 
     class Meta:

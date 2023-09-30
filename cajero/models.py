@@ -1,12 +1,12 @@
 from django.db import models
 from base.models import TbDpersona
-from adminschema.models import TbUser, TbInstitucion
-from django.contrib.postgres.fields import ArrayField
+from autenticacion.models.entities.institucion import Institucion
+from autenticacion.models.entities.usuario import Usuario
 ######################################################################## Pertenece a distibucion ################################
 
 
 class TbCategory(models.Model):
-    id_institucion = models.ForeignKey(TbInstitucion, models.CASCADE)
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     name = models.TextField()
     description = models.TextField(blank=True, null=True)
     active = models.BooleanField(blank=True, null=True)
@@ -23,7 +23,7 @@ class TbCategory(models.Model):
 
 
 class TbNclasificacionEvento(models.Model):
-    id_institucion = models.ForeignKey(TbInstitucion, models.CASCADE)
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_clasificacion_evento = models.AutoField(primary_key=True)
     nombre_clasificacion_evento = models.TextField(blank=True, null=True)
     activo = models.BooleanField(blank=True, null=True)
@@ -33,19 +33,21 @@ class TbNclasificacionEvento(models.Model):
     class Meta:
         db_table = 'tb_nclasificacion_evento'
 
+
 class TbNdiaSemana(models.Model):
     id_dia_semana = models.AutoField(primary_key=True)
     dia_semana = models.CharField(max_length=10)
-    
+
     def __str__(self) -> str:
         return self.dia_semana
 
     class Meta:
         db_table = 'tb_ndia_semana'
 
+
 class TbNhorario(models.Model):
-   
-    id_institucion = models.ForeignKey(TbInstitucion, models.CASCADE)
+
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_horario = models.AutoField(primary_key=True)
     dias_semana = models.ManyToManyField(TbNdiaSemana)
     nombre_horario = models.TextField()
@@ -58,7 +60,7 @@ class TbNhorario(models.Model):
 
 
 class TbNevento(models.Model):
-    id_institucion = models.ForeignKey(TbInstitucion, models.CASCADE)
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_evento = models.AutoField(primary_key=True)
     nombre_evento = models.TextField(blank=True, null=True)
     activo = models.BooleanField()
@@ -77,12 +79,13 @@ class TbNevento(models.Model):
 
     def __str__(self) -> str:
         return self.nombre_evento
+
     class Meta:
         db_table = 'tb_nevento'
 
 
 class TbStructure(models.Model):
-    id_institucion = models.ForeignKey(TbInstitucion, models.CASCADE)
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     category = models.ForeignKey(TbCategory, models.DO_NOTHING)
     estructura_parent = models.ForeignKey(
         'self', on_delete=models.CASCADE, blank=True, null=True, related_name='children')
@@ -114,7 +117,7 @@ class TbStructure(models.Model):
 
 
 class TbNclasificacionPlato(models.Model):
-    id_institucion = models.ForeignKey(TbInstitucion, models.CASCADE)
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_clasificacion_plato = models.AutoField(primary_key=True)
     nombre_clasificacion_plato = models.TextField(blank=True, null=True)
     activo = models.BooleanField(blank=True, null=True)
@@ -126,7 +129,7 @@ class TbNclasificacionPlato(models.Model):
 
 
 class TbNtipoProducto(models.Model):
-    id_institucion = models.ForeignKey(TbInstitucion, models.CASCADE)
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_tipo_producto = models.AutoField(primary_key=True)
     nombre_tipo_producto = models.TextField(blank=True, null=True)
     activo = models.BooleanField(blank=True, null=True)
@@ -138,7 +141,7 @@ class TbNtipoProducto(models.Model):
 
 
 class TbNunidadMedida(models.Model):
-    id_institucion = models.ForeignKey(TbInstitucion, models.CASCADE)
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_unidad_medida = models.AutoField(primary_key=True)
     nombre_unidad_medida = models.TextField(blank=True, null=True)
     activo = models.BooleanField(blank=True, null=True)
@@ -154,7 +157,7 @@ class TbNunidadMedida(models.Model):
 
 
 class TbDproducto(models.Model):
-    id_institucion = models.ForeignKey(TbInstitucion, models.CASCADE)
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_producto = models.AutoField(primary_key=True)
     nombre_producto = models.CharField(max_length=255)
     descripcion = models.TextField(blank=True, null=True)
@@ -177,7 +180,7 @@ class TbDconfiguracionProducto(models.Model):
     activo = models.BooleanField()
     fecha_registro = models.DateField(blank=True, null=True)
     id_usuario_registro = models.ForeignKey(
-        TbUser, models.DO_NOTHING, db_column='id_usuario_registro', blank=True, null=True)
+        Usuario, models.DO_NOTHING, db_column='id_usuario_registro', blank=True, null=True)
     id_producto = models.ForeignKey(TbDproducto, models.DO_NOTHING, db_column='id_producto',
                                     blank=True, null=True, related_name='id_producto_config')
     valor_merma = models.FloatField(blank=True, null=True)
@@ -192,7 +195,7 @@ class TbDconfiguracionProducto(models.Model):
 
 
 class TbDaccesoEventoSecundario(models.Model):
-    id_institucion = models.ForeignKey(TbInstitucion, models.CASCADE)
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_acceso_evento_secundario = models.AutoField(primary_key=True)
     cantidad_acceso = models.IntegerField(blank=True, null=True)
     fecha_registro = models.DateField(blank=True, null=True)
@@ -202,17 +205,17 @@ class TbDaccesoEventoSecundario(models.Model):
 
 
 class TbDpersonaIPPuerta(models.Model):
-    id_institucion = models.ForeignKey(TbInstitucion, models.CASCADE)
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_persona_puerta = models.AutoField(primary_key=True)
     id_persona = models.ForeignKey(
         TbDpersona, models.DO_NOTHING, db_column='id_persona', blank=True, null=True)  # quitar ya no hace falta
     id_puerta = models.ForeignKey(
         TbStructure, models.DO_NOTHING, db_column='id_puerta', blank=True, null=True)
     activo = models.BooleanField(blank=True, null=True)
-    id_usuario_registro = models.ForeignKey(TbUser, models.DO_NOTHING, db_column='id_usuario_registro',
+    id_usuario_registro = models.ForeignKey(Usuario, models.DO_NOTHING, db_column='id_usuario_registro',
                                             blank=True, null=True, related_name='id_usuario_registro_personaPuerta')
     fecha_registro = models.DateField(blank=True, null=True)
-    id_usuario_modificacion = models.ForeignKey(TbUser, models.DO_NOTHING, db_column='id_usuario_modificacion',
+    id_usuario_modificacion = models.ForeignKey(Usuario, models.DO_NOTHING, db_column='id_usuario_modificacion',
                                                 blank=True, null=True, related_name='id_usuario_modificacion_personaPuerta')
     fecha_modificacion = models.DateField(blank=True, null=True)
     # revisar por que hay 2 id puerta en esta tabla
@@ -223,14 +226,14 @@ class TbDpersonaIPPuerta(models.Model):
 
 
 class TbDsolapinPerdido(models.Model):
-    id_institucion = models.ForeignKey(TbInstitucion, models.CASCADE)
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_solapin_perdido = models.AutoField(primary_key=True)
     id_persona = models.ForeignKey(
         TbDpersona, models.DO_NOTHING, db_column='id_persona', blank=True, null=True, related_name='id_persona_solapin_perdido')
     codigo_solapin = models.CharField(max_length=1, blank=True, null=True)
     fecha_registro = models.DateTimeField(blank=True, null=True)
     id_usuario_registro = models.ForeignKey(
-        TbUser, models.DO_NOTHING, db_column='id_usuario_registro', blank=True, null=True)
+        Usuario, models.DO_NOTHING, db_column='id_usuario_registro', blank=True, null=True)
     activo = models.BooleanField(blank=True, null=True)
 
     class Meta:
@@ -238,7 +241,7 @@ class TbDsolapinPerdido(models.Model):
 
 
 class TbNestadoTarjeta(models.Model):
-    id_institucion = models.ForeignKey(TbInstitucion, models.CASCADE)
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_estado_tarjeta = models.AutoField(primary_key=True)
     nombre_estado_tarjeta = models.CharField(max_length=255)
     fecha_registro = models.DateField(blank=True, null=True)
@@ -250,7 +253,7 @@ class TbNestadoTarjeta(models.Model):
 
 
 class TbNtipoTarjeta(models.Model):
-    id_institucion = models.ForeignKey(TbInstitucion, models.CASCADE)
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_tipo_tarjeta = models.AutoField(primary_key=True)
     nombre_tipo_tarjeta = models.CharField(max_length=255)
     fecha_registro = models.DateField(blank=True, null=True)
@@ -263,19 +266,19 @@ class TbNtipoTarjeta(models.Model):
 
 
 class TbDtarjetaAlimentacion(models.Model):
-    id_institucion = models.ForeignKey(TbInstitucion, models.CASCADE)
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_tarjeta_alimentacion = models.AutoField(primary_key=True)
     codigo = models.TextField(blank=True, null=True, default='12345COD')
     numero_serie = models.TextField(blank=True, null=True, default='12345NO')
     id_estado_tarjeta = models.ForeignKey(
         TbNestadoTarjeta, models.DO_NOTHING, db_column='id_estado_tarjeta', blank=True, null=True)
     fecha_registro = models.DateField(blank=True, null=True)
-    id_usuario_registro = models.ForeignKey(TbUser, models.DO_NOTHING, db_column='id_usuario_registro',
+    id_usuario_registro = models.ForeignKey(Usuario, models.DO_NOTHING, db_column='id_usuario_registro',
                                             blank=True, null=True, related_name='id_usuario_registro_tarjetaAlimentacion')
     id_tipo_tarjeta = models.ForeignKey(
         TbNtipoTarjeta, models.DO_NOTHING, db_column='id_tipo_tarjeta', blank=True, null=True)
     fecha_modificacion = models.DateField(blank=True, null=True)
-    id_usuario_modificacion = models.ForeignKey(TbUser, models.DO_NOTHING, db_column='id_usuario_modificacion',
+    id_usuario_modificacion = models.ForeignKey(Usuario, models.DO_NOTHING, db_column='id_usuario_modificacion',
                                                 blank=True, null=True, related_name='id_usuario_modificacion_tarjetaAlimentacion')
 
     class Meta:
@@ -285,7 +288,7 @@ class TbDtarjetaAlimentacion(models.Model):
 
 
 class TbNclasificacionDistribucion(models.Model):
-    id_institucion = models.ForeignKey(TbInstitucion, models.CASCADE)
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_clasificacion_distribucion = models.AutoField(primary_key=True)
     nombre = models.TextField(blank=True, null=True)
     activo = models.BooleanField(blank=True, null=True)
@@ -297,12 +300,12 @@ class TbNclasificacionDistribucion(models.Model):
 
 
 class TbDdistribucion(models.Model):
-    id_institucion = models.ForeignKey(TbInstitucion, models.CASCADE)
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_distribucion = models.AutoField(primary_key=True)
     nombre = models.TextField(blank=True, null=True)
     descripcion = models.TextField(blank=True, null=True)
     id_usuario_registro = models.ForeignKey(
-        TbUser, models.DO_NOTHING, db_column='id_usuario_registro', blank=True, null=True)
+        Usuario, models.DO_NOTHING, db_column='id_usuario_registro', blank=True, null=True)
     id_clasificacion_distribucion = models.ForeignKey(
         TbNclasificacionDistribucion, models.DO_NOTHING, db_column='id_clasificacion_distribucion', blank=True, null=True)
     fecha_registro = models.DateField(blank=True, null=True)
@@ -317,15 +320,15 @@ class TbDdistribucion(models.Model):
 
 
 class TbDpersonaDistribucion(models.Model):
-    id_institucion = models.ForeignKey(TbInstitucion, models.CASCADE)
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_persona_distribucion = models.AutoField(primary_key=True)
     id_persona = models.ForeignKey(
         TbDpersona, models.DO_NOTHING, db_column='id_persona', blank=True, null=True, related_name='id_persona_dist')
     id_usuario_registro = models.ForeignKey(
-        TbUser, models.DO_NOTHING, db_column='id_usuario_registro', blank=True, null=True)
+        Usuario, models.DO_NOTHING, db_column='id_usuario_registro', blank=True, null=True)
     fecha_registro = models.DateField(blank=True, null=True)
     fecha_modificacion = models.DateField(blank=True, null=True)
-    id_usuario_modificacion = models.ForeignKey(TbUser, models.DO_NOTHING, db_column='id_usuario_modificacion',
+    id_usuario_modificacion = models.ForeignKey(Usuario, models.DO_NOTHING, db_column='id_usuario_modificacion',
                                                 blank=True, null=True, related_name='id_usuario_modificacion_distribucionpersona')
     id_distribucion = models.ForeignKey(TbDdistribucion, models.DO_NOTHING, db_column='id_distribucion',
                                         blank=True, null=True, related_name='id_distribucion_persona')
@@ -343,13 +346,13 @@ class TbDpersonaDistribucion(models.Model):
 
 
 class TbDtarjetaDistribucion(models.Model):
-    id_institucion = models.ForeignKey(TbInstitucion, models.CASCADE)
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_tarjeta_distribucion = models.AutoField(primary_key=True)
     id_usuario_registro = models.ForeignKey(
-        TbUser, models.DO_NOTHING, db_column='id_usuario_registro', blank=True, null=True)
+        Usuario, models.DO_NOTHING, db_column='id_usuario_registro', blank=True, null=True)
     fecha_registro = models.DateField(blank=True, null=True)
     fecha_modificacion = models.DateField(blank=True, null=True)
-    id_usuario_modificacion = models.ForeignKey(TbUser, models.DO_NOTHING, db_column='id_usuario_modificacion',
+    id_usuario_modificacion = models.ForeignKey(Usuario, models.DO_NOTHING, db_column='id_usuario_modificacion',
                                                 blank=True, null=True, related_name='id_usuario_modificacion_distribucion')
     id_distribucion = models.ForeignKey(TbDdistribucion, models.DO_NOTHING, db_column='id_distribucion',
                                         blank=True, null=True, related_name='id_distribucion_tarjeta')
@@ -370,7 +373,7 @@ class TbDtarjetaDistribucion(models.Model):
 
 
 class TbNregla(models.Model):
-    id_institucion = models.ForeignKey(TbInstitucion, models.CASCADE)
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_regla = models.AutoField(primary_key=True)
     nombre_regla = models.TextField(blank=True, null=True)
     activo = models.BooleanField(blank=True, null=True)
@@ -382,7 +385,7 @@ class TbNregla(models.Model):
 
 
 class TbDvaloresRegla(models.Model):
-    id_institucion = models.ForeignKey(TbInstitucion, models.CASCADE)
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_valores_regla = models.AutoField(primary_key=True)
     nombre_valores_regla = models.TextField(blank=True, null=True)
     activo = models.BooleanField(blank=True, null=True)
@@ -397,7 +400,7 @@ class TbDvaloresRegla(models.Model):
 
 
 class TbLastDistribucion(models.Model):
-    id_institucion = models.ForeignKey(TbInstitucion, models.CASCADE)
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_temp = models.AutoField(primary_key=True)
     id_persona = models.CharField(max_length=255, blank=True, null=True)
     id_usuario_registro = models.IntegerField(blank=True, null=True)
@@ -415,7 +418,7 @@ class TbLastDistribucion(models.Model):
 
 
 class TbNrangoEvento(models.Model):
-    id_institucion = models.ForeignKey(TbInstitucion, models.CASCADE)
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_rango_evento = models.AutoField(primary_key=True)
     activo = models.BooleanField(blank=True, null=True)
     descripcion_rango_evento = models.TextField(blank=True, null=True)
@@ -428,7 +431,7 @@ class TbNrangoEvento(models.Model):
 
 
 class TbRdistribucionRegla(models.Model):
-    id_institucion = models.ForeignKey(TbInstitucion, models.CASCADE)
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_distribucion_regla = models.AutoField(primary_key=True)
     id_distribucion = models.ForeignKey(
         TbDdistribucion, models.DO_NOTHING, db_column='id_distribucion', blank=True, null=True)
@@ -441,7 +444,7 @@ class TbRdistribucionRegla(models.Model):
 
 
 class TbRestructuraRegla(models.Model):
-    id_institucion = models.ForeignKey(TbInstitucion, models.CASCADE)
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_estructura_regla = models.AutoField(primary_key=True)
     id_estructura = models.ForeignKey(
         TbStructure, models.DO_NOTHING, db_column='id_estructura', blank=True, null=True)
@@ -456,7 +459,7 @@ class TbRestructuraRegla(models.Model):
 
 
 class TbReventoHorario(models.Model):
-    id_institucion = models.ForeignKey(TbInstitucion, models.CASCADE)
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_evento_horario = models.AutoField(primary_key=True)
     id_evento = models.ForeignKey(
         TbNevento, models.DO_NOTHING, db_column='id_evento')
@@ -468,7 +471,7 @@ class TbReventoHorario(models.Model):
 
 
 class TbReventoRangoEvento(models.Model):
-    id_institucion = models.ForeignKey(TbInstitucion, models.CASCADE)
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_evento_rango_evento = models.AutoField(primary_key=True)
     id_evento = models.ForeignKey(
         TbNevento, models.DO_NOTHING, db_column='id_evento', blank=True, null=True)
@@ -476,7 +479,7 @@ class TbReventoRangoEvento(models.Model):
         TbNrangoEvento, models.DO_NOTHING, db_column='id_rango_evento', blank=True, null=True)
     fecha_registro = models.DateField(blank=True, null=True)
     id_usuario_registro = models.ForeignKey(
-        TbUser, models.DO_NOTHING, db_column='id_usuario_registro', blank=True, null=True)
+        Usuario, models.DO_NOTHING, db_column='id_usuario_registro', blank=True, null=True)
 
     class Meta:
         db_table = 'tb_revento_rango_evento'
@@ -487,7 +490,7 @@ class TbReventoRangoEvento(models.Model):
 
 
 class TbDconfiguracionTarjeta(models.Model):
-    id_institucion = models.ForeignKey(TbInstitucion, models.CASCADE)
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_configuracion_tarjeta = models.AutoField(primary_key=True)
     id_tarjeta_alimentacion = models.ForeignKey(
         TbDtarjetaAlimentacion, models.DO_NOTHING, db_column='id_tarjeta_alimentacion', blank=True, null=True)
@@ -508,7 +511,7 @@ class TbDconfiguracionTarjeta(models.Model):
 
 
 class TbNestadoMovimientoAsignacion(models.Model):
-    id_institucion = models.ForeignKey(TbInstitucion, models.CASCADE)
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_estado_movimiento_asignacion = models.AutoField(primary_key=True)
     nombre_estado_movimiento_asignacion = models.TextField()
     fecha_registro = models.DateField(blank=True, null=True)
@@ -520,7 +523,7 @@ class TbNestadoMovimientoAsignacion(models.Model):
 
 
 class TbMovimientoAsignacion(models.Model):
-    id_institucion = models.ForeignKey(TbInstitucion, models.CASCADE)
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_movimiento_asignacion = models.AutoField(primary_key=True)
     id_puerta_origen = models.ForeignKey(TbStructure, models.DO_NOTHING, db_column='id_puerta_origen',
                                          blank=True, null=True, related_name='id_puerta_origen_MovimientoAsignacion')
@@ -529,11 +532,11 @@ class TbMovimientoAsignacion(models.Model):
     id_evento = models.ForeignKey(
         TbNevento, models.DO_NOTHING, db_column='id_evento', blank=True, null=True)
     fecha_movimiento = models.DateField(blank=True, null=True)
-    id_usuario_registro = models.ForeignKey(TbUser, models.DO_NOTHING, db_column='id_usuario_registro',
+    id_usuario_registro = models.ForeignKey(Usuario, models.DO_NOTHING, db_column='id_usuario_registro',
                                             blank=True, null=True, related_name='id_usuario_registro_MovimientoAsignacion')
     id_estado_movimiento_asignacion = models.ForeignKey(
         TbNestadoMovimientoAsignacion, models.DO_NOTHING, db_column='id_estado_movimiento_asignacion', blank=True, null=True)
-    id_usuario_modificacion = models.ForeignKey(TbUser, models.DO_NOTHING, db_column='id_usuario_modificacion',
+    id_usuario_modificacion = models.ForeignKey(Usuario, models.DO_NOTHING, db_column='id_usuario_modificacion',
                                                 blank=True, null=True, related_name='id_usuario_modificacion_MovimientoAsignacion')
     fecha_modificacion = models.DateField(blank=True, null=True)
     hora_movimiento_registro = models.TimeField(blank=True, null=True)
@@ -544,7 +547,7 @@ class TbMovimientoAsignacion(models.Model):
 
 
 class TbRpersonaTarjeta(models.Model):
-    id_institucion = models.ForeignKey(TbInstitucion, models.CASCADE)
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_persona_tarjeta = models.AutoField(primary_key=True)
     id_persona = models.ForeignKey(
         TbDpersona, models.DO_NOTHING, db_column='id_persona', blank=True, null=True)

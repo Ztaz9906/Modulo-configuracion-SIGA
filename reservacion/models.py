@@ -1,6 +1,6 @@
 from django.db import models
 from base.models import TbDpersona, TbNestructura
-from adminschema.models import TbUser
+from autenticacion.models.entities.usuario import Usuario
 
 
 class TbDelementosMostrar(models.Model):
@@ -35,7 +35,7 @@ class TbDresponsableAreaPersonas(models.Model):
         TbNestructura, models.DO_NOTHING, db_column='id_estructura', blank=True, null=True)
     fecha_registro = models.DateField(blank=True, null=True)
     id_persona_registro = models.ForeignKey(
-        TbUser, models.DO_NOTHING, db_column='id_persona_registro', blank=True, null=True)
+        Usuario, models.DO_NOTHING, db_column='id_persona_registro', blank=True, null=True)
 
     class Meta:
 
@@ -50,7 +50,7 @@ class TbDresponsableReservacion(models.Model):
         TbNestructura, models.DO_NOTHING, db_column='id_estructura', blank=True, null=True)
     fecha_registro = models.DateField(blank=True, null=True)
     id_persona_registro = models.ForeignKey(
-        TbUser, models.DO_NOTHING, db_column='id_persona_registro', blank=True, null=True)
+        Usuario, models.DO_NOTHING, db_column='id_persona_registro', blank=True, null=True)
 
     class Meta:
 

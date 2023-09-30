@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import *
-from adminschema.serializer import TbUserSerializer
+from autenticacion.gateway.serializers.usuario.v1.lectura import SerializadorDeUsuarioLecturaConPerfil
 from base.serializers import TbNcategoriaResidenteSerializer, TbNcategoriaSerializer, TbNestructuraSerializer, TbNtipoCursoSerializer
 
 
@@ -11,7 +11,7 @@ class TbDconfiguracionPersonaSerializer(serializers.ModelSerializer):
 
 
 class TbDconfiguracionProcesoSerializer(serializers.ModelSerializer):
-    id_usuario_registro = TbUserSerializer(read_only=True)
+    id_usuario_registro = SerializadorDeUsuarioLecturaConPerfil(read_only=True)
 
     class Meta:
         model = TbDconfiguracionProceso
@@ -25,7 +25,7 @@ class TbDconfiguracionProcesoCreateSerializer(serializers.ModelSerializer):
 
 
 class TbDdatosContactoSerializer(serializers.ModelSerializer):
-    id_usuario_registro = TbUserSerializer(read_only=True)
+    id_usuario_registro = SerializadorDeUsuarioLecturaConPerfil(read_only=True)
 
     class Meta:
         model = TbDdatosContacto

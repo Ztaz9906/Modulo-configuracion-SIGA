@@ -1,11 +1,12 @@
 from rest_framework import serializers
 from .models import *
 from .serializerPost import *
-from adminschema.serializer import TbUserSerializer, TbInstitucionSerializer
 from base.serializers import TbDpersonaSerializer
-
+from autenticacion.gateway.serializers.usuario.v1.lectura import SerializadorDeUsuarioLecturaConPerfil
 
 ######################################################################## Pertenece a distibucion ################################
+
+
 class TbCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = TbCategory
@@ -17,13 +18,16 @@ class TbNclasificacionEventoSerializer(serializers.ModelSerializer):
         model = TbNclasificacionEvento
         fields = '__all__'
 
+
 class TbNdiaSemanaSerializer(serializers.ModelSerializer):
     class Meta:
         model = TbNdiaSemana
         fields = '__all__'
 
+
 class TbNhorarioSerializer(serializers.ModelSerializer):
-    dias_semana=TbNdiaSemanaSerializer(many=True,read_only=True)
+    dias_semana = TbNdiaSemanaSerializer(many=True, read_only=True)
+
     class Meta:
         model = TbNhorario
         fields = '__all__'
@@ -37,27 +41,36 @@ class TbNeventoSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class RecursiveField(serializers.BaseSerializer):
-    def to_representation(self, value):
-        serializer = TbStructureSerializer(value, context=self.context)
-        return serializer.data
+# class RecursiveField(serializers.BaseSerializer):
+
+#     def to_representation(self, value):
+#         serializer = TbStructureSerializer(value, context=self.context)
+#         return serializer.data
+
 
 class TbStructureParentSerializer(serializers.ModelSerializer):
     # Solo contiene la información básica del padre
     class Meta:
         model = TbStructure
-        fields = ['id', 'name'] 
+        fields = ['id', 'name']
+
+
 class TbStructureSerializer(serializers.ModelSerializer):
     id_sub_director = TbDpersonaSerializer(read_only=True)
     id_tecnico_general = TbDpersonaSerializer(read_only=True)
     id_especialista_complejo = TbDpersonaSerializer(read_only=True)
     id_tecnico_atm = TbDpersonaSerializer(read_only=True)
     category = TbCategorySerializer(read_only=True)
-    children = RecursiveField(many=True, read_only=True)
+    children = serializers.SerializerMethodField()
     estructura_parent = TbStructureParentSerializer(read_only=True)
+
     class Meta:
         model = TbStructure
         fields = '__all__'
+
+    def get_children(self, obj):
+        return TbStructureSerializer(obj.children.all(), many=True, context=self.context).data
+
 
 ######################################################################## Final ############################################
 
@@ -91,7 +104,7 @@ class TbDproductoSerializer(serializers.ModelSerializer):
 
 ######### Termina esquema assets #########
 class TbDconfiguracionProductoSerializer(serializers.ModelSerializer):
-    id_usuario_registro = TbUserSerializer(read_only=True)
+
     id_unidad_medida = TbNunidadMedidaSerializer(read_only=True)
     id_unidad_medida_merma = TbNunidadMedidaSerializer(read_only=True)
     id_unidad_medida_por_cada = TbNunidadMedidaSerializer(read_only=True)
@@ -111,8 +124,6 @@ class TbDaccesoEventoSecundarioSerializer(serializers.ModelSerializer):
 
 class TbDpersonaPuertaSerializer(serializers.ModelSerializer):
     id_persona = TbDpersonaSerializer(read_only=True)
-    id_usuario_registro = TbUserSerializer(read_only=True)
-    id_usuario_modificacion = TbUserSerializer(read_only=True)
     id_puerta = TbStructureSerializer(read_only=True)
 
     class Meta:
@@ -122,7 +133,6 @@ class TbDpersonaPuertaSerializer(serializers.ModelSerializer):
 
 class TbDsolapinPerdidoSerializer(serializers.ModelSerializer):
     id_persona = TbDpersonaSerializer(read_only=True)
-    id_usuario_registro = TbUserSerializer(read_only=True)
 
     class Meta:
         model = TbDsolapinPerdido
@@ -144,9 +154,8 @@ class TbNtipoTarjetaSerializer(serializers.ModelSerializer):
 class TbDtarjetaAlimentacionSerializer(serializers.ModelSerializer):
 
     id_estado_tarjeta = TbNestadoTarjetaSerializer(read_only=True)
-    id_usuario_registro = TbUserSerializer(read_only=True)
+
     id_tipo_tarjeta = TbNtipoTarjetaSerializer(read_only=True)
-    id_usuario_modificacion = TbUserSerializer(read_only=True)
 
     class Meta:
         model = TbDtarjetaAlimentacion
@@ -162,7 +171,7 @@ class TbNclasificacionDistribucionSerializer(serializers.ModelSerializer):
 
 
 class TbDdistribucionSerializer(serializers.ModelSerializer):
-    id_usuario_registro = TbUserSerializer(read_only=True)
+
     id_clasificacion_distribucion = TbNclasificacionDistribucionSerializer(
         read_only=True)
     id_evento = TbNeventoSerializer(read_only=True)
@@ -176,8 +185,6 @@ class TbDpersonaDistribucionSerializer(serializers.ModelSerializer):
 
     id_persona = models.ForeignKey(
         TbDpersona, models.DO_NOTHING, db_column='id_persona', blank=True, null=True)
-    id_usuario_registro = TbUserSerializer(read_only=True)
-    id_usuario_modificacion = TbUserSerializer(read_only=True)
     id_distribucion = TbDdistribucionSerializer(read_only=True)
     id_complejo_comedor = TbStructureSerializer(read_only=True)
     id_comedor = TbStructureSerializer(read_only=True)
@@ -191,8 +198,6 @@ class TbDpersonaDistribucionSerializer(serializers.ModelSerializer):
 
 class TbDtarjetaDistribucionSerializer(serializers.ModelSerializer):
 
-    id_usuario_registro = TbUserSerializer(read_only=True)
-    id_usuario_modificacion = TbUserSerializer(read_only=True)
     id_distribucion = TbDdistribucionSerializer(read_only=True)
     id_complejo_comedor = TbStructureSerializer(read_only=True)
     id_comedor = TbStructureSerializer(read_only=True)
@@ -276,7 +281,6 @@ class TbReventoHorarioSerializer(serializers.ModelSerializer):
 class TbReventoRangoEventoSerializer(serializers.ModelSerializer):
     id_evento = TbNeventoSerializer(read_only=True)
     id_rango_evento = TbNrangoEventoSerializer(read_only=True)
-    id_usuario_registro = TbUserSerializer(read_only=True)
 
     class Meta:
         model = TbReventoRangoEvento
@@ -313,10 +317,11 @@ class TbMovimientoAsignacionSerializer(serializers.ModelSerializer):
     id_puerta_origen = TbStructureSerializer(read_only=True)
     id_puerta_destino = TbStructureSerializer(read_only=True)
     id_evento = TbNeventoSerializer(read_only=True)
-    id_usuario_registro = TbUserSerializer(read_only=True)
+    id_usuario_registro = SerializadorDeUsuarioLecturaConPerfil(read_only=True)
     id_estado_movimiento_asignacion = TbNestadoMovimientoAsignacionSerializer(
         read_only=True)
-    id_usuario_modificacion = TbUserSerializer(read_only=True)
+    id_usuario_modificacion = SerializadorDeUsuarioLecturaConPerfil(
+        read_only=True)
 
     class Meta:
         model = TbMovimientoAsignacion

@@ -1,8 +1,8 @@
 from rest_framework import serializers
 from .models import *
-from adminschema.serializer import TbUserSerializer
 from base.serializers import TbDpersonaSerializer, TbNcategoriaResidenteSerializer, TbNcategoriaSerializer
 from cajero.serializerGet import TbNeventoSerializer
+from autenticacion.gateway.serializers.usuario.v1.lectura import SerializadorDeUsuarioLecturaConPerfil
 
 
 class TbTipoReglaSerializer(serializers.ModelSerializer):
@@ -19,8 +19,9 @@ class TbNestadoImportacionSerializer(serializers.ModelSerializer):
 
 class TbDimportacionSerializer(serializers.ModelSerializer):
     id_estado_importacion = TbNestadoImportacionSerializer(read_only=True)
-    id_usuario_registro = TbUserSerializer(read_only=True)
-    id_usuario_modificacion = TbUserSerializer(read_only=True)
+    id_usuario_registro = SerializadorDeUsuarioLecturaConPerfil(read_only=True)
+    id_usuario_modificacion = SerializadorDeUsuarioLecturaConPerfil(
+        read_only=True)
 
     class Meta:
         model = TbDimportacion
@@ -34,7 +35,7 @@ class TbDimportacionCreateSerializer(serializers.ModelSerializer):
 
 
 class TbDimportacionesSerializer(serializers.ModelSerializer):
-    id_usuario_registro = TbUserSerializer(read_only=True)
+    id_usuario_registro = SerializadorDeUsuarioLecturaConPerfil(read_only=True)
 
     class Meta:
         model = TbDimportaciones
@@ -77,7 +78,7 @@ class TbDpersonaReglaCreateSerializer(serializers.ModelSerializer):
 
 
 class TbDreglaCobroSerializer(serializers.ModelSerializer):
-    id_usuario_registro = TbUserSerializer(read_only=True)
+    id_usuario_registro = SerializadorDeUsuarioLecturaConPerfil(read_only=True)
     id_tipo_regla = TbTipoReglaSerializer(read_only=True)
 
     class Meta:
@@ -132,7 +133,7 @@ class TbRimportacionReservacionCreateSerializer(serializers.ModelSerializer):
 class TbRpersonaExcluidaCobroSerializer(serializers.ModelSerializer):
     id_persona = TbDpersonaSerializer(read_only=True)
     id_importacion = TbDimportacionSerializer(read_only=True)
-    id_usuario_registro = TbUserSerializer(read_only=True)
+    id_usuario_registro = SerializadorDeUsuarioLecturaConPerfil(read_only=True)
 
     class Meta:
         model = TbRpersonaExcluidaCobro
