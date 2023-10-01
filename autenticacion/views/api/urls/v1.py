@@ -30,7 +30,7 @@ router = routers.SimpleRouter()
 router.register("permisos", VistasDePermisos)
 router.register("grupos", VistasDeGrupos)
 router.register("usuarios", VistasDeUsuarios)
-router.register("instituciones_nuevo", VistasDeInstituciones)
+router.register("instituciones", VistasDeInstituciones)
 # Definimos las urls
 urlpatterns = [
     path("api/login/", login("v1").as_view(), name="api-login"),

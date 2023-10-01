@@ -13,4 +13,5 @@ class SerializadorDeInstituciones(
 
     class Meta:
         model = Institucion
-        fields = ["id", "name", "active_modules", "active", "url"]
+        fields = ["id", "name", "active_modules",
+                  "active", "url", "description"]

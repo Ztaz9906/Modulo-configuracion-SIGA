@@ -13,15 +13,18 @@ from comun.views import ByOperationSerializer, ByVersionSerializer
 
 
 @extend_schema_view(
-    create=extend_schema(tags=["Administración"], description="Crea un usuario"),
+    create=extend_schema(tags=["Administración"],
+                         description="Crea un usuario"),
     retrieve=extend_schema(
         tags=["Administración"], description="Devuelve los detalles de un usuario"
     ),
-    update=extend_schema(tags=["Administración"], description="Actualiza un usuario"),
+    update=extend_schema(tags=["Administración"],
+                         description="Actualiza un usuario"),
     partial_update=extend_schema(
         tags=["Administración"], description="Actualiza un usuario"
     ),
-    destroy=extend_schema(tags=["Administración"], description="Destruye un usuario"),
+    destroy=extend_schema(tags=["Administración"],
+                          description="Destruye un usuario"),
     list=extend_schema(
         tags=["Administración"],
         description="Lista los usuarios",

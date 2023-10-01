@@ -1,12 +1,36 @@
-from rest_framework import viewsets, filters
+from rest_framework import viewsets
 from .models import *
 from .serializerGet import *
 from .serializerPost import *
-
-
+from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter
+from django_filters import rest_framework as filters
 ######################################################################## Pertenece a distibucion ################################
+
+
+@extend_schema_view(
+    create=extend_schema(tags=["Categoria"],
+                         description="Crea una Categoria"),
+    retrieve=extend_schema(
+        tags=["Categoria"], description="Devuelve los detalles de una Categoria"
+    ),
+    update=extend_schema(tags=["Categoria"],
+                         description="Actualiza una Categoria"),
+    partial_update=extend_schema(
+        tags=["Categoria"], description="Actualiza una Categoria"
+    ),
+    destroy=extend_schema(tags=["Categoria"],
+                          description="Destruye una Categoria"),
+    list=extend_schema(
+        tags=["Categoria"],
+        description="Lista las Categorias",
+        parameters=[OpenApiParameter(name="query", required=False, type=str)],
+    ),
+)
 class TbCategoryViewSet(viewsets.ModelViewSet):
-    queryset = TbCategory.objects.all()
+
+    def get_queryset(self):
+        user_institucion = self.request.user.institucion
+        return TbCategory.objects.filter(id_institucion=user_institucion)
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
@@ -15,6 +39,25 @@ class TbCategoryViewSet(viewsets.ModelViewSet):
             return TbCategoryCreateSerializer
 
 
+@extend_schema_view(
+    create=extend_schema(tags=["Clasificacion Evento"],
+                         description="Crea una clasificacion Evento"),
+    retrieve=extend_schema(
+        tags=["clasificacion Evento"], description="Devuelve los detalles de una clasificacion Evento"
+    ),
+    update=extend_schema(tags=["Clasificacion Evento"],
+                         description="Actualiza un clasificacionEvento"),
+    partial_update=extend_schema(
+        tags=["Clasificacion Evento"], description="Actualiza una clasificacion Evento"
+    ),
+    destroy=extend_schema(tags=["Clasificacion Evento"],
+                          description="Destruye una clasificacion Evento"),
+    list=extend_schema(
+        tags=["Clasificacion Evento"],
+        description="Lista las clasificacion Eventos",
+        parameters=[OpenApiParameter(name="query", required=False, type=str)],
+    ),
+)
 class TbNclasificacionEventoViewSet(viewsets.ModelViewSet):
     queryset = TbNclasificacionEvento.objects.all()
 
@@ -25,6 +68,25 @@ class TbNclasificacionEventoViewSet(viewsets.ModelViewSet):
             return TbNclasificacionEventoSerializer
 
 
+@extend_schema_view(
+    create=extend_schema(tags=["Horario"],
+                         description="Crea un horario"),
+    retrieve=extend_schema(
+        tags=["Horario"], description="Devuelve los detalles de un horario"
+    ),
+    update=extend_schema(tags=["Horario"],
+                         description="Actualiza un horario"),
+    partial_update=extend_schema(
+        tags=["Horario"], description="Actualiza un horario"
+    ),
+    destroy=extend_schema(tags=["Horario"],
+                          description="Destruye un horario"),
+    list=extend_schema(
+        tags=["Horario"],
+        description="Lista los horarios",
+        parameters=[OpenApiParameter(name="query", required=False, type=str)],
+    ),
+)
 class TbNhorarioViewSet(viewsets.ModelViewSet):
     queryset = TbNhorario.objects.all()
 
@@ -35,6 +97,25 @@ class TbNhorarioViewSet(viewsets.ModelViewSet):
             return TbNhorarioCreateSerializer
 
 
+@extend_schema_view(
+    create=extend_schema(tags=["Evento"],
+                         description="Crea un evento"),
+    retrieve=extend_schema(
+        tags=["Evento"], description="Devuelve los detalles de un evento"
+    ),
+    update=extend_schema(tags=["Evento"],
+                         description="Actualiza un evento"),
+    partial_update=extend_schema(
+        tags=["Evento"], description="Actualiza un evento"
+    ),
+    destroy=extend_schema(tags=["Evento"],
+                          description="Destruye un evento"),
+    list=extend_schema(
+        tags=["Evento"],
+        description="Lista los eventos",
+        parameters=[OpenApiParameter(name="query", required=False, type=str)],
+    ),
+)
 class TbNeventoViewSet(viewsets.ModelViewSet):
     queryset = TbNevento.objects.all()
 
@@ -45,8 +126,33 @@ class TbNeventoViewSet(viewsets.ModelViewSet):
             return TbNeventoSerializer
 
 
+@extend_schema_view(
+    create=extend_schema(tags=["Estructura"],
+                         description="Crea una Estructura"),
+    retrieve=extend_schema(
+        tags=["Estructura"], description="Devuelve los detalles de una Estructura"
+    ),
+    update=extend_schema(tags=["Estructura"],
+                         description="Actualiza un Estructura"),
+    partial_update=extend_schema(
+        tags=["Estructura"], description="Actualiza una Estructura"
+    ),
+    destroy=extend_schema(tags=["Estructura"],
+                          description="Destruye una Estructura"),
+    list=extend_schema(
+        tags=["Estructura"],
+        description="Lista las Estructuras",
+        parameters=[OpenApiParameter(name="query", required=False, type=str)],
+    ),
+)
 class TbStructureViewSet(viewsets.ModelViewSet):
-    queryset = TbStructure.objects.all()
+
+    filter_backends = [filters.DjangoFilterBackend]
+    filterset_fields = ['id_institucion', 'category']
+
+    def get_queryset(self):
+        user_institucion = self.request.user.institucion
+        return TbStructure.objects.filter(id_institucion=user_institucion)
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
@@ -58,6 +164,25 @@ class TbStructureViewSet(viewsets.ModelViewSet):
 ######################################################################## Abastecimiento con asset ###################################################
 
 
+@extend_schema_view(
+    create=extend_schema(tags=["Tipo de Producto"],
+                         description="Crea un Tipo de Producto"),
+    retrieve=extend_schema(
+        tags=["Tipo de Producto"], description="Devuelve los detalles de un Tipo de Producto"
+    ),
+    update=extend_schema(tags=["Tipo de Producto"],
+                         description="Actualiza un Tipo de Producto"),
+    partial_update=extend_schema(
+        tags=["Tipo de Producto"], description="Actualiza un Tipo de Producto"
+    ),
+    destroy=extend_schema(tags=["Tipo de Producto"],
+                          description="Destruye un Tipo de Producto"),
+    list=extend_schema(
+        tags=["Tipo de Producto"],
+        description="Lista los Tipos de Productos",
+        parameters=[OpenApiParameter(name="query", required=False, type=str)],
+    ),
+)
 class TbNtipoProductoViewSet(viewsets.ModelViewSet):
     queryset = TbNtipoProducto.objects.all()
 
@@ -68,6 +193,25 @@ class TbNtipoProductoViewSet(viewsets.ModelViewSet):
             return TbNtipoProductoSerializer
 
 
+@extend_schema_view(
+    create=extend_schema(tags=["Unudad de Medida"],
+                         description="Crea una Unudad de Medida"),
+    retrieve=extend_schema(
+        tags=["Unudad de Medida"], description="Devuelve los detalles de una Unudad de Medida"
+    ),
+    update=extend_schema(tags=["Unudad de Medida"],
+                         description="Actualiza una Unudad de Medida"),
+    partial_update=extend_schema(
+        tags=["Unudad de Medida"], description="Actualiza una Unudad de Medida"
+    ),
+    destroy=extend_schema(tags=["Unudad de Medida"],
+                          description="Destruye una Unudad de Medida"),
+    list=extend_schema(
+        tags=["Unudad de Medida"],
+        description="Lista las Unidades de Medidas",
+        parameters=[OpenApiParameter(name="query", required=False, type=str)],
+    ),
+)
 class TbNunidadMedidaViewSet(viewsets.ModelViewSet):
     queryset = TbNunidadMedida.objects.all()
 
@@ -78,14 +222,51 @@ class TbNunidadMedidaViewSet(viewsets.ModelViewSet):
             return TbNunidadMedidaSerializer
 
 
+@extend_schema_view(
+    create=extend_schema(tags=["Clasificaion de Plato"],
+                         description="Crea un Clasificaion de Plato"),
+    retrieve=extend_schema(
+        tags=["Clasificaion de Plato"], description="Devuelve los detalles de un Clasificaion de Plato"
+    ),
+    update=extend_schema(tags=["Clasificaion de Plato"],
+                         description="Actualiza un Clasificaion de Plato"),
+    partial_update=extend_schema(
+        tags=["Clasificaion de Plato"], description="Actualiza un Clasificaion de Plato"
+    ),
+    destroy=extend_schema(tags=["Clasificaion de Plato"],
+                          description="Destruye un Clasificaion de Plato"),
+    list=extend_schema(
+        tags=["Clasificaion de Plato"],
+        description="Lista las Clasificaiones de Platos",
+        parameters=[OpenApiParameter(name="query", required=False, type=str)],
+    ),
+)
 class TbNclasificacionPlatoViewSet(viewsets.ModelViewSet):
     queryset = TbNclasificacionPlato.objects.all()
     serializer_class = TbNclasificacionPlatoSerializer
-    filter_backends = [filters.SearchFilter]
-    search_fields = ['activo']
+
 ####### Empieza esquema asset ##########
 
 
+@extend_schema_view(
+    create=extend_schema(tags=["Producto"],
+                         description="Crea un Producto"),
+    retrieve=extend_schema(
+        tags=["Producto"], description="Devuelve los detalles de un Producto"
+    ),
+    update=extend_schema(tags=["Producto"],
+                         description="Actualiza un Producto"),
+    partial_update=extend_schema(
+        tags=["Producto"], description="Actualiza un Producto"
+    ),
+    destroy=extend_schema(tags=["Producto"],
+                          description="Destruye un Producto"),
+    list=extend_schema(
+        tags=["Producto"],
+        description="Lista los Productos",
+        parameters=[OpenApiParameter(name="query", required=False, type=str)],
+    ),
+)
 class TbDproductoViewSet(viewsets.ModelViewSet):
     queryset = TbDproducto.objects.all()
 
@@ -119,14 +300,32 @@ class TbDaccesoEventoSecundarioViewSet(viewsets.ModelViewSet):
             return TbDaccesoEventoSecundarioSerializer
 
 
+@extend_schema_view(
+    create=extend_schema(tags=["Asignar IP a Puerta"],
+                         description="Crea un Asignar IP a Puerta"),
+    retrieve=extend_schema(
+        tags=["Asignar IP a Puerta"], description="Devuelve los detalles de un Asignar IP a Puerta"
+    ),
+    update=extend_schema(tags=["Asignar IP a Puerta"],
+                         description="Actualiza un Asignar IP a Puerta"),
+    partial_update=extend_schema(
+        tags=["Asignar IP a Puerta"], description="Actualiza un Asignar IP a Puerta"
+    ),
+    destroy=extend_schema(tags=["Asignar IP a Puerta"],
+                          description="Destruye un Asignar IP a Puerta"),
+    list=extend_schema(
+        tags=["Asignar IP a Puerta"],
+        description="Lista los Asignar IP a Puerta",
+        parameters=[OpenApiParameter(name="query", required=False, type=str)],
+    ),
+)
 class TbDpersonaPuertaViewSet(viewsets.ModelViewSet):
     queryset = TbDpersonaIPPuerta.objects.all()
 
     def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return TbDpersonaPuertaCreateSerializer
-        else:
+        if self.request.method == 'GET':
             return TbDpersonaPuertaSerializer
+        return TbDpersonaPuertaCreateSerializer
 
 
 class TbDsolapinPerdidoViewSet(viewsets.ModelViewSet):
@@ -139,6 +338,25 @@ class TbDsolapinPerdidoViewSet(viewsets.ModelViewSet):
             return TbDsolapinPerdidoSerializer
 
 
+@extend_schema_view(
+    create=extend_schema(tags=["Estado de Tarjeta"],
+                         description="Crea un Estado de Tarjeta"),
+    retrieve=extend_schema(
+        tags=["Estado de Tarjeta"], description="Devuelve los detalles de un Estado de Tarjeta"
+    ),
+    update=extend_schema(tags=["Estado de Tarjeta"],
+                         description="Actualiza un Estado de Tarjeta"),
+    partial_update=extend_schema(
+        tags=["Estado de Tarjeta"], description="Actualiza un Estado de Tarjeta"
+    ),
+    destroy=extend_schema(tags=["Estado de Tarjeta"],
+                          description="Destruye un Estado de Tarjeta"),
+    list=extend_schema(
+        tags=["Estado de Tarjeta"],
+        description="Lista los Estado de Tarjeta",
+        parameters=[OpenApiParameter(name="query", required=False, type=str)],
+    ),
+)
 class TbNestadoTarjetaViewSet(viewsets.ModelViewSet):
     queryset = TbNestadoTarjeta.objects.all()
 
@@ -149,6 +367,25 @@ class TbNestadoTarjetaViewSet(viewsets.ModelViewSet):
             return TbNestadoTarjetaSerializer
 
 
+@extend_schema_view(
+    create=extend_schema(tags=["Tipo de Tarjeta"],
+                         description="Crea un Tipo de Tarjeta"),
+    retrieve=extend_schema(
+        tags=["Tipo de Tarjeta"], description="Devuelve los detalles de un Tipo de Tarjeta"
+    ),
+    update=extend_schema(tags=["Tipo de Tarjeta"],
+                         description="Actualiza un Tipo de Tarjeta"),
+    partial_update=extend_schema(
+        tags=["Tipo de Tarjeta"], description="Actualiza un Tipo de Tarjeta"
+    ),
+    destroy=extend_schema(tags=["Tipo de Tarjeta"],
+                          description="Destruye un Tipo de Tarjeta"),
+    list=extend_schema(
+        tags=["Tipo de Tarjeta"],
+        description="Lista los Tipo de Tarjeta",
+        parameters=[OpenApiParameter(name="query", required=False, type=str)],
+    ),
+)
 class TbNtipoTarjetaViewSet(viewsets.ModelViewSet):
     queryset = TbNtipoTarjeta.objects.all()
 
@@ -159,6 +396,25 @@ class TbNtipoTarjetaViewSet(viewsets.ModelViewSet):
             return TbNtipoTarjetaSerializer
 
 
+@extend_schema_view(
+    create=extend_schema(tags=["Tarjeta"],
+                         description="Crea un Tarjeta"),
+    retrieve=extend_schema(
+        tags=["Tarjeta"], description="Devuelve los detalles de un Tarjeta"
+    ),
+    update=extend_schema(tags=["Tarjeta"],
+                         description="Actualiza un Tarjeta"),
+    partial_update=extend_schema(
+        tags=["Tarjeta"], description="Actualiza un Tarjeta"
+    ),
+    destroy=extend_schema(tags=["Tarjeta"],
+                          description="Destruye un Tarjeta"),
+    list=extend_schema(
+        tags=["Tarjeta"],
+        description="Lista los Tarjeta",
+        parameters=[OpenApiParameter(name="query", required=False, type=str)],
+    ),
+)
 class TbDtarjetaAlimentacionViewSet(viewsets.ModelViewSet):
     queryset = TbDtarjetaAlimentacion.objects.all()
 
@@ -246,7 +502,7 @@ class TbLastDistribucionViewSet(viewsets.ModelViewSet):
 class TbNdiaSemanaViewSet(viewsets.ModelViewSet):
     queryset = TbNdiaSemana.objects.all()
     serializer_class = TbNdiaSemanaSerializer
-    
+
 
 class TbNrangoEventoViewSet(viewsets.ModelViewSet):
     queryset = TbNrangoEvento.objects.all()

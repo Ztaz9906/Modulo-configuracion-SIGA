@@ -20,6 +20,30 @@ class SerializadorDeUsuarioLecturaConPerfil(MixingPerfil, SerializadorDeUsuarioL
         model = SerializadorDeUsuarioLecturaBase.Meta.model
         fields = (
             SerializadorDeUsuarioLecturaBase.Meta.fields
-            + ["last_name", "institucion"]
+            + ["last_name", "institucion", 'id',
+               'id_sexo',
+               'id_municipio',
+               'id_estructura',
+               'nombre_completo',
+               'ci',
+               'solapin',
+               'id_expediente',
+               'id_categoria',
+               'id_estructura_credencial',
+               'id_persona_foto',
+               'id_responsabilidad',
+               'nombre_responsabilidad',
+               'id_estructura_consejo',
+               'id_categoria_residente',
+               'id_tipo_curso',
+               'id_apto',
+               'id_origen',
+               'codigo_solapin',
+               'id_edificio',
+               'id_carrera',
+               'id_pais',
+               'id_categoria_cientifica',
+               'id_categoria_docente',
+               'id_grupo',]
             + MixingPerfil.Meta.fields
         )

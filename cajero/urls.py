@@ -4,12 +4,14 @@ from .views import *
 
 router = routers.DefaultRouter()
 ######################################################################## Pertenece a distibucion ################################
-router.register(r'Distribucion_TbCategory', TbCategoryViewSet)
+router.register(r'Distribucion_TbCategory',
+                TbCategoryViewSet, basename='category')
 router.register(r'Distribucion_TbNclasificacionEvento',
                 TbNclasificacionEventoViewSet)
 router.register(r'Distribucion_TbNhorario', TbNhorarioViewSet)
 router.register(r'Distribucion_TbNevento', TbNeventoViewSet)
-router.register(r'Distribucion_TbStructure', TbStructureViewSet)
+router.register(r'Distribucion_TbStructure',
+                TbStructureViewSet, basename='structure')
 ######################################################################## Final ############################################
 ######################################################################## Abastecimiento con asset ###################################################
 

@@ -13,6 +13,7 @@ class TbCategory(models.Model):
     created_at = models.DateTimeField(auto_now=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True, blank=True)
     color = models.TextField()
+    base = models.BooleanField()
 
     class Meta:
         db_table = 'tb_category'

@@ -3,7 +3,7 @@ from .models import *
 from .serializerPost import *
 from base.serializers import TbDpersonaSerializer
 from autenticacion.gateway.serializers.usuario.v1.lectura import SerializadorDeUsuarioLecturaConPerfil
-
+from comun.serializers import RecursiveField
 ######################################################################## Pertenece a distibucion ################################
 
 
@@ -61,15 +61,12 @@ class TbStructureSerializer(serializers.ModelSerializer):
     id_especialista_complejo = TbDpersonaSerializer(read_only=True)
     id_tecnico_atm = TbDpersonaSerializer(read_only=True)
     category = TbCategorySerializer(read_only=True)
-    children = serializers.SerializerMethodField()
+    children = RecursiveField(many=True)
     estructura_parent = TbStructureParentSerializer(read_only=True)
 
     class Meta:
         model = TbStructure
         fields = '__all__'
-
-    def get_children(self, obj):
-        return TbStructureSerializer(obj.children.all(), many=True, context=self.context).data
 
 
 ######################################################################## Final ############################################

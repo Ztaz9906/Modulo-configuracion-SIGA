@@ -39,7 +39,7 @@ class VistasDeInstituciones(
 
     filter_backends = [filters.DjangoFilterBackend]
 
-    filterset_fields = ["name"]
+    filterset_fields = ["name", 'id']
 
     # permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
 
