@@ -428,13 +428,17 @@ class TbNestadoTarjetaViewSet(viewsets.ModelViewSet):
     ),
 )
 class TbNtipoTarjetaViewSet(viewsets.ModelViewSet):
-    queryset = TbNtipoTarjeta.objects.all()
+    serializer_class = TbNtipoTarjetaSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.DjangoFilterBackend]
+    filterset_fields = {'nombre_tipo_tarjeta': ['exact'],
+                        'activo': ['exact']}
 
-    def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return TbNtipoTarjetaCreateSerializer
-        else:
-            return TbNtipoTarjetaSerializer
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return TbNtipoTarjeta.objects.all()
+        user_institucion = self.request.user.institucion
+        return TbNtipoTarjeta.objects.filter(id_institucion=user_institucion)
 
 
 @extend_schema_view(
