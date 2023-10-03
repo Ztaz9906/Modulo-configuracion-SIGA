@@ -14,11 +14,13 @@ from autenticacion.gateway.manager import GruposManager
     retrieve=extend_schema(
         tags=["Administración"], description="Devuelve los detalles de un grupo"
     ),
-    update=extend_schema(tags=["Administración"], description="Actualiza un grupo"),
+    update=extend_schema(tags=["Administración"],
+                         description="Actualiza un grupo"),
     partial_update=extend_schema(
         tags=["Administración"], description="Actualiza un grupo"
     ),
-    destroy=extend_schema(tags=["Administración"], description="Destruye un grupo"),
+    destroy=extend_schema(tags=["Administración"],
+                          description="Destruye un grupo"),
     list=extend_schema(
         tags=["Administración"],
         description="Lista los grupos",
@@ -41,7 +43,7 @@ class VistasDeGrupos(
 
     filterset_fields = ["name"]
 
-    permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_serializer_class(self):
         if self.request.method in ["GET", "HEAD", "OPTIONS"]:

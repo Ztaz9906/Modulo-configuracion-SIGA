@@ -43,6 +43,7 @@ class TbNdiaSemana(models.Model):
         return self.dia_semana
 
     class Meta:
+        verbose_name = 'Dias de Semana'
         db_table = 'tb_ndia_semana'
 
 

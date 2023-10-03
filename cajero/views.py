@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions
 from .models import *
 from .serializerGet import *
 from .serializerPost import *
@@ -29,6 +29,8 @@ from django_filters import rest_framework as filters
 class TbCategoryViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
+        if self.request.user.is_staff:
+            return TbCategory.objects.all()
         user_institucion = self.request.user.institucion
         return TbCategory.objects.filter(id_institucion=user_institucion)
 
@@ -151,6 +153,8 @@ class TbStructureViewSet(viewsets.ModelViewSet):
     filterset_fields = ['id_institucion', 'category']
 
     def get_queryset(self):
+        if self.request.user.is_staff:
+            return TbStructure.objects.all()
         user_institucion = self.request.user.institucion
         return TbStructure.objects.filter(id_institucion=user_institucion)
 
@@ -184,7 +188,15 @@ class TbStructureViewSet(viewsets.ModelViewSet):
     ),
 )
 class TbNtipoProductoViewSet(viewsets.ModelViewSet):
-    queryset = TbNtipoProducto.objects.all()
+    filter_backends = [filters.DjangoFilterBackend]
+    filterset_fields = {'nombre_tipo_producto': ['exact'],
+                        'activo': ['exact']}
+
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return TbNtipoProducto.objects.all()
+        user_institucion = self.request.user.institucion
+        return TbNtipoProducto.objects.filter(id_institucion=user_institucion)
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
@@ -213,7 +225,17 @@ class TbNtipoProductoViewSet(viewsets.ModelViewSet):
     ),
 )
 class TbNunidadMedidaViewSet(viewsets.ModelViewSet):
-    queryset = TbNunidadMedida.objects.all()
+
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.DjangoFilterBackend]
+    filterset_fields = {'nombre_unidad_medida': ['exact'],
+                        'activo': ['exact'], 'clasificacion': ['exact']}
+
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return TbNunidadMedida.objects.all()
+        user_institucion = self.request.user.institucion
+        return TbNunidadMedida.objects.filter(id_institucion=user_institucion)
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
@@ -242,9 +264,18 @@ class TbNunidadMedidaViewSet(viewsets.ModelViewSet):
     ),
 )
 class TbNclasificacionPlatoViewSet(viewsets.ModelViewSet):
-    queryset = TbNclasificacionPlato.objects.all()
-    serializer_class = TbNclasificacionPlatoSerializer
 
+    serializer_class = TbNclasificacionPlatoSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.DjangoFilterBackend]
+    filterset_fields = {'nombre_clasificacion_plato': ['exact'],
+                        'activo': ['exact']}
+
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return TbNclasificacionPlato.objects.all()
+        user_institucion = self.request.user.institucion
+        return TbNclasificacionPlato.objects.filter(id_institucion=user_institucion)
 ####### Empieza esquema asset ##########
 
 
@@ -269,6 +300,16 @@ class TbNclasificacionPlatoViewSet(viewsets.ModelViewSet):
 )
 class TbDproductoViewSet(viewsets.ModelViewSet):
     queryset = TbDproducto.objects.all()
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.DjangoFilterBackend]
+    filterset_fields = {'nombre_producto': ['exact'],
+                        'id_tipo_producto': ['exact'], 'id_unidad_medida': ['exact']}
+
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return TbDproducto.objects.all()
+        user_institucion = self.request.user.institucion
+        return TbDproducto.objects.filter(id_institucion=user_institucion)
 
     def get_serializer_class(self):
         if self.request.method == 'GET':

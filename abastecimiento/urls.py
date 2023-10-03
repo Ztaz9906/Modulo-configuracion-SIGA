@@ -22,9 +22,9 @@ from django.contrib import admin
 # e 'include' para aquellas que definimos en las aplicaciones/módulos
 from django.urls import include, path
 
-admin.site.site_title = "Sistema de gestión de la DGT"
-admin.site.site_header = "Sistema de gestión de la DGT"
-admin.site.index_title = "Sistema de gestión de la DGT"
+admin.site.site_title = "Sistema de gestión de SIGA"
+admin.site.site_header = "Sistema de gestión de SIGA"
+admin.site.index_title = "Sistema de gestión de SIGA"
 admin.site.site_url = settings.FRONTEND_URL
 
 ui = [path("", include("documentacion.urls"))]

@@ -1,5 +1,5 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions
 from django_filters import rest_framework as filters
 from autenticacion.gateway.serializers.instituciones import SerializadorDeInstituciones
 from autenticacion.usecases import instituciones as usecases
@@ -41,7 +41,7 @@ class VistasDeInstituciones(
 
     filterset_fields = ["name", 'id']
 
-    # permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_serializer_class(self):
         return SerializadorDeInstituciones

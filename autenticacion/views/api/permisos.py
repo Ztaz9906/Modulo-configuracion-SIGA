@@ -22,5 +22,5 @@ class VistasDePermisos(
     """Lee y actualiza los permisos."""
 
     queryset = PermisosManager().all()
-    permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = serializers.SerializadorDePermisos

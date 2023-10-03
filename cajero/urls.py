@@ -16,11 +16,13 @@ router.register(r'Distribucion_TbStructure',
 ######################################################################## Abastecimiento con asset ###################################################
 
 router.register(r'Abastecimiento_TbNclasificacionPlato',
-                TbNclasificacionPlatoViewSet)
-router.register(r'Abastecimiento_TbNtipoProducto', TbNtipoProductoViewSet)
-router.register(r'Abastecimiento_TbNunidadMedida', TbNunidadMedidaViewSet)
+                TbNclasificacionPlatoViewSet, basename='clasificacion_plato')
+router.register(r'Abastecimiento_TbNtipoProducto',
+                TbNtipoProductoViewSet, basename='tipo_Producto')
+router.register(r'Abastecimiento_TbNunidadMedida',
+                TbNunidadMedidaViewSet, basename='unidad_medida')
 ####### Empieza esquema asset ##########
-router.register(r'Asset_TbDproducto', TbDproductoViewSet)
+router.register(r'Asset_TbDproducto', TbDproductoViewSet, basename='producto')
 ######### Termina esquema assets #########
 router.register(r'Abastecimiento_TbDconfiguracionProducto',
                 TbDconfiguracionProductoViewSet)
