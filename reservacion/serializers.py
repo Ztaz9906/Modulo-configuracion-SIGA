@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import *
 from autenticacion.gateway.serializers.usuario.v1.lectura import SerializadorDeUsuarioLecturaConPerfil
-from base.serializers import TbDpersonaSerializer, TbNestructuraSerializer
+from base.serializers import  TbNestructuraSerializer
 
 
 class TbDelementosMostrarSerializer(serializers.ModelSerializer):
@@ -17,7 +17,7 @@ class TbDperiodoReservacionSerializer(serializers.ModelSerializer):
 
 
 class TbDresponsableAreaPersonasSerializer(serializers.ModelSerializer):
-    id_persona = TbDpersonaSerializer(read_only=True)
+    id_persona = SerializadorDeUsuarioLecturaConPerfil(read_only=True)
     id_estructura = TbNestructuraSerializer(read_only=True)
     id_persona_registro = SerializadorDeUsuarioLecturaConPerfil(read_only=True)
 
@@ -34,7 +34,7 @@ class TbDresponsableAreaPersonasCreateSerializer(serializers.ModelSerializer):
 
 
 class TbDresponsableReservacionSerializer(serializers.ModelSerializer):
-    id_persona = TbDpersonaSerializer(read_only=True)
+    id_persona = SerializadorDeUsuarioLecturaConPerfil(read_only=True)
     id_estructura = TbNestructuraSerializer(read_only=True)
     id_persona_registro = SerializadorDeUsuarioLecturaConPerfil(read_only=True)
 

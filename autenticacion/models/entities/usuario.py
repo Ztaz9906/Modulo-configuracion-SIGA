@@ -11,6 +11,7 @@ class Usuario(auth.AbstractUser):
     nombre_completo = models.CharField(max_length=255, blank=True, null=True)
     ci = models.CharField(max_length=255, blank=True, null=True)
     solapin = models.CharField(max_length=255, blank=True, null=True)
+    codigo_solapin = models.CharField(max_length=255, blank=True, null=True)
     nombre_responsabilidad = models.TextField(blank=True, null=True)
     institucion = models.ForeignKey(
         Institucion, on_delete=models.CASCADE, null=True, blank=True)
@@ -38,7 +39,6 @@ class Usuario(auth.AbstractUser):
         TbNapto, models.DO_NOTHING, db_column='id_apto', blank=True, null=True)
     id_origen = models.ForeignKey(
         TbNorigen, models.DO_NOTHING, db_column='id_origen', blank=True, null=True)
-    codigo_solapin = models.CharField(max_length=1, blank=True, null=True)
     id_edificio = models.ForeignKey(
         TbNedificio, models.DO_NOTHING, db_column='id_edificio', blank=True, null=True)
     id_carrera = models.ForeignKey(

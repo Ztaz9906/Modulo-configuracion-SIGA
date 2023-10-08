@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from .models import *
 from .serializerPost import *
-from base.serializers import TbDpersonaSerializer
 from autenticacion.gateway.serializers.usuario.v1.lectura import SerializadorDeUsuarioLecturaConPerfil
 from comun.serializers import RecursiveField
 ######################################################################## Pertenece a distibucion ################################
@@ -56,10 +55,10 @@ class TbStructureParentSerializer(serializers.ModelSerializer):
 
 
 class TbStructureSerializer(serializers.ModelSerializer):
-    id_sub_director = TbDpersonaSerializer(read_only=True)
-    id_tecnico_general = TbDpersonaSerializer(read_only=True)
-    id_especialista_complejo = TbDpersonaSerializer(read_only=True)
-    id_tecnico_atm = TbDpersonaSerializer(read_only=True)
+    id_sub_director = SerializadorDeUsuarioLecturaConPerfil(read_only=True)
+    id_tecnico_general = SerializadorDeUsuarioLecturaConPerfil(read_only=True)
+    id_especialista_complejo = SerializadorDeUsuarioLecturaConPerfil(read_only=True)
+    id_tecnico_atm = SerializadorDeUsuarioLecturaConPerfil(read_only=True)
     category = TbCategorySerializer(read_only=True)
     children = RecursiveField(many=True)
     estructura_parent = TbStructureParentSerializer(read_only=True)
@@ -120,17 +119,20 @@ class TbDaccesoEventoSecundarioSerializer(serializers.ModelSerializer):
 
 
 class TbDpersonaPuertaSerializer(serializers.ModelSerializer):
-    id_persona = TbDpersonaSerializer(read_only=True)
-    id_puerta = TbStructureSerializer(read_only=True)
-
-    class Meta:
+     class Meta:
         model = TbDpersonaIPPuerta
-        fields = '__all__'
+        fields = [
+            'id_institucion',
+            'id_ip_puerta',
+            'id_puerta',
+            'activo',
+            'ip_puerta',
+            ]
+
 
 
 class TbDsolapinPerdidoSerializer(serializers.ModelSerializer):
-    id_persona = TbDpersonaSerializer(read_only=True)
-
+    id_persona = SerializadorDeUsuarioLecturaConPerfil(read_only=True)
     class Meta:
         model = TbDsolapinPerdido
         fields = '__all__'
@@ -180,8 +182,7 @@ class TbDdistribucionSerializer(serializers.ModelSerializer):
 
 class TbDpersonaDistribucionSerializer(serializers.ModelSerializer):
 
-    id_persona = models.ForeignKey(
-        TbDpersona, models.DO_NOTHING, db_column='id_persona', blank=True, null=True)
+    id_persona = SerializadorDeUsuarioLecturaConPerfil(read_only=True)
     id_distribucion = TbDdistribucionSerializer(read_only=True)
     id_complejo_comedor = TbStructureSerializer(read_only=True)
     id_comedor = TbStructureSerializer(read_only=True)
@@ -326,7 +327,7 @@ class TbMovimientoAsignacionSerializer(serializers.ModelSerializer):
 
 
 class TbRpersonaTarjetaSerializer(serializers.ModelSerializer):
-    id_persona = TbDpersonaSerializer(read_only=True)
+    id_persona = SerializadorDeUsuarioLecturaConPerfil(read_only=True)
     id_tarjeta = TbDtarjetaAlimentacionSerializer(read_only=True)
 
     class Meta:

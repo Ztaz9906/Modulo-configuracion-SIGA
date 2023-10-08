@@ -3,8 +3,6 @@ from autenticacion.models.entities.usuario import Usuario
 from base.models import TbNcategoria, TbNcategoriaResidente, TbNestructura, TbNtipoCurso
 
 # Aqui manda config comensales
-
-
 class TbDconfiguracionPersona(models.Model):
     id_configuracion_persona = models.AutoField(primary_key=True)
     activo = models.BooleanField(blank=True, null=True)
@@ -16,8 +14,6 @@ class TbDconfiguracionPersona(models.Model):
         db_table = 'tb_dconfiguracion_persona'
 
 # se ponen 3 campos incambiable 3 datos estaticos se activa o se desactiva
-
-
 class TbDconfiguracionProceso(models.Model):
     id_configuracion_proceso = models.AutoField(primary_key=True)
     flujo = models.BooleanField(blank=True, null=True)
@@ -29,8 +25,6 @@ class TbDconfiguracionProceso(models.Model):
     class Meta:
 
         db_table = 'tb_dconfiguracion_proceso'
-
-
 class TbDdatosContacto(models.Model):
     id_datos_contacto = models.AutoField(primary_key=True)
     direccion = models.TextField(blank=True, null=True)

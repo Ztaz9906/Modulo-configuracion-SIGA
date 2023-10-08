@@ -1,9 +1,9 @@
 from django.db import models
-from base.models import TbDpersona, TbNestructura
+from base.models import  TbNestructura
 from autenticacion.models.entities.usuario import Usuario
-
-
+from autenticacion.models.entities.institucion import Institucion
 class TbDelementosMostrar(models.Model):
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_elementos_mostrar = models.AutoField(primary_key=True)
     elementos_mostrar_menu = models.IntegerField(blank=True, null=True)
     elementos_mostrar_reservacion = models.IntegerField(blank=True, null=True)
@@ -15,22 +15,22 @@ class TbDelementosMostrar(models.Model):
 
         db_table = 'tb_delementos_mostrar'
 
-
 class TbDperiodoReservacion(models.Model):
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_periodo_reservacion = models.AutoField(primary_key=True)
     periodo_reservacion = models.IntegerField(blank=True, null=True)
     activo = models.BooleanField(blank=True, null=True)
     fecha_registro = models.DateField(blank=True, null=True)
-
     class Meta:
-
+        verbose_name='Peridodo de Reservacion'
         db_table = 'tb_dperiodo_reservacion'
 
 
 class TbDresponsableAreaPersonas(models.Model):
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_responsable_area_personas = models.AutoField(primary_key=True)
     id_persona = models.ForeignKey(
-        TbDpersona, models.DO_NOTHING, db_column='id_persona', blank=True, null=True, related_name='id_persona_resp_area')
+        Usuario, models.DO_NOTHING, db_column='id_persona', blank=True, null=True, related_name='id_persona_resp_area')
     id_estructura = models.ForeignKey(
         TbNestructura, models.DO_NOTHING, db_column='id_estructura', blank=True, null=True)
     fecha_registro = models.DateField(blank=True, null=True)
@@ -43,9 +43,10 @@ class TbDresponsableAreaPersonas(models.Model):
 
 
 class TbDresponsableReservacion(models.Model):
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_responsable_reservacion = models.AutoField(primary_key=True)
     id_persona = models.ForeignKey(
-        TbDpersona, models.DO_NOTHING, db_column='id_persona', blank=True, null=True, related_name='id_persona_responsable')
+        Usuario, models.DO_NOTHING, db_column='id_persona', blank=True, null=True, related_name='id_persona_responsable')
     id_estructura = models.ForeignKey(
         TbNestructura, models.DO_NOTHING, db_column='id_estructura', blank=True, null=True)
     fecha_registro = models.DateField(blank=True, null=True)
@@ -58,8 +59,8 @@ class TbDresponsableReservacion(models.Model):
 
 # por que esta tabla no tiene relacion con ninguna en la base de datos revisar
 
-
 class TbHistorialReservacion(models.Model):
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_historial_reservacion = models.AutoField(primary_key=True)
     id_persona = models.CharField(max_length=1)
     usuario_platos = models.JSONField(blank=True, null=True)

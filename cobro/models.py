@@ -1,6 +1,6 @@
 from django.db import models
 from autenticacion.models.entities.usuario import Usuario
-from base.models import TbDpersona, TbNcategoriaResidente, TbNcategoria
+from base.models import  TbNcategoriaResidente, TbNcategoria
 from cajero.models import TbNevento
 
 
@@ -84,7 +84,7 @@ class TbDimportacionRegistro(models.Model):
 class TbDpersonaRegla(models.Model):
     id_persona_regla = models.AutoField(primary_key=True)
     id_persona = models.ForeignKey(
-        TbDpersona, models.DO_NOTHING, db_column='id_persona', blank=True, null=True)
+        Usuario, models.DO_NOTHING, db_column='id_persona', blank=True, null=True)
     activo = models.BooleanField()
     # This field type is a guess.
     reglas = models.TextField(blank=True, null=True)
@@ -160,7 +160,7 @@ class TbRimportacionReservacion(models.Model):
 class TbRpersonaExcluidaCobro(models.Model):
     id_persona_excluida_cobro = models.AutoField(primary_key=True)
     id_persona = models.ForeignKey(
-        TbDpersona, models.DO_NOTHING, db_column='id_persona', blank=True, null=True)
+        Usuario, models.DO_NOTHING, db_column='id_persona', blank=True, null=True)
     id_importacion = models.ForeignKey(
         TbDimportacion, models.DO_NOTHING, db_column='id_importacion', blank=True, null=True)
     fecha_registro = models.DateField(blank=True, null=True)

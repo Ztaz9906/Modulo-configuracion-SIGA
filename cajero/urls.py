@@ -36,7 +36,7 @@ router.register(r'Cajero_TbNestadoTarjeta', TbNestadoTarjetaViewSet)
 router.register(r'Cajero_TbNtipoTarjeta',
                 TbNtipoTarjetaViewSet, basename='tipo_tarjeta')
 router.register(r'Cajero_TbDtarjetaAlimentacion',
-                TbDtarjetaAlimentacionViewSet)
+                TbDtarjetaAlimentacionViewSet,basename='tarjeta_alimentacion')
 ################################################################ Final ########################################################################
 ################################################################ Distribucion #################################################################
 router.register(r'Distribucion_TbNclasificacionDistribucion',

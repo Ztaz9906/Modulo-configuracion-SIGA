@@ -1,7 +1,7 @@
 from django.db import models
-from base.models import TbDpersona
 from autenticacion.models.entities.institucion import Institucion
 from autenticacion.models.entities.usuario import Usuario
+from django.contrib.postgres.fields import ArrayField
 ######################################################################## Pertenece a distibucion ################################
 
 
@@ -99,13 +99,13 @@ class TbStructure(models.Model):
     version = models.IntegerField(blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     capacidad = models.IntegerField(blank=True, null=True)
-    id_sub_director = models.ForeignKey(TbDpersona, models.DO_NOTHING, db_column='id_sub_director',
+    id_sub_director = models.ForeignKey(Usuario, models.DO_NOTHING, db_column='id_sub_director',
                                         blank=True, null=True, related_name='id_sub_director_Structure')
-    id_tecnico_general = models.ForeignKey(TbDpersona, models.DO_NOTHING, db_column='id_tecnico_general',
+    id_tecnico_general = models.ForeignKey(Usuario, models.DO_NOTHING, db_column='id_tecnico_general',
                                            blank=True, null=True, related_name='id_tecnico_general_Structure')
     centro_costo = models.TextField(blank=True, null=True)
     id_especialista_complejo = models.ForeignKey(
-        TbDpersona, models.DO_NOTHING, db_column='id_especialista_complejo', blank=True, null=True, related_name='id_especialista_complejo_Structure')
+        Usuario, models.DO_NOTHING, db_column='id_especialista_complejo', blank=True, null=True, related_name='id_especialista_complejo_Structure')
 
     class Meta:
         db_table = 'tb_structure'
@@ -194,8 +194,6 @@ class TbDconfiguracionProducto(models.Model):
         db_table = 'tb_dconfiguracion_producto'
 
 # Configuraciones de cantidad de accesos para eventos secundarios ej:doble tiene valor por defecto tiene q existir y solo se puede modificar, para diferentes instituciones hay que ahcer un crud
-
-
 class TbDaccesoEventoSecundario(models.Model):
     id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_acceso_evento_secundario = models.AutoField(primary_key=True)
@@ -208,9 +206,7 @@ class TbDaccesoEventoSecundario(models.Model):
 
 class TbDpersonaIPPuerta(models.Model):
     id_institucion = models.ForeignKey(Institucion, models.CASCADE)
-    id_persona_puerta = models.AutoField(primary_key=True)
-    id_persona = models.ForeignKey(
-        TbDpersona, models.DO_NOTHING, db_column='id_persona', blank=True, null=True)  # quitar ya no hace falta
+    id_ip_puerta = models.AutoField(primary_key=True)
     id_puerta = models.ForeignKey(
         TbStructure, models.DO_NOTHING, db_column='id_puerta', blank=True, null=True)
     activo = models.BooleanField(blank=True, null=True)
@@ -220,9 +216,7 @@ class TbDpersonaIPPuerta(models.Model):
     id_usuario_modificacion = models.ForeignKey(Usuario, models.DO_NOTHING, db_column='id_usuario_modificacion',
                                                 blank=True, null=True, related_name='id_usuario_modificacion_personaPuerta')
     fecha_modificacion = models.DateField(blank=True, null=True)
-    # revisar por que hay 2 id puerta en esta tabla
-    ip_puerta = models.TextField(blank=True, null=True)
-
+    ip_puerta = models.TextField(max_length=255,unique=True)
     class Meta:
         db_table = 'tb_dpersona_puerta'
 
@@ -231,14 +225,14 @@ class TbDsolapinPerdido(models.Model):
     id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_solapin_perdido = models.AutoField(primary_key=True)
     id_persona = models.ForeignKey(
-        TbDpersona, models.DO_NOTHING, db_column='id_persona', blank=True, null=True, related_name='id_persona_solapin_perdido')
-    codigo_solapin = models.CharField(max_length=1, blank=True, null=True)
+        Usuario, on_delete=models.CASCADE, db_column='id_persona', blank=True, null=True, related_name='id_persona_solapin_perdido',unique=True)
     fecha_registro = models.DateTimeField(blank=True, null=True)
     id_usuario_registro = models.ForeignKey(
         Usuario, models.DO_NOTHING, db_column='id_usuario_registro', blank=True, null=True)
     activo = models.BooleanField(blank=True, null=True)
 
     class Meta:
+        verbose_name='Solapin Perdido'
         db_table = 'tb_dsolapin_perdido'
 
 
@@ -249,8 +243,10 @@ class TbNestadoTarjeta(models.Model):
     fecha_registro = models.DateField(blank=True, null=True)
     descripcion = models.TextField(blank=True, null=True)
     activo = models.BooleanField(blank=True, null=True)
-
+    def __str__(self):
+        return self.nombre_estado_tarjeta
     class Meta:
+        verbose_name = 'Estado de Tarjetas'
         db_table = 'tb_nestado_tarjeta'
 
 
@@ -267,24 +263,47 @@ class TbNtipoTarjeta(models.Model):
         db_table = 'tb_ntipo_tarjeta'
 
 
+from django.db import models
+
 class TbDtarjetaAlimentacion(models.Model):
+    # Tus campos relacionados y demás campos
     id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_tarjeta_alimentacion = models.AutoField(primary_key=True)
-    codigo = models.TextField(blank=True, null=True, default='12345COD')
-    numero_serie = models.TextField(blank=True, null=True, default='12345NO')
+    codigo = models.TextField(blank=True, null=True)
+    numero_serie = models.TextField(blank=True, null=True)
     id_estado_tarjeta = models.ForeignKey(
         TbNestadoTarjeta, models.DO_NOTHING, db_column='id_estado_tarjeta', blank=True, null=True)
-    fecha_registro = models.DateField(blank=True, null=True)
+    fecha_inicio = models.DateField(blank=True, null=True)
     id_usuario_registro = models.ForeignKey(Usuario, models.DO_NOTHING, db_column='id_usuario_registro',
                                             blank=True, null=True, related_name='id_usuario_registro_tarjetaAlimentacion')
     id_tipo_tarjeta = models.ForeignKey(
         TbNtipoTarjeta, models.DO_NOTHING, db_column='id_tipo_tarjeta', blank=True, null=True)
-    fecha_modificacion = models.DateField(blank=True, null=True)
+    fecha_fin = models.DateField(blank=True, null=True)
     id_usuario_modificacion = models.ForeignKey(Usuario, models.DO_NOTHING, db_column='id_usuario_modificacion',
                                                 blank=True, null=True, related_name='id_usuario_modificacion_tarjetaAlimentacion')
 
+    def save(self, *args, **kwargs):
+        if not self.codigo:
+            self.codigo = TbDtarjetaAlimentacion.get_next_code("COD")
+        if not self.numero_serie:
+            self.numero_serie = TbDtarjetaAlimentacion.get_next_code("NS")
+        super(TbDtarjetaAlimentacion, self).save(*args, **kwargs)
+
+    @staticmethod
+    def get_next_code(prefix):
+        last = TbDtarjetaAlimentacion.objects.all().order_by('id_tarjeta_alimentacion').last()
+        if not last:
+            return f'{prefix}1'
+        if prefix == "COD":
+            code = last.codigo
+        else:  # Para "NS"
+            code = last.numero_serie
+        num = int(code.replace(prefix, '')) + 1
+        return f'{prefix}{num}'
+
     class Meta:
         db_table = 'tb_dtarjeta_alimentacion'
+
 
 ################################################################ Distribucion #################################################################
 
@@ -325,7 +344,7 @@ class TbDpersonaDistribucion(models.Model):
     id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_persona_distribucion = models.AutoField(primary_key=True)
     id_persona = models.ForeignKey(
-        TbDpersona, models.DO_NOTHING, db_column='id_persona', blank=True, null=True, related_name='id_persona_dist')
+        Usuario, models.DO_NOTHING, db_column='id_persona', blank=True, null=True, related_name='id_persona_dist')
     id_usuario_registro = models.ForeignKey(
         Usuario, models.DO_NOTHING, db_column='id_usuario_registro', blank=True, null=True)
     fecha_registro = models.DateField(blank=True, null=True)
@@ -552,7 +571,7 @@ class TbRpersonaTarjeta(models.Model):
     id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_persona_tarjeta = models.AutoField(primary_key=True)
     id_persona = models.ForeignKey(
-        TbDpersona, models.DO_NOTHING, db_column='id_persona', blank=True, null=True)
+        Usuario, models.DO_NOTHING, db_column='id_persona', blank=True, null=True)
     id_tarjeta = models.ForeignKey(
         TbDtarjetaAlimentacion, models.DO_NOTHING, db_column='id_tarjeta', blank=True, null=True)
     fecha_registro = models.DateField(blank=True, null=True)

@@ -47,8 +47,6 @@ class SerializadorDeUsuarioLecturaBase(serializers.HyperlinkedModelSerializer):
             "id",
             "username",
             "email",
-            "first_name",
-            "last_name",
             "is_staff",
             "groups",
             "user_permissions",
@@ -73,17 +71,21 @@ class SerializadorDeUsuarioEscrituraBase(serializers.HyperlinkedModelSerializer)
         required=False,
     )
 
+    def create(self, validated_data):
+        user = super().create(validated_data)
+        user.set_password(validated_data['password'])
+        user.save()
+        return user
+
     class Meta:
         model = models.Usuario
         fields = [
             "username",
             "email",
-            "first_name",
-            "last_name",
+            'password',
             "is_staff",
             "groups",
             "user_permissions",
             "institucion",
-
         ]
-        extra_kwargs = {"password": {"write_only": True}}
+

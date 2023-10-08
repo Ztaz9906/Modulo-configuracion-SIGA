@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import *
-from base.serializers import TbDpersonaSerializer, TbNcategoriaResidenteSerializer, TbNcategoriaSerializer
+from base.serializers import TbNcategoriaResidenteSerializer, TbNcategoriaSerializer
 from cajero.serializerGet import TbNeventoSerializer
 from autenticacion.gateway.serializers.usuario.v1.lectura import SerializadorDeUsuarioLecturaConPerfil
 
@@ -64,7 +64,7 @@ class TbDimportacionRegistroCreateSerializer(serializers.ModelSerializer):
 
 
 class TbDpersonaReglaSerializer(serializers.ModelSerializer):
-    id_persona = TbDpersonaSerializer(read_only=True)
+    id_persona = SerializadorDeUsuarioLecturaConPerfil(read_only=True)
 
     class Meta:
         model = TbDpersonaRegla
@@ -131,7 +131,7 @@ class TbRimportacionReservacionCreateSerializer(serializers.ModelSerializer):
 
 
 class TbRpersonaExcluidaCobroSerializer(serializers.ModelSerializer):
-    id_persona = TbDpersonaSerializer(read_only=True)
+    id_persona = SerializadorDeUsuarioLecturaConPerfil(read_only=True)
     id_importacion = TbDimportacionSerializer(read_only=True)
     id_usuario_registro = SerializadorDeUsuarioLecturaConPerfil(read_only=True)
 

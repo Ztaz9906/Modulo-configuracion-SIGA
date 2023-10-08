@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import *
-
+from autenticacion.models.entities.torpedo import TbDpersonaTorpedo
 
 class TbNpaisSerializer(serializers.ModelSerializer):
     class Meta:
@@ -108,34 +108,22 @@ class TbNparentescoSerializer(serializers.ModelSerializer):
     class Meta:
         model = TbNparentesco
         fields = '__all__'
-
-
-class TbDpersonaCreateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TbDpersona
-        fields = '__all__'
-
-
-class TbDpersonaSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = TbDpersona
-        fields = '__all__'
-
-
-class TbDpersonaTorpedoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TbDpersonaTorpedo
-        fields = '__all__'
-
-
 class TbRpersonaFamiliarSerializer(serializers.ModelSerializer):
     class Meta:
         model = TbRpersonaFamiliar
         fields = '__all__'
 
-
-class TbTempIdPersonaTarjetaSerializer(serializers.ModelSerializer):
+class TbDpersonaTorpedoSerializer(serializers.ModelSerializer):
+    id_sexo = TbNsexoSerializer(read_only=True)
+    id_municipio = TbNmunicipioSerializer(read_only=True)
+    id_provincia = TbNprovinciaSerializer(read_only=True)
+    id_pais = TbNpaisSerializer(read_only=True)
     class Meta:
-        model = TbTempIdPersonaTarjeta
+        model = TbDpersonaTorpedo
+        fields = '__all__'
+
+
+class TbDpersonaCreateTorpedoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TbDpersonaTorpedo
         fields = '__all__'

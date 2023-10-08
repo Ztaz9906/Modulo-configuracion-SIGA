@@ -4,3 +4,4 @@ from cajero.models import *
 
 
 admin.site.register(TbNdiaSemana)
+admin.site.register(TbNestadoTarjeta)

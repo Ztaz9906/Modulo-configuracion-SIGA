@@ -102,7 +102,7 @@ ASGI_APPLICATION = "abastecimiento.asgi.application"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'prueba',
+        'NAME': 'nueva1',
         'USER': 'postgres',
         'PASSWORD': '1234',
         'HOST': 'localhost',

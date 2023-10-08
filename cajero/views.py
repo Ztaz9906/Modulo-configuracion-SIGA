@@ -1,10 +1,13 @@
+from django_filters import rest_framework as filters
+from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter
 from rest_framework import viewsets, permissions
-from .models import *
+
 from .serializerGet import *
 from .serializerPost import *
-from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter
-from django_filters import rest_framework as filters
-######################################################################## Pertenece a distibucion ################################
+
+
+# ####################################################################### Pertenece a distibucion
+# ################################
 
 
 @extend_schema_view(
@@ -27,12 +30,12 @@ from django_filters import rest_framework as filters
     ),
 )
 class TbCategoryViewSet(viewsets.ModelViewSet):
-
+    permission_classes = [permissions.IsAuthenticated]
     def get_queryset(self):
         if self.request.user.is_staff:
             return TbCategory.objects.all()
-        user_institucion = self.request.user.institucion
-        return TbCategory.objects.filter(id_institucion=user_institucion)
+        user_institution = self.request.user.institucion
+        return TbCategory.objects.filter(id_institucion=user_institution)
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
@@ -45,7 +48,7 @@ class TbCategoryViewSet(viewsets.ModelViewSet):
     create=extend_schema(tags=["Clasificacion Evento"],
                          description="Crea una clasificacion Evento"),
     retrieve=extend_schema(
-        tags=["clasificacion Evento"], description="Devuelve los detalles de una clasificacion Evento"
+        tags=["Clasificacion Evento"], description="Devuelve los detalles de una clasificacion Evento"
     ),
     update=extend_schema(tags=["Clasificacion Evento"],
                          description="Actualiza un clasificacionEvento"),
@@ -91,7 +94,7 @@ class TbNclasificacionEventoViewSet(viewsets.ModelViewSet):
 )
 class TbNhorarioViewSet(viewsets.ModelViewSet):
     queryset = TbNhorario.objects.all()
-
+    permission_classes = [permissions.IsAuthenticated]
     def get_serializer_class(self):
         if self.request.method == 'GET':
             return TbNhorarioSerializer
@@ -120,7 +123,7 @@ class TbNhorarioViewSet(viewsets.ModelViewSet):
 )
 class TbNeventoViewSet(viewsets.ModelViewSet):
     queryset = TbNevento.objects.all()
-
+    permission_classes = [permissions.IsAuthenticated]
     def get_serializer_class(self):
         if self.request.method == 'POST':
             return TbNeventoCreateSerializer
@@ -148,7 +151,7 @@ class TbNeventoViewSet(viewsets.ModelViewSet):
     ),
 )
 class TbStructureViewSet(viewsets.ModelViewSet):
-
+    permission_classes = [permissions.IsAuthenticated]
     filter_backends = [filters.DjangoFilterBackend]
     filterset_fields = ['id_institucion', 'category']
 
@@ -188,6 +191,7 @@ class TbStructureViewSet(viewsets.ModelViewSet):
     ),
 )
 class TbNtipoProductoViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated]
     filter_backends = [filters.DjangoFilterBackend]
     filterset_fields = {'nombre_tipo_producto': ['exact'],
                         'activo': ['exact']}
@@ -206,20 +210,20 @@ class TbNtipoProductoViewSet(viewsets.ModelViewSet):
 
 
 @extend_schema_view(
-    create=extend_schema(tags=["Unudad de Medida"],
-                         description="Crea una Unudad de Medida"),
+    create=extend_schema(tags=["Unidad de Medida"],
+                         description="Crea una Unidad de Medida"),
     retrieve=extend_schema(
-        tags=["Unudad de Medida"], description="Devuelve los detalles de una Unudad de Medida"
+        tags=["Unidad de Medida"], description="Devuelve los detalles de una Unidad de Medida"
     ),
-    update=extend_schema(tags=["Unudad de Medida"],
-                         description="Actualiza una Unudad de Medida"),
+    update=extend_schema(tags=["Unidad de Medida"],
+                         description="Actualiza una Unidad de Medida"),
     partial_update=extend_schema(
-        tags=["Unudad de Medida"], description="Actualiza una Unudad de Medida"
+        tags=["Unidad de Medida"], description="Actualiza una Unidad de Medida"
     ),
-    destroy=extend_schema(tags=["Unudad de Medida"],
-                          description="Destruye una Unudad de Medida"),
+    destroy=extend_schema(tags=["Unidad de Medida"],
+                          description="Destruye una Unidad de Medida"),
     list=extend_schema(
-        tags=["Unudad de Medida"],
+        tags=["Unidad de Medida"],
         description="Lista las Unidades de Medidas",
         parameters=[OpenApiParameter(name="query", required=False, type=str)],
     ),
@@ -330,15 +334,34 @@ class TbDconfiguracionProductoViewSet(viewsets.ModelViewSet):
 
 ######################################################################## Final #################################################
 
-
+@extend_schema_view(
+    create=extend_schema(tags=["Configuracciones de Accesos"],
+                         description="Crea un Producto"),
+    retrieve=extend_schema(
+        tags=["Configuracciones de Accesos"], description="Devuelve los detalles de una Configuracciones de Accesos"
+    ),
+    update=extend_schema(tags=["Configuracciones de Accesos"],
+                         description="Actualiza una Configuracciones de Accesos"),
+    partial_update=extend_schema(
+        tags=["Configuracciones de Accesos"], description="Actualiza una Configuracciones de Accesos"
+    ),
+    destroy=extend_schema(tags=["Configuracciones de Accesos"],
+                          description="Destruye una Configuracciones de Accesos"),
+    list=extend_schema(
+        tags=["Configuracciones de Accesos"],
+        description="Lista las Configuracciones de Accesoss",
+        parameters=[OpenApiParameter(name="query", required=False, type=str)],
+    ),
+)
 class TbDaccesoEventoSecundarioViewSet(viewsets.ModelViewSet):
-    queryset = TbDaccesoEventoSecundario.objects.all()
-
-    def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return TbDaccesoEventoSecundarioCreateSerializer
-        else:
-            return TbDaccesoEventoSecundarioSerializer
+    queryset = TbDaccesoEventoSecundario.objects.none()
+    serializer_class = TbDaccesoEventoSecundarioSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return TbDaccesoEventoSecundario.objects.all()
+        user_institucion = self.request.user.institucion
+        return TbDaccesoEventoSecundario.objects.filter(id_institucion=user_institucion)
 
 
 @extend_schema_view(
@@ -361,22 +384,54 @@ class TbDaccesoEventoSecundarioViewSet(viewsets.ModelViewSet):
     ),
 )
 class TbDpersonaPuertaViewSet(viewsets.ModelViewSet):
-    queryset = TbDpersonaIPPuerta.objects.all()
+    serializer_class = TbDpersonaPuertaSerializer
+    queryset = TbDpersonaIPPuerta.objects.none()
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.DjangoFilterBackend]
+    filterset_fields = {'id_puerta': ['exact'],
+                        }
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return TbDpersonaIPPuerta.objects.all()
+        user_institucion = self.request.user.institucion
+        return TbDpersonaIPPuerta.objects.filter(id_institucion=user_institucion)
 
+
+@extend_schema_view(
+    create=extend_schema(tags=["Solapin Perdido"],
+                         description="Crea un Solapin Perdido"),
+    retrieve=extend_schema(
+        tags=["Solapin Perdido"], description="Devuelve los detalles de un Solapin Perdido"
+    ),
+    destroy=extend_schema(tags=["Solapin Perdido"],
+                          description="Destruye un Solapin Perdido"),
+    list=extend_schema(
+        tags=["Solapin Perdido"],
+        description="Lista los Solapin Perdido",
+        parameters=[OpenApiParameter(name="query", required=False, type=str)],
+    ),
+)
+class TbDsolapinPerdidoViewSet(viewsets.ModelViewSet):
+    queryset = TbDsolapinPerdido.objects.none()
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.DjangoFilterBackend]
+    filterset_fields = {'id_persona__id_sexo': ['exact'],
+                        'id_persona__id_municipio': ['exact'],
+                        'id_persona__id_pais': ['exact'],
+                        'id_persona__ci': ['exact', 'icontains'],
+                        'id_persona__username': ['exact', 'icontains'],
+                        'id_persona__nombre_completo': ['exact', 'icontains'],
+                        'id_persona__solapin': ['exact', 'icontains'],
+                        }
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return TbDsolapinPerdido.objects.all()
+        user_institucion = self.request.user.institucion
+        return TbDsolapinPerdido.objects.filter(id_institucion=user_institucion)
     def get_serializer_class(self):
         if self.request.method == 'GET':
-            return TbDpersonaPuertaSerializer
-        return TbDpersonaPuertaCreateSerializer
-
-
-class TbDsolapinPerdidoViewSet(viewsets.ModelViewSet):
-    queryset = TbDsolapinPerdido.objects.all()
-
-    def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return TbDsolapinPerdidoCreateSerializer
-        else:
             return TbDsolapinPerdidoSerializer
+        return TbDsolapinPerdidoCreateSerializer
 
 
 @extend_schema_view(
@@ -399,14 +454,14 @@ class TbDsolapinPerdidoViewSet(viewsets.ModelViewSet):
     ),
 )
 class TbNestadoTarjetaViewSet(viewsets.ModelViewSet):
-    queryset = TbNestadoTarjeta.objects.all()
+    queryset = TbNestadoTarjeta.objects.none()
+    serializer_class = TbNestadoTarjetaSerializer
 
-    def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return TbNestadoTarjetaCreateSerializer
-        else:
-            return TbNestadoTarjetaSerializer
-
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return TbNestadoTarjeta.objects.all()
+        user_institucion = self.request.user.institucion
+        return TbNestadoTarjeta.objects.filter(id_institucion=user_institucion)
 
 @extend_schema_view(
     create=extend_schema(tags=["Tipo de Tarjeta"],
@@ -461,8 +516,18 @@ class TbNtipoTarjetaViewSet(viewsets.ModelViewSet):
     ),
 )
 class TbDtarjetaAlimentacionViewSet(viewsets.ModelViewSet):
-    queryset = TbDtarjetaAlimentacion.objects.all()
 
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.DjangoFilterBackend]
+    filterset_fields = {'numero_serie': ['exact'],
+                        'codigo': ['exact'] ,'id_estado_tarjeta': ['exact'],
+                        'id_tipo_tarjeta': ['exact']}
+
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return TbDtarjetaAlimentacion.objects.all()
+        user_institucion = self.request.user.institucion
+        return TbDtarjetaAlimentacion.objects.filter(id_institucion=user_institucion)
     def get_serializer_class(self):
         if self.request.method == 'GET':
             return TbDtarjetaAlimentacionSerializer

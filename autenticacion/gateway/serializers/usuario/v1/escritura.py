@@ -33,4 +33,4 @@ class SerializadorDeUsuarioEscritura(SerializadorDeUsuarioEscrituraBase):
                                                                    'id_pais',
                                                                    'id_categoria_cientifica',
                                                                    'id_categoria_docente',
-                                                                   'id_grupo',]
+                                                                   'id_grupo']
