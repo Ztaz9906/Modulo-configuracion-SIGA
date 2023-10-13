@@ -7,7 +7,6 @@ M = typing.TypeVar("M", bound=models.Model)
 
 class BaseApiFunctionViewModelPermissions(permissions.BasePermission):
     model = None
-
     perms_map = {
         "GET": [],
         "OPTIONS": [],

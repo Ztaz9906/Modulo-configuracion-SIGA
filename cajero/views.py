@@ -31,6 +31,9 @@ from .serializerPost import *
 )
 class TbCategoryViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.DjangoFilterBackend]
+    filterset_fields = {'name': ['exact'],
+                        'active': ['exact']}
     def get_queryset(self):
         if self.request.user.is_staff:
             return TbCategory.objects.all()
@@ -93,8 +96,16 @@ class TbNclasificacionEventoViewSet(viewsets.ModelViewSet):
     ),
 )
 class TbNhorarioViewSet(viewsets.ModelViewSet):
-    queryset = TbNhorario.objects.all()
+    queryset = TbNhorario.objects.none()
     permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.DjangoFilterBackend]
+    filterset_fields = {'nombre_horario': ['exact'],
+                        'activo': ['exact']}
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return TbNhorario.objects.all()
+        user_institucion = self.request.user.institucion
+        return TbNhorario.objects.filter(id_institucion=user_institucion)
     def get_serializer_class(self):
         if self.request.method == 'GET':
             return TbNhorarioSerializer
@@ -124,11 +135,18 @@ class TbNhorarioViewSet(viewsets.ModelViewSet):
 class TbNeventoViewSet(viewsets.ModelViewSet):
     queryset = TbNevento.objects.all()
     permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.DjangoFilterBackend]
+    filterset_fields = {'id_clasificacion_evento': ['exact'],
+                        'activo': ['exact']}
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return TbNevento.objects.all()
+        user_institucion = self.request.user.institucion
+        return TbNevento.objects.filter(id_institucion=user_institucion)
     def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return TbNeventoCreateSerializer
-        else:
+        if self.request.method == 'GET':
             return TbNeventoSerializer
+        return TbNeventoCreateSerializer
 
 
 @extend_schema_view(
@@ -153,13 +171,18 @@ class TbNeventoViewSet(viewsets.ModelViewSet):
 class TbStructureViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     filter_backends = [filters.DjangoFilterBackend]
-    filterset_fields = ['id_institucion', 'category']
+    filterset_fields = ['name','initials','active']
 
     def get_queryset(self):
+        # Crear un filtro base por institución o por usuario si es necesario
         if self.request.user.is_staff:
-            return TbStructure.objects.all()
-        user_institucion = self.request.user.institucion
-        return TbStructure.objects.filter(id_institucion=user_institucion)
+            base_query = TbStructure.objects.all()
+        else:
+            user_institucion = self.request.user.institucion
+            base_query = TbStructure.objects.filter(id_institucion=user_institucion)
+
+        # Filtrar solo aquellos que no tienen estructura padre (estructura_parent es nulo)
+        return base_query.filter(estructura_parent__isnull=True)
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
@@ -191,6 +214,8 @@ class TbStructureViewSet(viewsets.ModelViewSet):
     ),
 )
 class TbNtipoProductoViewSet(viewsets.ModelViewSet):
+    queryset = TbNtipoProducto.objects.none()
+    serializer_class = TbNtipoProductoSerializer
     permission_classes = [permissions.IsAuthenticated]
     filter_backends = [filters.DjangoFilterBackend]
     filterset_fields = {'nombre_tipo_producto': ['exact'],
@@ -202,11 +227,6 @@ class TbNtipoProductoViewSet(viewsets.ModelViewSet):
         user_institucion = self.request.user.institucion
         return TbNtipoProducto.objects.filter(id_institucion=user_institucion)
 
-    def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return TbNtipoProductoCreateSerializer
-        else:
-            return TbNtipoProductoSerializer
 
 
 @extend_schema_view(
@@ -419,7 +439,6 @@ class TbDsolapinPerdidoViewSet(viewsets.ModelViewSet):
                         'id_persona__id_municipio': ['exact'],
                         'id_persona__id_pais': ['exact'],
                         'id_persona__ci': ['exact', 'icontains'],
-                        'id_persona__username': ['exact', 'icontains'],
                         'id_persona__nombre_completo': ['exact', 'icontains'],
                         'id_persona__solapin': ['exact', 'icontains'],
                         }

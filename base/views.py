@@ -6,23 +6,23 @@ from django_filters import rest_framework as filters
 from rest_framework import mixins
 from rest_framework.viewsets import GenericViewSet
 from autenticacion.models.entities.torpedo import TbDpersonaTorpedo
-
+from autenticacion.models.entities.persona import Persona
 
 @extend_schema_view(
-    create=extend_schema(tags=["Torpedos"],
-                         description="Crea una torpedo"),
+    create=extend_schema(tags=["Torpedo"],
+                         description="Crea un torpedo"),
     retrieve=extend_schema(
-        tags=["Torpedos"], description="Devuelve los detalles de un torpedo"
+        tags=["Torpedo"], description="Devuelve los detalles de un torpedo"
     ),
-    update=extend_schema(tags=["Torpedos"],
+    update=extend_schema(tags=["Torpedo"],
                          description="Actualiza un torpedo"),
     partial_update=extend_schema(
-        tags=["Torpedos"], description="Actualiza un torpedo"
+        tags=["Torpedo"], description="Actualiza un torpedo"
     ),
-    destroy=extend_schema(tags=["Torpedos"],
+    destroy=extend_schema(tags=["Torpedo"],
                           description="Destruye un torpedo"),
     list=extend_schema(
-        tags=["Torpedos"],
+        tags=["Torpedo"],
         description="Lista los torpedos",
         parameters=[OpenApiParameter(name="query", required=False, type=str)],
     ),
@@ -30,7 +30,6 @@ from autenticacion.models.entities.torpedo import TbDpersonaTorpedo
 class TbTorpedoViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     queryset = TbDpersonaTorpedo.objects.none()
-    serializer_class = TbDpersonaTorpedoSerializer
     filter_backends = [filters.DjangoFilterBackend]
     filterset_fields = ['nombre_completo', 'id_sexo','id_municipio','id_provincia','id_pais','ci']
     def get_queryset(self):
@@ -46,6 +45,41 @@ class TbTorpedoViewSet(viewsets.ModelViewSet):
             return TbDpersonaCreateTorpedoSerializer
 
 
+@extend_schema_view(
+    create=extend_schema(tags=["Persona"],
+                         description="Crea una persona"),
+    retrieve=extend_schema(
+        tags=["Persona"], description="Devuelve las detalles de un persona"
+    ),
+    update=extend_schema(tags=["Persona"],
+                         description="Actualiza una persona"),
+    partial_update=extend_schema(
+        tags=["Persona"], description="Actualiza una persona"
+    ),
+    destroy=extend_schema(tags=["Persona"],
+                          description="Destruye una persona"),
+    list=extend_schema(
+        tags=["Persona"],
+        description="Lista las personas",
+        parameters=[OpenApiParameter(name="query", required=False, type=str)],
+    ),
+)
+class PersonaViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = Persona.objects.none()
+    filter_backends = [filters.DjangoFilterBackend]
+    filterset_fields = ['nombre_completo', 'id_sexo','id_municipio','id_provincia','id_pais','ci']
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return Persona.objects.all()
+        user_institucion = self.request.user.institucion
+        return Persona.objects.filter(institucion=user_institucion)
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return PersonaSerializer
+        else:
+            return PersonaSerializer
 class ReadOnlyModelViewSet(mixins.RetrieveModelMixin,
                            mixins.ListModelMixin,
                            GenericViewSet):
@@ -56,11 +90,7 @@ def get_schema_config(model_name):
         return view_func  # Decorador que no hace nada y simplemente devuelve la función original
 
     return {
-        "create": no_op_decorator,
         "retrieve": extend_schema(tags=["Nomecladores"], description=f"Devuelve los detalles de un {model_name}"),
-        "update": no_op_decorator,
-        "partial_update": no_op_decorator,
-        "destroy": no_op_decorator,
         "list": extend_schema(tags=["Nomecladores"], description=f"Lista los {model_name}",
                               parameters=[OpenApiParameter(name="query", required=False, type=str)]),
     }

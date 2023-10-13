@@ -87,5 +87,6 @@ class SerializadorDeUsuarioEscrituraBase(serializers.HyperlinkedModelSerializer)
             "groups",
             "user_permissions",
             "institucion",
+            'persona'
         ]
 

@@ -1,6 +1,7 @@
 from django.db import models
 from autenticacion.models.entities.institucion import Institucion
 from autenticacion.models.entities.usuario import Usuario
+from autenticacion.models.entities.persona import Persona
 from django.contrib.postgres.fields import ArrayField
 ######################################################################## Pertenece a distibucion ################################
 
@@ -32,8 +33,8 @@ class TbNclasificacionEvento(models.Model):
     fecha_registro = models.DateField(blank=True, null=True)
 
     class Meta:
+        verbose_name="Clasificacion de Evento"
         db_table = 'tb_nclasificacion_evento'
-
 
 class TbNdiaSemana(models.Model):
     id_dia_semana = models.AutoField(primary_key=True)
@@ -83,6 +84,7 @@ class TbNevento(models.Model):
         return self.nombre_evento
 
     class Meta:
+        verbose_name='Evento'
         db_table = 'tb_nevento'
 
 
@@ -224,9 +226,9 @@ class TbDpersonaIPPuerta(models.Model):
 class TbDsolapinPerdido(models.Model):
     id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_solapin_perdido = models.AutoField(primary_key=True)
-    id_persona = models.ForeignKey(
-        Usuario, on_delete=models.CASCADE, db_column='id_persona', blank=True, null=True, related_name='id_persona_solapin_perdido',unique=True)
-    fecha_registro = models.DateTimeField(blank=True, null=True)
+    id_persona = models.OneToOneField(
+        Persona, on_delete=models.CASCADE, db_column='id_persona', blank=True, null=True, related_name='id_persona_solapin_perdido')
+    fecha_registro = models.DateTimeField(auto_now=True,blank=True, null=True)
     id_usuario_registro = models.ForeignKey(
         Usuario, models.DO_NOTHING, db_column='id_usuario_registro', blank=True, null=True)
     activo = models.BooleanField(blank=True, null=True)

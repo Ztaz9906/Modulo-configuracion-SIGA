@@ -44,7 +44,7 @@ class VistasDeUsuarios(
     """Lee y actualiza los usuarios."""
 
     queryset = UsuarioManager().all()
-    permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = {
         "v1": {
             "read": serializers.v1.SerializadorDeUsuarioLecturaConPerfil,

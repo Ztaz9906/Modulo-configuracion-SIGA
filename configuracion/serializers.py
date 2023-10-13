@@ -11,8 +11,6 @@ class TbDconfiguracionPersonaSerializer(serializers.ModelSerializer):
 
 
 class TbDconfiguracionProcesoSerializer(serializers.ModelSerializer):
-    id_usuario_registro = SerializadorDeUsuarioLecturaConPerfil(read_only=True)
-
     class Meta:
         model = TbDconfiguracionProceso
         fields = '__all__'

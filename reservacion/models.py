@@ -1,7 +1,9 @@
 from django.db import models
-from base.models import  TbNestructura
+from base.models import TbNestructura
 from autenticacion.models.entities.usuario import Usuario
 from autenticacion.models.entities.institucion import Institucion
+from autenticacion.models.entities.persona import Persona
+
 class TbDelementosMostrar(models.Model):
     id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_elementos_mostrar = models.AutoField(primary_key=True)

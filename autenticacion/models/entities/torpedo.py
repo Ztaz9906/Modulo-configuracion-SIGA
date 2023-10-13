@@ -1,6 +1,6 @@
 from autenticacion.models.entities.institucion import Institucion
 from base.models import *
-
+from django.contrib import admin
 class TbDpersonaTorpedo(models.Model):
     id_institucion = models.ForeignKey(
         Institucion, on_delete=models.CASCADE, null=True, blank=True)
@@ -26,3 +26,6 @@ class TbDpersonaTorpedo(models.Model):
 
     def __str__(self) -> str:
         return self.nombre_completo
+
+    class Admin(admin.ModelAdmin):
+        list_display = ["id_persona_torpedo", "nombre_completo", "ci", "id_institucion"]

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import *
 from autenticacion.models.entities.torpedo import TbDpersonaTorpedo
-
+from autenticacion.models.entities.persona import Persona
 class TbNpaisSerializer(serializers.ModelSerializer):
     class Meta:
         model = TbNpais
@@ -127,3 +127,15 @@ class TbDpersonaCreateTorpedoSerializer(serializers.ModelSerializer):
     class Meta:
         model = TbDpersonaTorpedo
         fields = '__all__'
+
+class PersonaSerializer(serializers.ModelSerializer):
+    url = serializers.HyperlinkedIdentityField(
+        view_name="persona-detail#v1")
+    class Meta:
+        model = Persona
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['url'] = self.fields['url'].to_representation(instance)
+        return representation

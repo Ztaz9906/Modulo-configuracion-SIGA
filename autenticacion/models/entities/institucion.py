@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 from polymorphic import models as polymorphic
-
+from django.contrib import admin
 MODULE_CHOICES = (
     ('abastecimiento', 'Abastecimiento'),
     ('cajero', 'Cajero'),
@@ -29,3 +29,6 @@ class Institucion(polymorphic.PolymorphicModel):
 
     def __str__(self) -> str:
         return self.name
+
+    class Admin(admin.ModelAdmin):
+        list_display = ["id", "name", "description", "active_modules"]

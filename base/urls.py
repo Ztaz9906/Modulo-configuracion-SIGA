@@ -5,6 +5,7 @@ from .views import *
 router = routers.DefaultRouter()
 
 router.register(r'torpedo', TbTorpedoViewSet)
+router.register('personas',PersonaViewSet)
 router.register(r'paises', TbNpaisViewSet)
 router.register(r'provincias', TbNprovinciaViewSet)
 router.register(r'edificios', TbNedificioViewSet)

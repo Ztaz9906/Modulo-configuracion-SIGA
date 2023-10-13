@@ -2,7 +2,10 @@ from rest_framework import serializers
 from .models import *
 from .serializerPost import *
 from autenticacion.gateway.serializers.usuario.v1.lectura import SerializadorDeUsuarioLecturaConPerfil
+
 from comun.serializers import RecursiveField
+from base.serializers import PersonaSerializer
+
 ######################################################################## Pertenece a distibucion ################################
 
 
@@ -34,18 +37,11 @@ class TbNhorarioSerializer(serializers.ModelSerializer):
 
 class TbNeventoSerializer(serializers.ModelSerializer):
     id_horario = TbNhorarioSerializer(read_only=True)
-
+    id_clasificacion_evento = TbNclasificacionEventoSerializer(read_only=True)
+    evento_padre = RecursiveField(allow_null=True, required=False)
     class Meta:
         model = TbNevento
         fields = '__all__'
-
-
-# class RecursiveField(serializers.BaseSerializer):
-
-#     def to_representation(self, value):
-#         serializer = TbStructureSerializer(value, context=self.context)
-#         return serializer.data
-
 
 class TbStructureParentSerializer(serializers.ModelSerializer):
     # Solo contiene la información básica del padre
@@ -132,11 +128,10 @@ class TbDpersonaPuertaSerializer(serializers.ModelSerializer):
 
 
 class TbDsolapinPerdidoSerializer(serializers.ModelSerializer):
-    id_persona = SerializadorDeUsuarioLecturaConPerfil(read_only=True)
+    id_persona = PersonaSerializer(read_only=True)
     class Meta:
         model = TbDsolapinPerdido
         fields = '__all__'
-
 
 class TbNestadoTarjetaSerializer(serializers.ModelSerializer):
     class Meta:

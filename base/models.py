@@ -48,7 +48,8 @@ class TbNedificio(models.Model):
     fecha_registro = models.DateField(blank=True, null=True)
 
     class Meta:
-
+        verbose_name = "Edificio"
+        verbose_name_plural = "Edificios"
         db_table = 'tb_nedificio'
 
 class TbNestructura(models.Model):
@@ -64,7 +65,8 @@ class TbNestructura(models.Model):
     activo = models.BooleanField(blank=True, null=True)
 
     class Meta:
-
+        verbose_name = "Estructura"
+        verbose_name_plural = "Estructuras"
         db_table = 'tb_nestructura'
 
 class TbNcategoria(models.Model):
@@ -75,7 +77,8 @@ class TbNcategoria(models.Model):
     activo = models.BooleanField()
 
     class Meta:
-
+        verbose_name = "Categoria"
+        verbose_name_plural = "Categorias"
         db_table = 'tb_ncategoria'
 
 class TbNapto(models.Model):
@@ -88,7 +91,8 @@ class TbNapto(models.Model):
         TbNedificio, models.DO_NOTHING, db_column='id_edificio', blank=True, null=True)
 
     class Meta:
-
+        verbose_name = "Apartamento"
+        verbose_name_plural = "Apartamentos"
         db_table = 'tb_napto'
 
 class TbNsexo(models.Model):
@@ -99,7 +103,8 @@ class TbNsexo(models.Model):
     activo = models.BooleanField()
 
     class Meta:
-
+        verbose_name = "Sexo"
+        verbose_name_plural = "Sexos"
         db_table = 'tb_nsexo'
 
 class TbNcarrera(models.Model):
@@ -110,7 +115,8 @@ class TbNcarrera(models.Model):
     fecha_registro = models.DateField(blank=True, null=True)
 
     class Meta:
-
+        verbose_name = "Carrera"
+        verbose_name_plural = "Carreras"
         db_table = 'tb_ncarrera'
 
 class TbNcategoriaResidente(models.Model):
@@ -122,7 +128,8 @@ class TbNcategoriaResidente(models.Model):
     siglas = models.TextField(blank=True, null=True)
 
     class Meta:
-
+        verbose_name = "Categorias Residente"
+        verbose_name_plural = "Categorias Residentes"
         db_table = 'tb_ncategoria_residente'
 
 class TbNgrupo(models.Model):
@@ -133,7 +140,8 @@ class TbNgrupo(models.Model):
     activo = models.BooleanField(blank=True, null=True)
 
     class Meta:
-
+        verbose_name = "Grupo"
+        verbose_name_plural = "Grupos"
         db_table = 'tb_ngrupo'
 
 class TbNtipoCurso(models.Model):
@@ -144,7 +152,8 @@ class TbNtipoCurso(models.Model):
     activo = models.BooleanField(blank=True, null=True)
 
     class Meta:
-
+        verbose_name = "Tipo de curso"
+        verbose_name_plural = "Tipo de cursos"
         db_table = 'tb_ntipo_curso'
 
 class TbNcategoriaDocente(models.Model):
@@ -155,7 +164,8 @@ class TbNcategoriaDocente(models.Model):
     activo = models.BooleanField(blank=True, null=True)
 
     class Meta:
-
+        verbose_name = "Categorias Docente"
+        verbose_name_plural = "Categorias Docentes"
         db_table = 'tb_ncategoria_docente'
 
 class TbNorigen(models.Model):
@@ -166,7 +176,8 @@ class TbNorigen(models.Model):
     fecha_registro = models.DateField(blank=True, null=True)
 
     class Meta:
-
+        verbose_name = "Origen"
+        verbose_name_plural = "Origenes"
         db_table = 'tb_norigen'
 
 class TbNmunicipio(models.Model):
@@ -180,7 +191,8 @@ class TbNmunicipio(models.Model):
     codigo_oficial_municipio = models.IntegerField(blank=True, null=True)
 
     class Meta:
-
+        verbose_name = "Municipio"
+        verbose_name_plural = "Municipios"
         db_table = 'tb_nmunicipio'
 
 
@@ -192,7 +204,8 @@ class TbNresponsabilidad(models.Model):
     activo = models.BooleanField()
 
     class Meta:
-
+        verbose_name = "Responsabilidad"
+        verbose_name_plural = "Responsabilidades"
         db_table = 'tb_nresponsabilidad'
 
 
@@ -204,7 +217,8 @@ class TbNcategoriaCientifica(models.Model):
     activo = models.BooleanField(blank=True, null=True)
 
     class Meta:
-
+        verbose_name = "Categorias Cientifica"
+        verbose_name_plural = "Categorias Cientificas"
         db_table = 'tb_ncategoria_cientifica'
 
 
@@ -217,7 +231,8 @@ class TbNparentesco(models.Model):
         max_length=255, blank=True, null=True)
 
     class Meta:
-
+        verbose_name = "Parentesco"
+        verbose_name_plural = "Parentescos"
         db_table = 'tb_nparentesco'
 
 

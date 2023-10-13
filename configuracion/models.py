@@ -1,7 +1,7 @@
 from django.db import models
 from autenticacion.models.entities.usuario import Usuario
 from base.models import TbNcategoria, TbNcategoriaResidente, TbNestructura, TbNtipoCurso
-
+from autenticacion.models.entities.institucion import Institucion
 # Aqui manda config comensales
 class TbDconfiguracionPersona(models.Model):
     id_configuracion_persona = models.AutoField(primary_key=True)
@@ -15,6 +15,7 @@ class TbDconfiguracionPersona(models.Model):
 
 # se ponen 3 campos incambiable 3 datos estaticos se activa o se desactiva
 class TbDconfiguracionProceso(models.Model):
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_configuracion_proceso = models.AutoField(primary_key=True)
     flujo = models.BooleanField(blank=True, null=True)
     descripcion_configuracion_proceso = models.TextField(blank=True, null=True)
@@ -26,12 +27,13 @@ class TbDconfiguracionProceso(models.Model):
 
         db_table = 'tb_dconfiguracion_proceso'
 class TbDdatosContacto(models.Model):
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_datos_contacto = models.AutoField(primary_key=True)
     direccion = models.TextField(blank=True, null=True)
     telefono = models.TextField(blank=True, null=True)
     correo = models.TextField(blank=True, null=True)
     id_usuario_registro = models.ForeignKey(
-        Usuario, models.DO_NOTHING, db_column='id_usuario_registro')
+        Usuario, models.DO_NOTHING, db_column='id_usuario_registro',blank=True, null=True)
     fecha_registro = models.DateField(blank=True, null=True)
 
     class Meta:

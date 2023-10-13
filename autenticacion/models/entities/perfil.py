@@ -22,11 +22,10 @@ class Perfil(polymorphic.PolymorphicModel):
         verbose_name = "Perfil"
         verbose_name_plural = "Perfiles"
 
-    class Admin(admin.ModelAdmin):
-        list_display = ["id", "user"]
-
 
 # noinspection PyUnusedLocal
+
+
 @receiver(signals.post_delete, sender=Perfil)
 def on_delete_profile(sender, instance: Perfil, **kwargs):
     try:
