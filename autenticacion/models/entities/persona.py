@@ -41,6 +41,7 @@ class Persona(models.Model):
         TbNcategoriaDocente, models.DO_NOTHING, db_column='id_categoria_docente', blank=True, null=True)
     id_categoria_residente = models.ForeignKey(
         TbNcategoriaResidente, models.DO_NOTHING, db_column='id_categoria_residente', blank=True, null=True)
+    # id_configuracion_persona annadir esta persona
 
     def __str__(self) -> str:
         return self.nombre_completo

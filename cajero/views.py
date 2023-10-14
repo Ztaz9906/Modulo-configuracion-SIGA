@@ -181,8 +181,14 @@ class TbStructureViewSet(viewsets.ModelViewSet):
             user_institucion = self.request.user.institucion
             base_query = TbStructure.objects.filter(id_institucion=user_institucion)
 
-        # Filtrar solo aquellos que no tienen estructura padre (estructura_parent es nulo)
-        return base_query.filter(estructura_parent__isnull=True)
+        # Si se está accediendo a la lista completa (action == 'list'),
+        # filtrar solo aquellos que no tienen estructura padre (estructura_parent es nulo)
+        if self.action == 'list':
+            return base_query.filter(estructura_parent__isnull=True)
+
+        # Para las otras acciones (retrieve, patch, delete, etc.), devolver el objeto
+        # independientemente de si tiene un estructura_parent o no
+        return base_query
 
     def get_serializer_class(self):
         if self.request.method == 'GET':

@@ -8,6 +8,7 @@ from rest_framework.viewsets import GenericViewSet
 from autenticacion.models.entities.torpedo import TbDpersonaTorpedo
 from autenticacion.models.entities.persona import Persona
 
+
 @extend_schema_view(
     create=extend_schema(tags=["Torpedo"],
                          description="Crea un torpedo"),
@@ -68,7 +69,8 @@ class PersonaViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     queryset = Persona.objects.none()
     filter_backends = [filters.DjangoFilterBackend]
-    filterset_fields = ['nombre_completo', 'id_sexo','id_municipio','id_provincia','id_pais','ci']
+    filterset_fields = ['nombre_completo', 'id_sexo', 'id_municipio', 'id_provincia', 'id_pais', 'ci']
+
     def get_queryset(self):
         if self.request.user.is_staff:
             return Persona.objects.all()
@@ -80,10 +82,84 @@ class PersonaViewSet(viewsets.ModelViewSet):
             return PersonaSerializer
         else:
             return PersonaSerializer
+
+@extend_schema_view(
+    create=extend_schema(tags=["Configuracion de Estruturas"],
+                         description="Crea una Configuracion de Estruturas"),
+    retrieve=extend_schema(
+        tags=["Configuracion de Estruturas"], description="Devuelve las detalles de un Configuracion de Estruturas"
+    ),
+    update=extend_schema(tags=["Configuracion de Estruturas"],
+                         description="Actualiza una Configuracion de Estruturas"),
+    partial_update=extend_schema(
+        tags=["Configuracion de Estruturas"], description="Actualiza una Configuracion de Estruturas"
+    ),
+    destroy=extend_schema(tags=["Configuracion de Estruturas"],
+                          description="Destruye una Configuracion de Estruturas"),
+    list=extend_schema(
+        tags=["Configuracion de Estruturas"],
+        description="Lista las Configuracion de Estruturas",
+        parameters=[OpenApiParameter(name="query", required=False, type=str)],
+    ),
+)
+class EstructuraViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = TbNestructura.objects.none()
+    filter_backends = [filters.DjangoFilterBackend]
+    filterset_fields = ['nombre_estructura', 'activo', "codigo_externo", 'codigo_area', 'id_tipo_estructura']
+
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return TbNestructura.objects.all()
+        user_institucion = self.request.user.institucion
+        return TbNestructura.objects.filter(id_institucion=user_institucion)
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return TbNestructuraSerializer
+        else:
+            return TbNestructuraCreateSerializer
+
+
+@extend_schema_view(
+    create=extend_schema(tags=["Configuracion de Tipo de Estructuras"],
+                         description="Crea una Configuracion de Tipo de Estructuras"),
+    retrieve=extend_schema(
+        tags=["Configuracion de Tipo de Estructuras"], description="Devuelve las detalles de un Configuracion de Tipo de Estructuras"
+    ),
+    update=extend_schema(tags=["Configuracion de Tipo de Estructuras"],
+                         description="Actualiza una Configuracion de Tipo de Estructuras"),
+    partial_update=extend_schema(
+        tags=["Configuracion de Tipo de Estructuras"], description="Actualiza una Configuracion de Tipo de Estructuras"
+    ),
+    destroy=extend_schema(tags=["Configuracion de Tipo de Estructuras"],
+                          description="Destruye una Configuracion de Tipo de Estructuras"),
+    list=extend_schema(
+        tags=["Configuracion de Tipo de Estructuras"],
+        description="Lista las Configuracion de Tipo de Estructuras",
+        parameters=[OpenApiParameter(name="query", required=False, type=str)],
+    ),
+)
+class TipoEstructuraViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = TbNtipoEstructura.objects.none()
+    serializer_class = TbNtipoEstructuraSerializer
+    filter_backends = [filters.DjangoFilterBackend]
+    filterset_fields = ['nombre_tipo_estructura', 'activo']
+
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return TbNtipoEstructura.objects.all()
+        user_institucion = self.request.user.institucion
+        return TbNtipoEstructura.objects.filter(id_institucion=user_institucion)
+
+
 class ReadOnlyModelViewSet(mixins.RetrieveModelMixin,
                            mixins.ListModelMixin,
                            GenericViewSet):
     pass
+
+
 
 def get_schema_config(model_name):
     def no_op_decorator(view_func):
@@ -108,56 +184,78 @@ class TbNprovinciaViewSet(ReadOnlyModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     queryset = TbNprovincia.objects.all()
     serializer_class = TbNprovinciaSerializer
+
+
 @extend_schema_view(**get_schema_config("Edificio"))
 class TbNedificioViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     queryset = TbNedificio.objects.all()
     serializer_class = TbNedificioSerializer
+
+
 @extend_schema_view(**get_schema_config("Categoria"))
 class TbNcategoriaViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     queryset = TbNcategoria.objects.all()
     serializer_class = TbNcategoriaSerializer
+
+
 @extend_schema_view(**get_schema_config("Apartamento"))
 class TbNaptoViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     queryset = TbNapto.objects.all()
     serializer_class = TbNaptoSerializer
+
+
 @extend_schema_view(**get_schema_config("Sexo"))
 class TbNsexoViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     queryset = TbNsexo.objects.all()
     serializer_class = TbNsexoSerializer
+
+
 @extend_schema_view(**get_schema_config("Carrera"))
 class TbNcarreraViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     queryset = TbNcarrera.objects.all()
     serializer_class = TbNcarreraSerializer
+
+
 @extend_schema_view(**get_schema_config("Categoria de Residente"))
 class TbNcategoriaResidenteViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     queryset = TbNcategoriaResidente.objects.all()
     serializer_class = TbNcategoriaResidenteSerializer
+
+
 @extend_schema_view(**get_schema_config("Grupo"))
 class TbNgrupoViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     queryset = TbNgrupo.objects.all()
     serializer_class = TbNgrupoSerializer
+
+
 @extend_schema_view(**get_schema_config("Categoria Docente"))
 class TbNcategoriaDocenteViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     queryset = TbNcategoriaDocente.objects.all()
     serializer_class = TbNcategoriaDocenteSerializer
+
+
 @extend_schema_view(**get_schema_config("Municipio"))
 class TbNmunicipioViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     queryset = TbNmunicipio.objects.all()
     serializer_class = TbNmunicipioSerializer
+
+
 @extend_schema_view(**get_schema_config("Responsabilidad"))
 class TbNresponsabilidadViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     queryset = TbNresponsabilidad.objects.all()
     serializer_class = TbNresponsabilidadSerializer
+
+
 @extend_schema_view(**get_schema_config("Categoria Cientifica"))
 class TbNcategoriaCientificaViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]

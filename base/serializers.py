@@ -20,15 +20,23 @@ class TbNtipoEstructuraSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class TbNedificioSerializer(serializers.ModelSerializer):
+class TbNestructuraSerializer(serializers.ModelSerializer):
+    id_tipo_estructura = TbNtipoEstructuraSerializer(read_only=True)
+
     class Meta:
-        model = TbNedificio
+        model = TbNestructura
         fields = '__all__'
 
 
-class TbNestructuraSerializer(serializers.ModelSerializer):
+class TbNestructuraCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = TbNestructura
+        fields = '__all__'
+
+
+class TbNedificioSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TbNedificio
         fields = '__all__'
 
 
@@ -113,6 +121,7 @@ class TbRpersonaFamiliarSerializer(serializers.ModelSerializer):
         model = TbRpersonaFamiliar
         fields = '__all__'
 
+
 class TbDpersonaTorpedoSerializer(serializers.ModelSerializer):
     id_sexo = TbNsexoSerializer(read_only=True)
     id_municipio = TbNmunicipioSerializer(read_only=True)
@@ -128,6 +137,7 @@ class TbDpersonaCreateTorpedoSerializer(serializers.ModelSerializer):
         model = TbDpersonaTorpedo
         fields = '__all__'
 
+
 class PersonaSerializer(serializers.ModelSerializer):
     url = serializers.HyperlinkedIdentityField(
         view_name="persona-detail#v1")
@@ -139,3 +149,5 @@ class PersonaSerializer(serializers.ModelSerializer):
         representation = super().to_representation(instance)
         representation['url'] = self.fields['url'].to_representation(instance)
         return representation
+
+

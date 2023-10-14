@@ -1,5 +1,5 @@
 from django.db import models
-
+from autenticacion.models.entities.institucion import Institucion
 class TbNpais(models.Model):
     nombre_pais = models.CharField(max_length=255)
     fecha_registro_pais = models.DateTimeField()
@@ -29,7 +29,8 @@ class TbNprovincia(models.Model):
 
 class TbNtipoEstructura(models.Model):
     id_tipo_estructura = models.AutoField(primary_key=True)
-    id_tipo_estructura_padre = models.IntegerField(blank=True, null=True)
+    id_institucion = models.ForeignKey(
+        Institucion, on_delete=models.CASCADE, null=True, blank=True)
     nombre_tipo_estructura = models.CharField(max_length=255)
     fecha_registro_tipo_estructura = models.DateTimeField()
     descripcion_tipo_estructura = models.TextField(blank=True, null=True)
@@ -55,8 +56,9 @@ class TbNedificio(models.Model):
 class TbNestructura(models.Model):
     id_estructura = models.AutoField(primary_key=True)
     id_tipo_estructura = models.ForeignKey(
-        TbNtipoEstructura, models.DO_NOTHING, db_column='id_tipo_estructura', blank=True, null=True)
-    id_estructura_padre = models.IntegerField(blank=True, null=True)
+            TbNtipoEstructura, models.DO_NOTHING, db_column='id_tipo_estructura', blank=True, null=True)
+    id_institucion = models.ForeignKey(
+        Institucion, on_delete=models.CASCADE, null=True, blank=True)
     nombre_estructura = models.CharField(max_length=255)
     codigo_externo = models.CharField(max_length=255)
     codigo_area = models.CharField(max_length=255)
