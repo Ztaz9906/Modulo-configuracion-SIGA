@@ -2,18 +2,9 @@ from django.db import models
 from autenticacion.models.entities.usuario import Usuario
 from base.models import TbNcategoria, TbNcategoriaResidente, TbNestructura, TbNtipoCurso
 from autenticacion.models.entities.institucion import Institucion
-# Aqui manda config comensales
-class TbDconfiguracionPersona(models.Model):
-    id_configuracion_persona = models.AutoField(primary_key=True)
-    activo = models.BooleanField(blank=True, null=True)
-    descripcion = models.TextField(blank=True, null=True)
-    fecha_registro = models.DateField(blank=True, null=True)
+from autenticacion.models.entities.configuracion_comensales import TbDconfiguracionPersona
 
-    class Meta:
 
-        db_table = 'tb_dconfiguracion_persona'
-
-# se ponen 3 campos incambiable 3 datos estaticos se activa o se desactiva
 class TbDconfiguracionProceso(models.Model):
     id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_configuracion_proceso = models.AutoField(primary_key=True)
@@ -26,6 +17,8 @@ class TbDconfiguracionProceso(models.Model):
     class Meta:
 
         db_table = 'tb_dconfiguracion_proceso'
+
+
 class TbDdatosContacto(models.Model):
     id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_datos_contacto = models.AutoField(primary_key=True)
@@ -43,6 +36,7 @@ class TbDdatosContacto(models.Model):
 
 class TbDvaloresConfiguracionPersona(models.Model):
     id_calores_configuracion_persona = models.AutoField(primary_key=True)
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_configuracion_persona = models.ForeignKey(
         TbDconfiguracionPersona, models.DO_NOTHING, db_column='id_configuracion_persona', blank=True, null=True)
     id_categoria = models.ForeignKey(

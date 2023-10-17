@@ -1,5 +1,6 @@
 from django.db import models
 from autenticacion.models.entities.institucion import Institucion
+from autenticacion.models.entities.configuracion_comensales import TbDconfiguracionPersona
 from base.models import *
 from django.contrib import admin
 class Persona(models.Model):
@@ -12,7 +13,6 @@ class Persona(models.Model):
     id_expediente = models.CharField(max_length=255, blank=True, null=True)
     institucion = models.ForeignKey(
         Institucion, on_delete=models.CASCADE, null=True, blank=True)
-
     id_sexo = models.ForeignKey(
         TbNsexo, models.DO_NOTHING, db_column='id_sexo', blank=True, null=True)
     id_municipio = models.ForeignKey(
@@ -41,7 +41,7 @@ class Persona(models.Model):
         TbNcategoriaDocente, models.DO_NOTHING, db_column='id_categoria_docente', blank=True, null=True)
     id_categoria_residente = models.ForeignKey(
         TbNcategoriaResidente, models.DO_NOTHING, db_column='id_categoria_residente', blank=True, null=True)
-    # id_configuracion_persona annadir esta persona
+    id_configuracion_comensal = models.ForeignKey(TbDconfiguracionPersona,models.DO_NOTHING,db_column='id_configuracion_comensal', blank=True, null=True)
 
     def __str__(self) -> str:
         return self.nombre_completo

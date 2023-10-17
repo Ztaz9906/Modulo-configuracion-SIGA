@@ -573,7 +573,7 @@ class TbRpersonaTarjeta(models.Model):
     id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_persona_tarjeta = models.AutoField(primary_key=True)
     id_persona = models.ForeignKey(
-        Usuario, models.DO_NOTHING, db_column='id_persona', blank=True, null=True)
+        Persona, models.DO_NOTHING, db_column='id_persona', blank=True, null=True)
     id_tarjeta = models.ForeignKey(
         TbDtarjetaAlimentacion, models.DO_NOTHING, db_column='id_tarjeta', blank=True, null=True)
     fecha_registro = models.DateField(blank=True, null=True)

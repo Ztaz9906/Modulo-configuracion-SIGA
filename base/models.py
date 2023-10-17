@@ -32,7 +32,7 @@ class TbNtipoEstructura(models.Model):
     id_institucion = models.ForeignKey(
         Institucion, on_delete=models.CASCADE, null=True, blank=True)
     nombre_tipo_estructura = models.CharField(max_length=255)
-    fecha_registro_tipo_estructura = models.DateTimeField()
+    fecha_registro_tipo_estructura = models.DateTimeField(auto_now=True)
     descripcion_tipo_estructura = models.TextField(blank=True, null=True)
     activo = models.BooleanField()
 

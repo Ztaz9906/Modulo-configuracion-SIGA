@@ -69,19 +69,37 @@ class PersonaViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     queryset = Persona.objects.none()
     filter_backends = [filters.DjangoFilterBackend]
-    filterset_fields = ['nombre_completo', 'id_sexo', 'id_municipio', 'id_provincia', 'id_pais', 'ci']
+    filterset_fields = ['nombre_completo', 'id_sexo', 'id_municipio', 'id_provincia', 'ci',
+                        'id_categoria_residente', 'id_categoria', 'id_estructura',
+                        'id_responsabilidad']
 
     def get_queryset(self):
+        # Si el usuario es staff, devolver todas las personas.
         if self.request.user.is_staff:
-            return Persona.objects.all()
-        user_institucion = self.request.user.institucion
-        return Persona.objects.filter(institucion=user_institucion)
+            queryset = Persona.objects.all()
+        else:
+            # De lo contrario, filtrar por la institución del usuario.
+            user_institucion = self.request.user.institucion
+            queryset = Persona.objects.filter(institucion=user_institucion)
+
+        # Luego, verificar los otros parámetros.
+        id_configuracion_comensal = self.request.query_params.get('id_configuracion_comensal', None)
+        exclude_param = self.request.query_params.get('exclude', 'false')
+        include_param = self.request.query_params.get('include', 'flase')
+
+        if id_configuracion_comensal:
+            if exclude_param.lower() == 'true':
+                queryset = queryset.exclude(id_configuracion_comensal=id_configuracion_comensal)
+            else:
+                queryset = queryset.filter(id_configuracion_comensal=include_param)
+
+        return queryset
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
             return PersonaSerializer
         else:
-            return PersonaSerializer
+            return PersonaCreateSerializer
 
 @extend_schema_view(
     create=extend_schema(tags=["Configuracion de Estruturas"],

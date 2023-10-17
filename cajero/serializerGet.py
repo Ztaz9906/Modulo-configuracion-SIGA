@@ -2,7 +2,6 @@ from rest_framework import serializers
 from .models import *
 from .serializerPost import *
 from autenticacion.gateway.serializers.usuario.v1.lectura import SerializadorDeUsuarioLecturaConPerfil
-
 from comun.serializers import RecursiveField
 from base.serializers import PersonaSerializer
 
@@ -322,7 +321,7 @@ class TbMovimientoAsignacionSerializer(serializers.ModelSerializer):
 
 
 class TbRpersonaTarjetaSerializer(serializers.ModelSerializer):
-    id_persona = SerializadorDeUsuarioLecturaConPerfil(read_only=True)
+    id_persona = PersonaSerializer(read_only=True)
     id_tarjeta = TbDtarjetaAlimentacionSerializer(read_only=True)
 
     class Meta:

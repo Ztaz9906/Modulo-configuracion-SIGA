@@ -141,6 +141,8 @@ class TbDpersonaCreateTorpedoSerializer(serializers.ModelSerializer):
 class PersonaSerializer(serializers.ModelSerializer):
     url = serializers.HyperlinkedIdentityField(
         view_name="persona-detail#v1")
+    id_responsabilidad = TbNresponsabilidadSerializer(read_only=True)
+    id_estructura = TbNestructuraSerializer(read_only=True)
     class Meta:
         model = Persona
         fields = '__all__'
@@ -150,4 +152,8 @@ class PersonaSerializer(serializers.ModelSerializer):
         representation['url'] = self.fields['url'].to_representation(instance)
         return representation
 
+class PersonaCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Persona
+        fields = '__all__'
 

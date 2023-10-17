@@ -621,8 +621,6 @@ class TbDvaloresReglaViewSet(viewsets.ModelViewSet):
         else:
             return TbDvaloresReglaSerializer
 
-# Revisar por q este modelo en la base de datos no tiene ninguna relacion con las tablas
-
 
 class TbLastDistribucionViewSet(viewsets.ModelViewSet):
     queryset = TbLastDistribucion.objects.all()
@@ -726,13 +724,49 @@ class TbMovimientoAsignacionViewSet(viewsets.ModelViewSet):
         else:
             return TbMovimientoAsignacionSerializer
 
-
+@extend_schema_view(
+    create=extend_schema(tags=["Asociar tarjeta a persona"],
+                         description="Crea un Asociar tarjeta a persona"),
+    retrieve=extend_schema(
+        tags=["Asociar tarjeta a persona"], description="Devuelve los detalles de un Asociar tarjeta a persona"
+    ),
+    update=extend_schema(tags=["Asociar tarjeta a persona"],
+                         description="Actualiza un Asociar tarjeta a persona"),
+    partial_update=extend_schema(
+        tags=["Asociar tarjeta a persona"], description="Actualiza un Asociar tarjeta a persona"
+    ),
+    destroy=extend_schema(tags=["Asociar tarjeta a persona"],
+                          description="Destruye un Asociar tarjeta a persona"),
+    list=extend_schema(
+        tags=["Asociar tarjeta a persona"],
+        description="Lista los Asociar tarjeta a persona",
+        parameters=[OpenApiParameter(name="query", required=False, type=str)],
+    ),
+)
 class TbRpersonaTarjetaViewSet(viewsets.ModelViewSet):
-    queryset = TbRpersonaTarjeta.objects.all()
+    queryset = TbRpersonaTarjeta.objects.none()
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.DjangoFilterBackend]
+    filterset_fields = ['id_tarjeta',
+                        'id_persona__nombre_completo',
+                        'id_persona__solapin',
+                        'id_persona__id_sexo',
+                        'id_persona__id_municipio',
+                        'id_persona__id_provincia',
+                        'id_persona__id_responsabilidad',
+                        'id_persona__id_estructura',
+                        'id_persona__id_categoria',
+                        'id_persona__id_categoria_residente',]
+
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return TbRpersonaTarjeta.objects.all()
+        user_institucion = self.request.user.institucion
+        return TbRpersonaTarjeta.objects.filter(id_institucion=user_institucion)
 
     def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return TbRpersonaTarjetaCreateSerializer
-        else:
+        if self.request.method == 'GET':
             return TbRpersonaTarjetaSerializer
+        return TbRpersonaTarjetaCreateSerializer
 ########################################################################## Fin ###############################################################################
+
