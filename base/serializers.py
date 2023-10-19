@@ -2,6 +2,18 @@ from rest_framework import serializers
 from .models import *
 from autenticacion.models.entities.torpedo import TbDpersonaTorpedo
 from autenticacion.models.entities.persona import Persona
+from reservacion.models import TbDresponsableAreaPersonas,TbDresponsableReservacion
+
+
+class PersonaExcelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Persona
+        fields = [
+            'nombre_completo', 'ci', 'solapin', 'codigo_solapin', 'nombre_responsabilidad',
+            'id_expediente', 'institucion'
+        ]
+
+
 class TbNpaisSerializer(serializers.ModelSerializer):
     class Meta:
         model = TbNpais
@@ -22,10 +34,30 @@ class TbNtipoEstructuraSerializer(serializers.ModelSerializer):
 
 class TbNestructuraSerializer(serializers.ModelSerializer):
     id_tipo_estructura = TbNtipoEstructuraSerializer(read_only=True)
+    tiene_responsables_area = serializers.SerializerMethodField()
+    tiene_responsables_reservacion = serializers.SerializerMethodField()
 
     class Meta:
         model = TbNestructura
-        fields = '__all__'
+        fields = (
+            'id_estructura',
+            'id_tipo_estructura',
+            'id_institucion',
+            'nombre_estructura',
+            'codigo_externo',
+            'codigo_area',
+            'estructura_consejo',
+            'estructura_credencial',
+            'activo',
+            'tiene_responsables_area',
+            'tiene_responsables_reservacion'
+        )
+
+    def get_tiene_responsables_area(self, obj):
+        return TbDresponsableAreaPersonas.objects.filter(id_estructura=obj).exists()
+
+    def get_tiene_responsables_reservacion(self, obj):
+        return TbDresponsableReservacion.objects.filter(id_estructura=obj).exists()
 
 
 class TbNestructuraCreateSerializer(serializers.ModelSerializer):

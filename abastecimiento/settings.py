@@ -174,6 +174,12 @@ REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "DEFAULT_VERSIONING_CLASS": "comun.versioning.CustomNamespaceVersioning",
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser',
+        'comun.parser_excel.ExcelParser',  # Reemplaza 'ruta.a.tu.parser' con la ruta correcta a tu parser
+    ],
 }
 
 SPECTACULAR_SETTINGS = {

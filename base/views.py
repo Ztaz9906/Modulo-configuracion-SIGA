@@ -1,4 +1,8 @@
+from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.http import QueryDict
+from rest_framework.parsers import MultiPartParser
 
+from comun.parser_excel import ExcelParser
 from .serializers import *
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter
 from rest_framework import viewsets, permissions
@@ -7,8 +11,10 @@ from rest_framework import mixins
 from rest_framework.viewsets import GenericViewSet
 from autenticacion.models.entities.torpedo import TbDpersonaTorpedo
 from autenticacion.models.entities.persona import Persona
-
-
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+import openpyxl
 @extend_schema_view(
     create=extend_schema(tags=["Torpedo"],
                          description="Crea un torpedo"),
@@ -101,22 +107,34 @@ class PersonaViewSet(viewsets.ModelViewSet):
         else:
             return PersonaCreateSerializer
 
+
+class EstructuraFilter(filters.FilterSet):
+    tiene_responsables_area = filters.BooleanFilter(field_name="tbdresponsableareapersonas", lookup_expr='isnull',
+                                                    exclude=True)
+    tiene_responsables_reservacion = filters.BooleanFilter(field_name="tbdresponsablereservacion", lookup_expr='isnull',
+                                                           exclude=True)
+    class Meta:
+        model = TbNestructura
+        fields = ['nombre_estructura', 'activo', "codigo_externo", 'codigo_area', 'id_tipo_estructura',
+                  'tiene_responsables_area', 'tiene_responsables_reservacion']
+
+
 @extend_schema_view(
-    create=extend_schema(tags=["Configuracion de Estruturas"],
-                         description="Crea una Configuracion de Estruturas"),
+    create=extend_schema(tags=["Configuracion de Areas"],
+                         description="Crea una Configuracion de Areas"),
     retrieve=extend_schema(
-        tags=["Configuracion de Estruturas"], description="Devuelve las detalles de un Configuracion de Estruturas"
+        tags=["Configuracion de Areas"], description="Devuelve las detalles de un Configuracion de Areas"
     ),
-    update=extend_schema(tags=["Configuracion de Estruturas"],
-                         description="Actualiza una Configuracion de Estruturas"),
+    update=extend_schema(tags=["Configuracion de Areas"],
+                         description="Actualiza una Configuracion de Areas"),
     partial_update=extend_schema(
-        tags=["Configuracion de Estruturas"], description="Actualiza una Configuracion de Estruturas"
+        tags=["Configuracion de Areas"], description="Actualiza una Configuracion de Areas"
     ),
-    destroy=extend_schema(tags=["Configuracion de Estruturas"],
-                          description="Destruye una Configuracion de Estruturas"),
+    destroy=extend_schema(tags=["Configuracion de Areas"],
+                          description="Destruye una Configuracion de Areas"),
     list=extend_schema(
-        tags=["Configuracion de Estruturas"],
-        description="Lista las Configuracion de Estruturas",
+        tags=["Configuracion de Areas"],
+        description="Lista las Configuracion de Areas",
         parameters=[OpenApiParameter(name="query", required=False, type=str)],
     ),
 )
@@ -124,7 +142,7 @@ class EstructuraViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     queryset = TbNestructura.objects.none()
     filter_backends = [filters.DjangoFilterBackend]
-    filterset_fields = ['nombre_estructura', 'activo', "codigo_externo", 'codigo_area', 'id_tipo_estructura']
+    filterset_class  = EstructuraFilter
 
     def get_queryset(self):
         if self.request.user.is_staff:
@@ -140,21 +158,21 @@ class EstructuraViewSet(viewsets.ModelViewSet):
 
 
 @extend_schema_view(
-    create=extend_schema(tags=["Configuracion de Tipo de Estructuras"],
-                         description="Crea una Configuracion de Tipo de Estructuras"),
+    create=extend_schema(tags=["Configuracion de Tipo de Areas"],
+                         description="Crea una Configuracion de Tipo de Areas"),
     retrieve=extend_schema(
-        tags=["Configuracion de Tipo de Estructuras"], description="Devuelve las detalles de un Configuracion de Tipo de Estructuras"
+        tags=["Configuracion de Tipo de Areas"], description="Devuelve las detalles de un Configuracion de Tipo de Areas"
     ),
-    update=extend_schema(tags=["Configuracion de Tipo de Estructuras"],
-                         description="Actualiza una Configuracion de Tipo de Estructuras"),
+    update=extend_schema(tags=["Configuracion de Tipo de Areas"],
+                         description="Actualiza una Configuracion de Tipo de Areas"),
     partial_update=extend_schema(
-        tags=["Configuracion de Tipo de Estructuras"], description="Actualiza una Configuracion de Tipo de Estructuras"
+        tags=["Configuracion de Tipo de Areas"], description="Actualiza una Configuracion de Tipo de Areas"
     ),
-    destroy=extend_schema(tags=["Configuracion de Tipo de Estructuras"],
-                          description="Destruye una Configuracion de Tipo de Estructuras"),
+    destroy=extend_schema(tags=["Configuracion de Tipo de Areas"],
+                          description="Destruye una Configuracion de Tipo de Areas"),
     list=extend_schema(
-        tags=["Configuracion de Tipo de Estructuras"],
-        description="Lista las Configuracion de Tipo de Estructuras",
+        tags=["Configuracion de Tipo de Areas"],
+        description="Lista las Configuracion de Tipo de Areas",
         parameters=[OpenApiParameter(name="query", required=False, type=str)],
     ),
 )
@@ -280,5 +298,47 @@ class TbNcategoriaCientificaViewSet(viewsets.ModelViewSet):
     queryset = TbNcategoriaCientifica.objects.all()
     serializer_class = TbNcategoriaCientificaSerializer
 
+@extend_schema_view(
+    create=extend_schema(tags=["Exel"],
+                         description="Carga un exel"),
+)
+class UploadExcelView(APIView):
+    parser_classes = (ExcelParser, MultiPartParser)
+    def post(self, request):
+        print('Entro al post', request.data)
 
+        # Verificar si los datos vienen en forma de QueryDict (posiblemente multipart)
+        if isinstance(request.data, QueryDict) and 'file' in request.data:
+            # El archivo fue enviado como 'multipart/form-data'
+            uploaded_file = request.data['file']
 
+            # Asegurarse de que id_institucion esté presente
+            institucion = request.POST.get('institucion')
+            print(institucion)
+            if not institucion:
+                return Response({'detail': 'Falta institucion.'}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Verificar si el uploaded_file es realmente un archivo
+            if isinstance(uploaded_file, InMemoryUploadedFile):
+                try:
+                    # Procesa el archivo usando el ExcelParser manualmente
+                    parser = ExcelParser()
+                    data = parser.parse(uploaded_file)
+
+                    # Agregar institucion a cada registro
+                    for item in data:
+                        item['institucion'] = institucion
+                except Exception as e:
+                    return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({'detail': 'No se encontró archivo.'}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            data = request.data
+
+        # Validar y guardar datos
+        print(data)
+        serializer = PersonaExcelSerializer(data=data, many=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'result': serializer.data, 'detail': 'Datos cargados correctamente.'}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

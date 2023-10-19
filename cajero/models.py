@@ -573,9 +573,9 @@ class TbRpersonaTarjeta(models.Model):
     id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_persona_tarjeta = models.AutoField(primary_key=True)
     id_persona = models.ForeignKey(
-        Persona, models.DO_NOTHING, db_column='id_persona', blank=True, null=True)
+        Persona, on_delete=models.CASCADE, db_column='id_persona', blank=True, null=True)
     id_tarjeta = models.ForeignKey(
-        TbDtarjetaAlimentacion, models.DO_NOTHING, db_column='id_tarjeta', blank=True, null=True)
+        TbDtarjetaAlimentacion, on_delete=models.CASCADE, db_column='id_tarjeta', blank=True, null=True)
     fecha_registro = models.DateField(blank=True, null=True)
     activo = models.BooleanField(blank=True, null=True)
 

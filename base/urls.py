@@ -24,4 +24,5 @@ router.register('tipo_estructuras', TipoEstructuraViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('cargar_excel/', UploadExcelView.as_view(), name='cargar-excel'),
 ]
