@@ -101,13 +101,13 @@ class TbStructure(models.Model):
     version = models.IntegerField(blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     capacidad = models.IntegerField(blank=True, null=True)
-    id_sub_director = models.ForeignKey(Usuario, models.DO_NOTHING, db_column='id_sub_director',
+    id_sub_director = models.ForeignKey(Persona, models.DO_NOTHING, db_column='id_sub_director',
                                         blank=True, null=True, related_name='id_sub_director_Structure')
-    id_tecnico_general = models.ForeignKey(Usuario, models.DO_NOTHING, db_column='id_tecnico_general',
+    id_tecnico_general = models.ForeignKey(Persona, models.DO_NOTHING, db_column='id_tecnico_general',
                                            blank=True, null=True, related_name='id_tecnico_general_Structure')
     centro_costo = models.TextField(blank=True, null=True)
     id_especialista_complejo = models.ForeignKey(
-        Usuario, models.DO_NOTHING, db_column='id_especialista_complejo', blank=True, null=True, related_name='id_especialista_complejo_Structure')
+        Persona, models.DO_NOTHING, db_column='id_especialista_complejo', blank=True, null=True, related_name='id_especialista_complejo_Structure')
 
     class Meta:
         db_table = 'tb_structure'

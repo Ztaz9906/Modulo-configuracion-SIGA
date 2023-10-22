@@ -50,10 +50,9 @@ class TbStructureParentSerializer(serializers.ModelSerializer):
 
 
 class TbStructureSerializer(serializers.ModelSerializer):
-    id_sub_director = SerializadorDeUsuarioLecturaConPerfil(read_only=True)
-    id_tecnico_general = SerializadorDeUsuarioLecturaConPerfil(read_only=True)
-    id_especialista_complejo = SerializadorDeUsuarioLecturaConPerfil(read_only=True)
-    id_tecnico_atm = SerializadorDeUsuarioLecturaConPerfil(read_only=True)
+    id_sub_director = PersonaSerializer(read_only=True)
+    id_tecnico_general = PersonaSerializer(read_only=True)
+    id_especialista_complejo = PersonaSerializer(read_only=True)
     category = TbCategorySerializer(read_only=True)
     children = RecursiveField(many=True)
     estructura_parent = TbStructureParentSerializer(read_only=True)
