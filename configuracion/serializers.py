@@ -24,14 +24,6 @@ class TbDconfiguracionProcesoCreateSerializer(serializers.ModelSerializer):
 
 
 class TbDdatosContactoSerializer(serializers.ModelSerializer):
-    id_usuario_registro = SerializadorDeUsuarioLecturaConPerfil(read_only=True)
-
-    class Meta:
-        model = TbDdatosContacto
-        fields = '__all__'
-
-
-class TbDdatosContactoCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = TbDdatosContacto
         fields = '__all__'

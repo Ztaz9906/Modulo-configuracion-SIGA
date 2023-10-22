@@ -31,7 +31,6 @@ class TbNtipoCobroViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-
         user_institution = self.request.user.institucion
         return TbNtipoCobro.objects.filter(id_institucion=user_institution)
 

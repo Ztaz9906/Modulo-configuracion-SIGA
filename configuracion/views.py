@@ -34,7 +34,7 @@ class TbDconfiguracionProcesoViewSet(viewsets.ModelViewSet):
 
 
 @extend_schema_view(
-    create=extend_schema(tags=["Datos de contacto"],
+    create=extend_schema(tags=["Datos de contactos"],
                          description="Crea un Datos de contactos"),
     retrieve=extend_schema(
         tags=["Datos de contactos"], description="Devuelve los detalles de un Datos de contacto"
@@ -57,9 +57,8 @@ class TbDdatosContactoViewSet(viewsets.ModelViewSet):
     serializer_class = TbDdatosContactoSerializer
     permission_classes = [permissions.IsAuthenticated]
     def get_queryset(self):
-
         user_institution = self.request.user.institucion
-        return TbDconfiguracionProceso.objects.filter(id_institucion=user_institution)
+        return TbDdatosContacto.objects.filter(id_institucion=user_institution)
 
 
 @extend_schema_view(
