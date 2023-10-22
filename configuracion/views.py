@@ -28,8 +28,7 @@ class TbDconfiguracionProcesoViewSet(viewsets.ModelViewSet):
     serializer_class = TbDconfiguracionProcesoSerializer
     permission_classes = [permissions.IsAuthenticated]
     def get_queryset(self):
-            if self.request.user.is_staff:
-                return TbDconfiguracionProceso.objects.all()
+
             user_institution = self.request.user.institucion
             return TbDconfiguracionProceso.objects.filter(id_institucion=user_institution)
 
@@ -58,10 +57,9 @@ class TbDdatosContactoViewSet(viewsets.ModelViewSet):
     serializer_class = TbDdatosContactoSerializer
     permission_classes = [permissions.IsAuthenticated]
     def get_queryset(self):
-            if self.request.user.is_staff:
-                return TbDconfiguracionProceso.objects.all()
-            user_institution = self.request.user.institucion
-            return TbDconfiguracionProceso.objects.filter(id_institucion=user_institution)
+
+        user_institution = self.request.user.institucion
+        return TbDconfiguracionProceso.objects.filter(id_institucion=user_institution)
 
 
 @extend_schema_view(
@@ -89,8 +87,7 @@ class TbDconfiguracionPersonaViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        if self.request.user.is_staff:
-            return TbDconfiguracionPersona.objects.all()
+
         user_institution = self.request.user.institucion
         return TbDconfiguracionPersona.objects.filter(id_institucion=user_institution)
 
@@ -120,8 +117,7 @@ class TbDvaloresConfiguracionPersonaViewSet(viewsets.ModelViewSet):
     filter_backends = [filters.DjangoFilterBackend]
     filterset_fields = ['id_configuracion_persona']
     def get_queryset(self):
-        if self.request.user.is_staff:
-            return TbDvaloresConfiguracionPersona.objects.all()
+
         user_institution = self.request.user.institucion
         return TbDvaloresConfiguracionPersona.objects.filter(id_institucion=user_institution)
 

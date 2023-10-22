@@ -28,8 +28,6 @@ class TbDelementosMostrarViewSet(viewsets.ModelViewSet):
     serializer_class = TbDelementosMostrarSerializer
     permission_classes = [permissions.IsAuthenticated]
     def get_queryset(self):
-        if self.request.user.is_staff:
-            return TbDelementosMostrar.objects.all()
         user_institution = self.request.user.institucion
         return TbDelementosMostrar.objects.filter(id_institucion=user_institution)
 @extend_schema_view(
@@ -56,8 +54,6 @@ class TbDperiodoReservacionViewSet(viewsets.ModelViewSet):
     serializer_class = TbDperiodoReservacionSerializer
     permission_classes = [permissions.IsAuthenticated]
     def get_queryset(self):
-        if self.request.user.is_staff:
-            return TbDperiodoReservacion.objects.all()
         user_institution = self.request.user.institucion
         return TbDperiodoReservacion.objects.filter(id_institucion=user_institution)
 
@@ -87,8 +83,6 @@ class TbDresponsableAreaPersonasViewSet(viewsets.ModelViewSet):
     filterset_fields = ['id_estructura']
 
     def get_queryset(self):
-        if self.request.user.is_staff:
-            return TbDresponsableAreaPersonas.objects.all()
         user_institucion = self.request.user.institucion
         return TbDresponsableAreaPersonas.objects.filter(id_institucion=user_institucion)
 
@@ -127,7 +121,5 @@ class TbDresponsableReservacionViewSet(viewsets.ModelViewSet):
         return TbDresponsableReservacionCreateSerializer
 
     def get_queryset(self):
-        if self.request.user.is_staff:
-            return TbDresponsableReservacion.objects.all()
         user_institucion = self.request.user.institucion
         return TbDresponsableReservacion.objects.filter(id_institucion=user_institucion)

@@ -40,8 +40,6 @@ class TbTorpedoViewSet(viewsets.ModelViewSet):
     filter_backends = [filters.DjangoFilterBackend]
     filterset_fields = ['nombre_completo', 'id_sexo','id_municipio','id_provincia','id_pais','ci']
     def get_queryset(self):
-        if self.request.user.is_staff:
-            return TbDpersonaTorpedo.objects.all()
         user_institucion = self.request.user.institucion
         return TbDpersonaTorpedo.objects.filter(id_institucion=user_institucion)
 
@@ -80,13 +78,9 @@ class PersonaViewSet(viewsets.ModelViewSet):
                         'id_responsabilidad']
 
     def get_queryset(self):
-        # Si el usuario es staff, devolver todas las personas.
-        if self.request.user.is_staff:
-            queryset = Persona.objects.all()
-        else:
-            # De lo contrario, filtrar por la institución del usuario.
-            user_institucion = self.request.user.institucion
-            queryset = Persona.objects.filter(institucion=user_institucion)
+        # De lo contrario, filtrar por la institución del usuario.
+        user_institucion = self.request.user.institucion
+        queryset = Persona.objects.filter(institucion=user_institucion)
 
         # Luego, verificar los otros parámetros.
         id_configuracion_comensal = self.request.query_params.get('id_configuracion_comensal', None)
@@ -145,8 +139,6 @@ class EstructuraViewSet(viewsets.ModelViewSet):
     filterset_class  = EstructuraFilter
 
     def get_queryset(self):
-        if self.request.user.is_staff:
-            return TbNestructura.objects.all()
         user_institucion = self.request.user.institucion
         return TbNestructura.objects.filter(id_institucion=user_institucion)
 
@@ -184,8 +176,6 @@ class TipoEstructuraViewSet(viewsets.ModelViewSet):
     filterset_fields = ['nombre_tipo_estructura', 'activo']
 
     def get_queryset(self):
-        if self.request.user.is_staff:
-            return TbNtipoEstructura.objects.all()
         user_institucion = self.request.user.institucion
         return TbNtipoEstructura.objects.filter(id_institucion=user_institucion)
 

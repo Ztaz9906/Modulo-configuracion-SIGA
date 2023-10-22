@@ -29,11 +29,11 @@ class TbNtipoCobroViewSet(viewsets.ModelViewSet):
     queryset = TbNtipoCobro.objects.none()
     serializer_class = TbNtipoCobroSerializer
     permission_classes = [permissions.IsAuthenticated]
+
     def get_queryset(self):
-            if self.request.user.is_staff:
-                return TbNtipoCobro.objects.all()
-            user_institution = self.request.user.institucion
-            return TbNtipoCobro.objects.filter(id_institucion=user_institution)
+
+        user_institution = self.request.user.institucion
+        return TbNtipoCobro.objects.filter(id_institucion=user_institution)
 
 
 @extend_schema_view(
@@ -59,11 +59,10 @@ class TbNconfiguracionCobroViewSet(viewsets.ModelViewSet):
     queryset = TbNconfiguracionCobro.objects.none()
     serializer_class = TbNconfiguracionCobroSerializer
     permission_classes = [permissions.IsAuthenticated]
+
     def get_queryset(self):
-            if self.request.user.is_staff:
-                return TbNconfiguracionCobro.objects.all()
-            user_institution = self.request.user.institucion
-            return TbNconfiguracionCobro.objects.filter(id_institucion=user_institution)
+        user_institution = self.request.user.institucion
+        return TbNconfiguracionCobro.objects.filter(id_institucion=user_institution)
 
 
 @extend_schema_view(
@@ -92,10 +91,8 @@ class TbNvaloresConfiguracionCobroViewSet(viewsets.ModelViewSet):
     filterset_fields = ['id_configuracion_cobro']
 
     def get_queryset(self):
-            if self.request.user.is_staff:
-                return TbNvaloresConfiguracionCobro.objects.all()
-            user_institution = self.request.user.institucion
-            return TbNvaloresConfiguracionCobro.objects.filter(id_institucion=user_institution)
+        user_institution = self.request.user.institucion
+        return TbNvaloresConfiguracionCobro.objects.filter(id_institucion=user_institution)
 
     def get_serializer_class(self):
         if self.request.method == 'GET':

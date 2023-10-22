@@ -70,6 +70,7 @@ class SerializadorDeUsuarioEscrituraBase(serializers.HyperlinkedModelSerializer)
         queryset=PermisosManager().all(),
         required=False,
     )
+    password = serializers.CharField(write_only=True)
 
     def create(self, validated_data):
         user = super().create(validated_data)
@@ -80,6 +81,7 @@ class SerializadorDeUsuarioEscrituraBase(serializers.HyperlinkedModelSerializer)
     class Meta:
         model = models.Usuario
         fields = [
+            "id",
             "username",
             "email",
             'password',
@@ -89,4 +91,3 @@ class SerializadorDeUsuarioEscrituraBase(serializers.HyperlinkedModelSerializer)
             "institucion",
             'persona'
         ]
-

@@ -35,8 +35,7 @@ class TbCategoryViewSet(viewsets.ModelViewSet):
     filterset_fields = {'name': ['exact'],
                         'active': ['exact']}
     def get_queryset(self):
-        if self.request.user.is_staff:
-            return TbCategory.objects.all()
+
         user_institution = self.request.user.institucion
         return TbCategory.objects.filter(id_institucion=user_institution)
 
@@ -102,8 +101,7 @@ class TbNhorarioViewSet(viewsets.ModelViewSet):
     filterset_fields = {'nombre_horario': ['exact'],
                         'activo': ['exact']}
     def get_queryset(self):
-        if self.request.user.is_staff:
-            return TbNhorario.objects.all()
+
         user_institucion = self.request.user.institucion
         return TbNhorario.objects.filter(id_institucion=user_institucion)
     def get_serializer_class(self):
@@ -139,8 +137,7 @@ class TbNeventoViewSet(viewsets.ModelViewSet):
     filterset_fields = {'id_clasificacion_evento': ['exact'],
                         'activo': ['exact']}
     def get_queryset(self):
-        if self.request.user.is_staff:
-            return TbNevento.objects.all()
+
         user_institucion = self.request.user.institucion
         return TbNevento.objects.filter(id_institucion=user_institucion)
     def get_serializer_class(self):
@@ -175,11 +172,9 @@ class TbStructureViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         # Crear un filtro base por institución o por usuario si es necesario
-        if self.request.user.is_staff:
-            base_query = TbStructure.objects.all()
-        else:
-            user_institucion = self.request.user.institucion
-            base_query = TbStructure.objects.filter(id_institucion=user_institucion)
+
+        user_institucion = self.request.user.institucion
+        base_query = TbStructure.objects.filter(id_institucion=user_institucion)
 
         # Si se está accediendo a la lista completa (action == 'list'),
         # filtrar solo aquellos que no tienen estructura padre (estructura_parent es nulo)
@@ -228,8 +223,7 @@ class TbNtipoProductoViewSet(viewsets.ModelViewSet):
                         'activo': ['exact']}
 
     def get_queryset(self):
-        if self.request.user.is_staff:
-            return TbNtipoProducto.objects.all()
+
         user_institucion = self.request.user.institucion
         return TbNtipoProducto.objects.filter(id_institucion=user_institucion)
 
@@ -262,8 +256,7 @@ class TbNunidadMedidaViewSet(viewsets.ModelViewSet):
                         'activo': ['exact'], 'clasificacion': ['exact']}
 
     def get_queryset(self):
-        if self.request.user.is_staff:
-            return TbNunidadMedida.objects.all()
+
         user_institucion = self.request.user.institucion
         return TbNunidadMedida.objects.filter(id_institucion=user_institucion)
 
@@ -302,8 +295,7 @@ class TbNclasificacionPlatoViewSet(viewsets.ModelViewSet):
                         'activo': ['exact']}
 
     def get_queryset(self):
-        if self.request.user.is_staff:
-            return TbNclasificacionPlato.objects.all()
+
         user_institucion = self.request.user.institucion
         return TbNclasificacionPlato.objects.filter(id_institucion=user_institucion)
 ####### Empieza esquema asset ##########
@@ -336,8 +328,7 @@ class TbDproductoViewSet(viewsets.ModelViewSet):
                         'id_tipo_producto': ['exact'], 'id_unidad_medida': ['exact']}
 
     def get_queryset(self):
-        if self.request.user.is_staff:
-            return TbDproducto.objects.all()
+
         user_institucion = self.request.user.institucion
         return TbDproducto.objects.filter(id_institucion=user_institucion)
 
@@ -384,8 +375,7 @@ class TbDaccesoEventoSecundarioViewSet(viewsets.ModelViewSet):
     serializer_class = TbDaccesoEventoSecundarioSerializer
     permission_classes = [permissions.IsAuthenticated]
     def get_queryset(self):
-        if self.request.user.is_staff:
-            return TbDaccesoEventoSecundario.objects.all()
+
         user_institucion = self.request.user.institucion
         return TbDaccesoEventoSecundario.objects.filter(id_institucion=user_institucion)
 
@@ -417,8 +407,7 @@ class TbDpersonaPuertaViewSet(viewsets.ModelViewSet):
     filterset_fields = {'id_puerta': ['exact'],
                         }
     def get_queryset(self):
-        if self.request.user.is_staff:
-            return TbDpersonaIPPuerta.objects.all()
+
         user_institucion = self.request.user.institucion
         return TbDpersonaIPPuerta.objects.filter(id_institucion=user_institucion)
 
@@ -449,8 +438,7 @@ class TbDsolapinPerdidoViewSet(viewsets.ModelViewSet):
                         'id_persona__solapin': ['exact', 'icontains'],
                         }
     def get_queryset(self):
-        if self.request.user.is_staff:
-            return TbDsolapinPerdido.objects.all()
+
         user_institucion = self.request.user.institucion
         return TbDsolapinPerdido.objects.filter(id_institucion=user_institucion)
     def get_serializer_class(self):
@@ -483,8 +471,7 @@ class TbNestadoTarjetaViewSet(viewsets.ModelViewSet):
     serializer_class = TbNestadoTarjetaSerializer
 
     def get_queryset(self):
-        if self.request.user.is_staff:
-            return TbNestadoTarjeta.objects.all()
+
         user_institucion = self.request.user.institucion
         return TbNestadoTarjeta.objects.filter(id_institucion=user_institucion)
 
@@ -515,8 +502,7 @@ class TbNtipoTarjetaViewSet(viewsets.ModelViewSet):
                         'activo': ['exact']}
 
     def get_queryset(self):
-        if self.request.user.is_staff:
-            return TbNtipoTarjeta.objects.all()
+
         user_institucion = self.request.user.institucion
         return TbNtipoTarjeta.objects.filter(id_institucion=user_institucion)
 
@@ -549,8 +535,7 @@ class TbDtarjetaAlimentacionViewSet(viewsets.ModelViewSet):
                         'id_tipo_tarjeta': ['exact']}
 
     def get_queryset(self):
-        if self.request.user.is_staff:
-            return TbDtarjetaAlimentacion.objects.all()
+
         user_institucion = self.request.user.institucion
         return TbDtarjetaAlimentacion.objects.filter(id_institucion=user_institucion)
     def get_serializer_class(self):
@@ -759,8 +744,7 @@ class TbRpersonaTarjetaViewSet(viewsets.ModelViewSet):
                         'id_persona__id_categoria_residente',]
 
     def get_queryset(self):
-        if self.request.user.is_staff:
-            return TbRpersonaTarjeta.objects.all()
+
         user_institucion = self.request.user.institucion
         return TbRpersonaTarjeta.objects.filter(id_institucion=user_institucion)
 
