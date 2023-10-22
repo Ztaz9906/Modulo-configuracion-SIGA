@@ -1,5 +1,17 @@
 from rest_framework import serializers
 from .models import *
+from autenticacion.models.entities.torpedo import TbDpersonaTorpedo
+from autenticacion.models.entities.persona import Persona
+from reservacion.models import TbDresponsableAreaPersonas,TbDresponsableReservacion
+
+
+class PersonaExcelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Persona
+        fields = [
+            'nombre_completo', 'ci', 'solapin', 'codigo_solapin', 'nombre_responsabilidad',
+            'id_expediente', 'institucion'
+        ]
 
 
 class TbNpaisSerializer(serializers.ModelSerializer):
@@ -20,15 +32,43 @@ class TbNtipoEstructuraSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class TbNedificioSerializer(serializers.ModelSerializer):
+class TbNestructuraSerializer(serializers.ModelSerializer):
+    id_tipo_estructura = TbNtipoEstructuraSerializer(read_only=True)
+    tiene_responsables_area = serializers.SerializerMethodField()
+    tiene_responsables_reservacion = serializers.SerializerMethodField()
+
     class Meta:
-        model = TbNedificio
+        model = TbNestructura
+        fields = (
+            'id_estructura',
+            'id_tipo_estructura',
+            'id_institucion',
+            'nombre_estructura',
+            'codigo_externo',
+            'codigo_area',
+            'estructura_consejo',
+            'estructura_credencial',
+            'activo',
+            'tiene_responsables_area',
+            'tiene_responsables_reservacion'
+        )
+
+    def get_tiene_responsables_area(self, obj):
+        return TbDresponsableAreaPersonas.objects.filter(id_estructura=obj).exists()
+
+    def get_tiene_responsables_reservacion(self, obj):
+        return TbDresponsableReservacion.objects.filter(id_estructura=obj).exists()
+
+
+class TbNestructuraCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TbNestructura
         fields = '__all__'
 
 
-class TbNestructuraSerializer(serializers.ModelSerializer):
+class TbNedificioSerializer(serializers.ModelSerializer):
     class Meta:
-        model = TbNestructura
+        model = TbNedificio
         fields = '__all__'
 
 
@@ -108,56 +148,44 @@ class TbNparentescoSerializer(serializers.ModelSerializer):
     class Meta:
         model = TbNparentesco
         fields = '__all__'
-
-
-class TbDpersonaCreateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TbDpersona
-        fields = '__all__'
-
-
-class TbDpersonaSerializer(serializers.ModelSerializer):
-    id_sexo = TbNsexoSerializer(read_only=True)
-    id_municipio = TbNmunicipioSerializer(read_only=True)
-    id_estructura = TbNestructuraSerializer(read_only=True)
-    nombre_completo = models.CharField(max_length=255)
-    id_categoria = TbNcategoriaSerializer(read_only=True)
-    activo = models.BooleanField()
-    id_estructura_credencial = TbNestructuraSerializer(read_only=True)
-    id_persona_foto = models.CharField(max_length=36, blank=True, null=True)
-    id_responsabilidad = TbNresponsabilidadSerializer(read_only=True)
-    nombre_usuario = models.TextField(blank=True, null=True)
-    nombre_responsabilidad = models.TextField(blank=True, null=True)
-    id_estructura_consejo = TbNestructuraSerializer(read_only=True)
-    id_categoria_residente = TbNcategoriaResidenteSerializer(read_only=True)
-    id_tipo_curso = TbNtipoCursoSerializer(read_only=True)
-    id_apto = TbNaptoSerializer(read_only=True)
-    id_origen = TbNorigenSerializer(read_only=True)
-    id_edificio = TbNedificioSerializer(read_only=True)
-    id_carrera = TbNcarreraSerializer(read_only=True)
-    id_pais = TbNpaisSerializer(read_only=True)
-    id_categoria_cientifica = TbNcategoriaCientificaSerializer(read_only=True)
-    id_categoria_docente = TbNcategoriaDocenteSerializer(read_only=True)
-    id_grupo = TbNgrupoSerializer(read_only=True)
-
-    class Meta:
-        model = TbDpersona
-        fields = '__all__'
-
-
-class TbDpersonaTorpedoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TbDpersonaTorpedo
-        fields = '__all__'
-
-
 class TbRpersonaFamiliarSerializer(serializers.ModelSerializer):
     class Meta:
         model = TbRpersonaFamiliar
         fields = '__all__'
 
 
-class TbTempIdPersonaTarjetaSerializer(serializers.ModelSerializer):
+class TbDpersonaTorpedoSerializer(serializers.ModelSerializer):
+    id_sexo = TbNsexoSerializer(read_only=True)
+    id_municipio = TbNmunicipioSerializer(read_only=True)
+    id_provincia = TbNprovinciaSerializer(read_only=True)
+    id_pais = TbNpaisSerializer(read_only=True)
     class Meta:
-        model = TbTempIdPersonaTarjeta
+        model = TbDpersonaTorpedo
         fields = '__all__'
+
+
+class TbDpersonaCreateTorpedoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TbDpersonaTorpedo
+        fields = '__all__'
+
+
+class PersonaSerializer(serializers.ModelSerializer):
+    url = serializers.HyperlinkedIdentityField(
+        view_name="persona-detail#v1")
+    id_responsabilidad = TbNresponsabilidadSerializer(read_only=True)
+    id_estructura = TbNestructuraSerializer(read_only=True)
+    class Meta:
+        model = Persona
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['url'] = self.fields['url'].to_representation(instance)
+        return representation
+
+class PersonaCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Persona
+        fields = '__all__'
+

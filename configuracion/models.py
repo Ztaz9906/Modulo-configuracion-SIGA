@@ -1,30 +1,18 @@
 from django.db import models
-from adminschema.models import TbUser
+from autenticacion.models.entities.usuario import Usuario
 from base.models import TbNcategoria, TbNcategoriaResidente, TbNestructura, TbNtipoCurso
-
-# Aqui manda config comensales
-
-
-class TbDconfiguracionPersona(models.Model):
-    id_configuracion_persona = models.AutoField(primary_key=True)
-    activo = models.BooleanField(blank=True, null=True)
-    descripcion = models.TextField(blank=True, null=True)
-    fecha_registro = models.DateField(blank=True, null=True)
-
-    class Meta:
-
-        db_table = 'tb_dconfiguracion_persona'
-
-# se ponen 3 campos incambiable 3 datos estaticos se activa o se desactiva
+from autenticacion.models.entities.institucion import Institucion
+from autenticacion.models.entities.configuracion_comensales import TbDconfiguracionPersona
 
 
 class TbDconfiguracionProceso(models.Model):
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_configuracion_proceso = models.AutoField(primary_key=True)
     flujo = models.BooleanField(blank=True, null=True)
     descripcion_configuracion_proceso = models.TextField(blank=True, null=True)
     fecha_registro = models.DateField(blank=True, null=True)
     id_usuario_registro = models.ForeignKey(
-        TbUser, models.DO_NOTHING, db_column='id_usuario_registro')
+        Usuario, models.DO_NOTHING, db_column='id_usuario_registro')
 
     class Meta:
 
@@ -32,12 +20,13 @@ class TbDconfiguracionProceso(models.Model):
 
 
 class TbDdatosContacto(models.Model):
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_datos_contacto = models.AutoField(primary_key=True)
     direccion = models.TextField(blank=True, null=True)
     telefono = models.TextField(blank=True, null=True)
     correo = models.TextField(blank=True, null=True)
     id_usuario_registro = models.ForeignKey(
-        TbUser, models.DO_NOTHING, db_column='id_usuario_registro')
+        Usuario, models.DO_NOTHING, db_column='id_usuario_registro',blank=True, null=True)
     fecha_registro = models.DateField(blank=True, null=True)
 
     class Meta:
@@ -47,6 +36,7 @@ class TbDdatosContacto(models.Model):
 
 class TbDvaloresConfiguracionPersona(models.Model):
     id_calores_configuracion_persona = models.AutoField(primary_key=True)
+    id_institucion = models.ForeignKey(Institucion, models.CASCADE)
     id_configuracion_persona = models.ForeignKey(
         TbDconfiguracionPersona, models.DO_NOTHING, db_column='id_configuracion_persona', blank=True, null=True)
     id_categoria = models.ForeignKey(

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import *
-from adminschema.serializer import TbUserSerializer
-from base.serializers import TbDpersonaSerializer, TbNestructuraSerializer
+from autenticacion.gateway.serializers.usuario.v1.lectura import SerializadorDeUsuarioLecturaConPerfil
+from base.serializers import TbNestructuraSerializer, PersonaSerializer
 
 
 class TbDelementosMostrarSerializer(serializers.ModelSerializer):
@@ -17,9 +17,8 @@ class TbDperiodoReservacionSerializer(serializers.ModelSerializer):
 
 
 class TbDresponsableAreaPersonasSerializer(serializers.ModelSerializer):
-    id_persona = TbDpersonaSerializer(read_only=True)
+    id_persona = PersonaSerializer(read_only=True)
     id_estructura = TbNestructuraSerializer(read_only=True)
-    id_persona_registro = TbUserSerializer(read_only=True)
 
     class Meta:
         model = TbDresponsableAreaPersonas
@@ -34,9 +33,8 @@ class TbDresponsableAreaPersonasCreateSerializer(serializers.ModelSerializer):
 
 
 class TbDresponsableReservacionSerializer(serializers.ModelSerializer):
-    id_persona = TbDpersonaSerializer(read_only=True)
+    id_persona = PersonaSerializer(read_only=True)
     id_estructura = TbNestructuraSerializer(read_only=True)
-    id_persona_registro = TbUserSerializer(read_only=True)
 
     class Meta:
         model = TbDresponsableReservacion
@@ -49,10 +47,4 @@ class TbDresponsableReservacionCreateSerializer(serializers.ModelSerializer):
         model = TbDresponsableReservacion
         fields = '__all__'
 
-# por que esta tabla no tiene relacion con ninguna en la base de datos revisar
 
-
-class TbHistorialReservacionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TbHistorialReservacion
-        fields = '__all__'

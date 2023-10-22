@@ -4,21 +4,25 @@ from .views import *
 
 router = routers.DefaultRouter()
 ######################################################################## Pertenece a distibucion ################################
-router.register(r'Distribucion_TbCategory', TbCategoryViewSet)
+router.register(r'Distribucion_TbCategory',
+                TbCategoryViewSet, basename='category')
 router.register(r'Distribucion_TbNclasificacionEvento',
                 TbNclasificacionEventoViewSet)
 router.register(r'Distribucion_TbNhorario', TbNhorarioViewSet)
 router.register(r'Distribucion_TbNevento', TbNeventoViewSet)
-router.register(r'Distribucion_TbStructure', TbStructureViewSet)
+router.register(r'Distribucion_TbStructure',
+                TbStructureViewSet, basename='structure')
 ######################################################################## Final ############################################
 ######################################################################## Abastecimiento con asset ###################################################
 
 router.register(r'Abastecimiento_TbNclasificacionPlato',
-                TbNclasificacionPlatoViewSet)
-router.register(r'Abastecimiento_TbNtipoProducto', TbNtipoProductoViewSet)
-router.register(r'Abastecimiento_TbNunidadMedida', TbNunidadMedidaViewSet)
+                TbNclasificacionPlatoViewSet, basename='clasificacion_plato')
+router.register(r'Abastecimiento_TbNtipoProducto',
+                TbNtipoProductoViewSet, basename='tipo_Producto')
+router.register(r'Abastecimiento_TbNunidadMedida',
+                TbNunidadMedidaViewSet, basename='unidad_medida')
 ####### Empieza esquema asset ##########
-router.register(r'Asset_TbDproducto', TbDproductoViewSet)
+router.register(r'Asset_TbDproducto', TbDproductoViewSet, basename='producto')
 ######### Termina esquema assets #########
 router.register(r'Abastecimiento_TbDconfiguracionProducto',
                 TbDconfiguracionProductoViewSet)
@@ -29,9 +33,10 @@ router.register(r'Cajero_TbDaccesoEventoSecundario',
 router.register(r'Cajero_TbDIp_Puerta', TbDpersonaPuertaViewSet)
 router.register(r'Cajero_TbDsolapinPerdido', TbDsolapinPerdidoViewSet)
 router.register(r'Cajero_TbNestadoTarjeta', TbNestadoTarjetaViewSet)
-router.register(r'Cajero_TbNtipoTarjeta', TbNtipoTarjetaViewSet)
+router.register(r'Cajero_TbNtipoTarjeta',
+                TbNtipoTarjetaViewSet, basename='tipo_tarjeta')
 router.register(r'Cajero_TbDtarjetaAlimentacion',
-                TbDtarjetaAlimentacionViewSet)
+                TbDtarjetaAlimentacionViewSet,basename='tarjeta_alimentacion')
 ################################################################ Final ########################################################################
 ################################################################ Distribucion #################################################################
 router.register(r'Distribucion_TbNclasificacionDistribucion',
