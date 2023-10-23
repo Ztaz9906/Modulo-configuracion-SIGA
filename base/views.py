@@ -295,7 +295,6 @@ class TbNcategoriaCientificaViewSet(viewsets.ModelViewSet):
 class UploadExcelView(APIView):
     parser_classes = (ExcelParser, MultiPartParser)
     def post(self, request):
-        print('Entro al post', request.data)
 
         # Verificar si los datos vienen en forma de QueryDict (posiblemente multipart)
         if isinstance(request.data, QueryDict) and 'file' in request.data:
