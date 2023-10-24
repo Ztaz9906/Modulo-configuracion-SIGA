@@ -10,7 +10,7 @@ from autenticacion.gateway.manager import UsuarioManager
 from autenticacion.gateway.serializers import usuario as serializers
 from autenticacion.usecases import usuarios as usecases
 from comun.views import ByOperationSerializer, ByVersionSerializer
-
+from autenticacion.models import Usuario
 
 @extend_schema_view(
     create=extend_schema(tags=["Administración"],
@@ -43,7 +43,7 @@ class VistasDeUsuarios(
 ):
     """Lee y actualiza los usuarios."""
 
-    queryset = UsuarioManager().all()
+    queryset = UsuarioManager().none()
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = {
         "v1": {
@@ -55,3 +55,9 @@ class VistasDeUsuarios(
             "write": serializers.v2.SerializadorDeUsuarioEscritura,
         },
     }
+
+    def get_queryset(self):
+        user_institucion = self.request.user.institucion
+        if self.request.user.is_staff:
+            return UsuarioManager().all()
+        return Usuario.objects.filter(institucion=user_institucion)
