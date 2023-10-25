@@ -1,5 +1,5 @@
 from django.core.files.uploadedfile import InMemoryUploadedFile
-from django.http import QueryDict
+from django.http import QueryDict, HttpResponse
 from rest_framework.parsers import MultiPartParser
 
 from comun.parser_excel import ExcelParser
@@ -15,6 +15,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 import openpyxl
+
+
 @extend_schema_view(
     create=extend_schema(tags=["Torpedo"],
                          description="Crea un torpedo"),
@@ -331,3 +333,38 @@ class UploadExcelView(APIView):
             serializer.save()
             return Response({'result': serializer.data, 'detail': 'Datos cargados correctamente.'}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@extend_schema_view(
+    create=extend_schema(tags=["Exel"],
+                         description="Descargar plantilla"),
+)
+class ExcelTemplateDownloadView(APIView):
+    def get(self, request):
+        filename = 'Plantilla entrada de datos.xlsx'
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = f'attachment; filename="{filename}"'
+
+        # Crear un libro y hoja de trabajo
+        wb = openpyxl.Workbook()
+        ws = wb.active
+        ws.title = "Datos"
+
+        # Definir los encabezados
+        headers = [
+            'nombre_completo',
+            'ci',
+            'solapin',
+            'codigo_solapin',
+            'nombre_responsabilidad',
+            'id_expediente'
+        ]
+
+        # Escribir encabezados en la hoja de trabajo
+        for col_num, header in enumerate(headers, 1):
+            ws.cell(row=1, column=col_num, value=header)
+
+        # Guardar el archivo en la respuesta
+        wb.save(response)
+        return response
+

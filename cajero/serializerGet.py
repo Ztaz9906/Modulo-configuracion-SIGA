@@ -143,15 +143,27 @@ class TbNtipoTarjetaSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+
+
 class TbDtarjetaAlimentacionSerializer(serializers.ModelSerializer):
-
     id_estado_tarjeta = TbNestadoTarjetaSerializer(read_only=True)
-
     id_tipo_tarjeta = TbNtipoTarjetaSerializer(read_only=True)
-
+    has_persona = serializers.SerializerMethodField()
     class Meta:
         model = TbDtarjetaAlimentacion
-        fields = '__all__'
+        fields = (
+            'id_institucion',
+            'id_tarjeta_alimentacion',
+            'codigo',
+            'numero_serie',
+            'id_tipo_tarjeta',
+            'id_estado_tarjeta',
+            'fecha_inicio',
+            'fecha_fin',
+            'has_persona',
+        )
+    def get_has_persona(self, obj):
+        return TbRpersonaTarjeta.objects.filter(id_tarjeta=obj).exists()
 
 ################################################################ Distribucion #################################################################
 

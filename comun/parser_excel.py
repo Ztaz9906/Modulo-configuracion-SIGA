@@ -6,7 +6,7 @@ import openpyxl
 class ExcelParser(BaseParser):
     media_type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     def parse(self, stream, media_type=None, parser_context=None):
-        print("Parsing Excel file...")
+
         workbook = openpyxl.load_workbook(filename=BytesIO(stream.read()))
         sheet = workbook.active
         data_list = []
