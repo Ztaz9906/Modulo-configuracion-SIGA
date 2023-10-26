@@ -14,7 +14,7 @@ class TbNtipoCobro(models.Model):
     id_institucion = models.ForeignKey(Institucion, models.CASCADE)
 
     class Meta:
-
+        verbose_name='Tipo de cobro'
         db_table = 'tb_ntipo_cobro'
 
 
