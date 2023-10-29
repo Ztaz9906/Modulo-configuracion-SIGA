@@ -77,7 +77,7 @@ class PersonaViewSet(viewsets.ModelViewSet):
     filter_backends = [filters.DjangoFilterBackend]
     filterset_fields = ['nombre_completo', 'id_sexo', 'id_municipio', 'id_provincia', 'ci',
                         'id_categoria_residente', 'id_categoria', 'id_estructura',
-                        'id_responsabilidad']
+                        'id_responsabilidad', 'solapin']
 
     def get_queryset(self):
         # De lo contrario, filtrar por la institución del usuario.
